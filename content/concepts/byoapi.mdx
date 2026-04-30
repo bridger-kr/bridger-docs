@@ -1,6 +1,140 @@
 ---
 title: "BYOAPI — 자체 API 등록"
-description: "OpenAPI 스펙이 있는 어떤 API든 도구로 만드는 방법."
+description: "OpenAPI 스펙이 있는 어떤 API든 datari에 도구로 등록하는 멀티-테넌트 ID 기반 파이프라인."
 ---
 
-<Note>이 페이지는 Phase 4에서 자동 생성/마이그레이션됩니다.</Note>
+datari의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 있다면 어떤 API든
+**별도 컨테이너 빌드/배포 없이** datari Gateway의 MCP 도구로 즉시 등록되는 기능입니다.
+
+## 핵심 아이디어 — 배포가 아니라 등록
+
+<CardGroup cols={2}>
+  <Card title="기존 방식" icon="container-storage">
+    API 한 개당 컨테이너 한 개를 빌드·배포·운영. 비용·관리 모두 폭증.
+  </Card>
+  <Card title="datari BYOAPI" icon="bolt">
+    Tool 정의만 DB에 등록. 단일 Gateway가 ID로 라우팅 → 수 초 내 완료.
+  </Card>
+</CardGroup>
+
+```text
+하나의 MCP Hub Server (mcp.datari.kr)
+  ├─ @mcphub/weather-forecast
+  ├─ @mcphub/bus-arrival
+  ├─ @user123/my-custom-api
+  ├─ @company/internal-crm
+  └─ ... 250+ tools
+```
+
+## Tool ID 체계
+
+모든 도구는 `@{owner}/{name}` 네임스페이스를 가집니다.
+
+| 구분 | Owner | 예시 |
+| --- | --- | --- |
+| 공식 프리셋 | `@mcphub` | `@mcphub/weather-forecast`, `@mcphub/bus-arrival` |
+| 공공데이터 카테고리 | `@mcphub` | `@mcphub/apt-trade`, `@mcphub/pharmacy-info` |
+| 사용자 커스텀 | `@{username}` | `@user123/my-petstore`, `@company/internal-crm` |
+| 커뮤니티 공개 | `@{username}` | `@developer42/kakao-map` |
+
+**규칙**
+
+- 소문자 + 하이픈만: `[a-z0-9-]`
+- `@{owner}/{name}` 전체가 unique
+- 예약어: `@mcphub/*` (공식), `@system/*` (내부)
+
+## 등록 파이프라인
+
+<Steps>
+  <Step title="Ingestion">
+    OpenAPI 스펙을 URL · 파일 업로드 · 인라인 텍스트 중 하나로 입력합니다.
+  </Step>
+  <Step title="Validation">
+    스펙 유효성·보안 스캔·MCP 변환 적합성 점수를 계산합니다.
+  </Step>
+  <Step title="Generation">
+    OpenAPI `paths`를 MCP Tool 정의로 변환합니다 (`name`, `description`, `inputSchema`).
+  </Step>
+  <Step title="Registration">
+    Tool Registry DB에 등록 — **컨테이너 배포 없음**.
+  </Step>
+  <Step title="Ready">
+    즉시 `mcp.datari.kr/mcp`의 `tools/list`에 노출, `tools/call` 시 런타임 프록시로 upstream 호출.
+  </Step>
+</Steps>
+
+## v1 vs v2 비교
+
+| 측면 | v1 (컨테이너 기반) | v2 (ID 기반, 현재) |
+| --- | --- | --- |
+| 등록 단위 | API → Docker 컨테이너 | API → Tool 정의 JSON |
+| 등록 시간 | 수십 초 ~ 분 | **수 초 이내** |
+| 운영 단위 | 컨테이너 N개 | 단일 Gateway 프로세스 |
+| 스케일링 | 컨테이너 수평 확장 | Gateway 수평 확장 (stateless) |
+
+## tools/list 응답 예시
+
+```json
+{
+  "tools": [
+    {
+      "name": "@mcphub/weather-forecast",
+      "description": "기상청 단기예보 — 위치 기반 날씨 정보",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "nx": { "type": "integer", "description": "예보지점 X 좌표" },
+          "ny": { "type": "integer", "description": "예보지점 Y 좌표" }
+        },
+        "required": ["nx", "ny"]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "@user123/my-petstore-api__list-pets",
+      "description": "List all pets in the store",
+      "inputSchema": { /* ... */ }
+    }
+  ]
+}
+```
+
+## 데이터 모델 (요약)
+
+```sql
+CREATE TABLE tool_registrations (
+  id            UUID PRIMARY KEY,
+  owner_id      UUID NOT NULL REFERENCES users(id),
+  tool_id       VARCHAR(128) NOT NULL UNIQUE,   -- @owner/name
+  display_name  VARCHAR(256),
+  description   TEXT,
+  category      VARCHAR(64),
+
+  source_type   VARCHAR(16),     -- preset | byoapi | manual
+  source_spec   TEXT,            -- 원본 OpenAPI (압축)
+  spec_hash     VARCHAR(64),     -- SHA-256
+
+  upstream_base_url VARCHAR(512),
+  upstream_paths    JSONB,       -- [{method, path, operationId, inputSchema, ...}]
+  auth_config       JSONB        -- {type, header, tokenEndpoint, ...}
+);
+```
+
+자세한 스키마, 인증 주입, 권한 모델, 등급별 제한은 저장소의
+[`docs/BYOAPI_PIPELINE_DESIGN.md`](https://github.com/happycastle114/project-two/blob/main/docs/BYOAPI_PIPELINE_DESIGN.md)
+를 참고하세요.
+
+## 다음 단계
+
+<CardGroup cols={2}>
+  <Card title="API Reference" icon="book" href="/content/api-reference/introduction">
+    Registry · MCP JSON-RPC · SSE 전체 스펙.
+  </Card>
+  <Card title="인증·보안" icon="shield" href="/content/concepts/auth-and-security">
+    BYOAPI 등록 도구의 시크릿/감사/PII 처리.
+  </Card>
+</CardGroup>

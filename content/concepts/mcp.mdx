@@ -1,6 +1,73 @@
 ---
 title: "Model Context Protocol(MCP)이란?"
-description: "Anthropic의 MCP 표준과 datari의 관계."
+description: "Anthropic의 MCP 표준과 datari가 어떻게 맞물리는지 살펴봅니다."
 ---
 
-<Note>이 페이지는 Phase 4에서 자동 생성/마이그레이션됩니다.</Note>
+**Model Context Protocol (MCP)** 은 Anthropic이 공개한, AI 모델이 외부 도구·데이터·시스템에
+표준화된 방식으로 접근하기 위한 오픈 프로토콜입니다. JSON-RPC 2.0 기반이며 STDIO 또는 HTTP +
+SSE 트랜스포트를 사용합니다.
+
+## 핵심 개념
+
+<CardGroup cols={2}>
+  <Card title="Server" icon="server">
+    도구(`tools`), 리소스(`resources`), 프롬프트(`prompts`)를 노출하는 프로세스.
+  </Card>
+  <Card title="Client" icon="plug">
+    Claude Desktop, Cursor, 커스텀 에이전트 — Server에 붙어 도구를 호출.
+  </Card>
+  <Card title="Tool" icon="wrench">
+    이름 + 설명 + 입력 스키마(JSON Schema)를 가진 호출 가능한 함수.
+  </Card>
+  <Card title="Transport" icon="route">
+    STDIO(로컬 프로세스) 또는 Streamable HTTP(원격) 두 가지 표준 트랜스포트.
+  </Card>
+</CardGroup>
+
+## 표준 메서드
+
+| 메서드 | 용도 |
+| --- | --- |
+| `initialize` | 핸드셰이크 — 프로토콜 버전, capabilities 교환 |
+| `tools/list` | Server가 노출하는 도구 메타데이터 조회 |
+| `tools/call` | 도구 실행 — `name` + `arguments`를 받아 결과 반환 |
+| `resources/list`, `resources/read` | 정적/동적 리소스 조회 |
+| `prompts/list`, `prompts/get` | 사전 정의 프롬프트 템플릿 |
+
+## datari와 MCP
+
+datari는 **MCP Server 호스팅 플랫폼**입니다. 자체 MCP 서버를 작성·배포·운영하지 않아도,
+OpenAPI 스펙만 있으면 즉시 MCP 도구로 변환됩니다.
+
+```text
+OpenAPI 스펙 (preset YAML 또는 BYOAPI 등록)
+        │
+        ▼
+  ┌─────────────────────────────┐
+  │  datari Gateway              │
+  │  (mcp.datari.kr/mcp)        │
+  ├─────────────────────────────┤
+  │  • tools/list                │
+  │  • tools/call                │
+  │  • SSE event stream          │
+  └─────────────────────────────┘
+        │
+        ▼
+   Claude / Cursor / 커스텀 에이전트
+```
+
+- 한 도메인(`mcp.datari.kr`)에 **수백 개 도구**가 ID로 다중화됩니다 (`@mcphub/weather-forecast`,
+  `@user123/my-api`...).
+- Server를 별도로 띄울 필요 없이 **API Key 한 개**로 모든 등록 도구 사용.
+- 클라이언트는 어떤 MCP 호환 클라이언트(Claude Desktop, Cursor, ChatGPT Actions 어댑터, 자체 SDK)든 그대로 동작.
+
+## 다음 단계
+
+<CardGroup cols={2}>
+  <Card title="아키텍처 보기" icon="diagram-project" href="/content/concepts/architecture">
+    CLI · Gateway · 미들웨어가 어떻게 맞물리는지.
+  </Card>
+  <Card title="첫 도구 호출" icon="play" href="/content/getting-started/first-tool">
+    실제 JSON-RPC 호출을 직접 실행.
+  </Card>
+</CardGroup>
