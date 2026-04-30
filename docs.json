@@ -1,0 +1,154 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "datari",
+  "description": "datari 공식 문서 — 230+ 공공데이터 API와 BYOAPI를 AI 도구로 잇는 다리. 인증, 파싱, 에러 처리, 감사 로그, 시크릿 관리.",
+  "colors": {
+    "primary": "#ea580c",
+    "light": "#fb923c",
+    "dark": "#ea580c"
+  },
+  "background": {
+    "color": {
+      "light": "#fafaf6",
+      "dark": "#0a0b0f"
+    },
+    "decoration": "none"
+  },
+  "appearance": {
+    "default": "system",
+    "strict": false
+  },
+  "favicon": "/logo/favicon.svg",
+  "logo": {
+    "light": "/logo/logo-light.svg",
+    "dark": "/logo/logo-dark.svg",
+    "href": "https://datari.kr"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Landing",
+        "href": "https://datari.kr"
+      },
+      {
+        "label": "Dashboard",
+        "href": "https://admin.datari.kr"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/happycastle114/project-two"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get started",
+      "href": "/getting-started/quickstart"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/happycastle114/project-two"
+    },
+    "links": [
+      {
+        "header": "Product",
+        "items": [
+          { "label": "Landing", "href": "https://datari.kr" },
+          { "label": "Dashboard", "href": "https://admin.datari.kr" },
+          { "label": "Gateway status", "href": "https://mcp.datari.kr/health" }
+        ]
+      },
+      {
+        "header": "Resources",
+        "items": [
+          { "label": "GitHub", "href": "https://github.com/happycastle114/project-two" },
+          { "label": "License (MIT)", "href": "https://github.com/happycastle114/project-two/blob/main/LICENSE" },
+          { "label": "Contributing", "href": "https://github.com/happycastle114/project-two/blob/main/CONTRIBUTING.md" }
+        ]
+      }
+    ]
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "시작하기",
+            "pages": [
+              "content/getting-started/introduction",
+              "content/getting-started/quickstart",
+              "content/getting-started/installation",
+              "content/getting-started/first-tool"
+            ]
+          },
+          {
+            "group": "가이드",
+            "pages": [
+              "content/guides/claude",
+              "content/guides/chatgpt",
+              "content/guides/api",
+              "content/guides/subscribe"
+            ]
+          },
+          {
+            "group": "개념",
+            "pages": [
+              "content/concepts/mcp",
+              "content/concepts/byoapi",
+              "content/concepts/auth-and-security",
+              "content/concepts/architecture"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Gateway API",
+            "pages": [
+              "content/api-reference/introduction",
+              "content/api-reference/authentication",
+              "content/api-reference/health",
+              "content/api-reference/registry-servers",
+              "content/api-reference/registry-tools",
+              "content/api-reference/mcp-jsonrpc",
+              "content/api-reference/mcp-sse"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Presets",
+        "groups": [
+          {
+            "group": "프리셋 카탈로그",
+            "pages": [
+              "content/presets/index",
+              "content/presets/civil",
+              "content/presets/culture",
+              "content/presets/economy",
+              "content/presets/education",
+              "content/presets/environment",
+              "content/presets/food",
+              "content/presets/land",
+              "content/presets/law",
+              "content/presets/realestate",
+              "content/presets/safety",
+              "content/presets/science",
+              "content/presets/transportation",
+              "content/presets/weather",
+              "content/presets/welfare"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "integrations": {},
+  "search": {
+    "prompt": "datari 문서 검색…"
+  }
+}
