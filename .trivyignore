@@ -1,0 +1,13 @@
+# =============================================================================
+# Trivy ignore file for the datari-docs image
+# =============================================================================
+#
+# Required by .github/workflows/deploy-nks.yml — the trivy-action treats every
+# path listed in `trivyignores:` as mandatory and fails when one is missing,
+# so each build context needs its own ignore file (it can be empty when there
+# are no accepted-risk CVEs for that image).
+#
+# Add a CVE id on its own line, preceded by a comment block that records:
+#   * the vulnerable component and version
+#   * the upstream fix version
+#   * a re-check date for periodic review
