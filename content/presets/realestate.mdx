@@ -1,6 +1,57 @@
 ---
 title: "부동산"
-description: "아파트·오피스텔 실거래, 전월세, 건축 인허가."
+description: "아파트·오피스텔 실거래, 전월세, 지적·건축 인허가. 총 17개 프리셋 · 17개 도구."
 ---
 
-<Note>이 페이지는 Phase 6에서 `presets/*.yaml`을 파싱해 자동 생성됩니다.</Note>
+이 카테고리에는 **17개의 프리셋**이 등록되어 있으며, 합산 **17개의 MCP 도구**가 노출됩니다.
+
+<Tip>
+  특정 도구만 사용하고 싶다면 `mcp-gen install realestate/<preset-name>` 형식으로 개별 설치할 수 있습니다.
+  아래 표의 **파일** 컬럼이 `<preset-name>` 입니다.
+</Tip>
+
+## 프리셋 목록
+
+| 이름 | 제공기관 | 도구 수 | data.go.kr | 파일 |
+| --- | --- | --- | --- | --- |
+| 아파트 전월세 실거래가 조회 | 국토교통부 | 1 | [15070765](https://www.data.go.kr/data/15070765/openapi.do) | `presets/realestate/apt-rent.yaml` |
+| 아파트 매매 실거래가 조회 | 국토교통부 | 1 | [15070748](https://www.data.go.kr/data/15070748/openapi.do) | `presets/realestate/apt-trade.yaml` |
+| 건축물대장 조회 | 국토교통부 | 1 | [15070884](https://www.data.go.kr/data/15070884/openapi.do) | `presets/realestate/building-ledger.yaml` |
+| 건축인허가 조회 | 국토교통부 | 1 | [15070901](https://www.data.go.kr/data/15070901/openapi.do) | `presets/realestate/building-permit.yaml` |
+| 상업용 부동산 실거래가 | 국토교통부 | 1 | — | `presets/realestate/commercial-trade-real.yaml` |
+| 상업업무용 실거래가 조회 | 국토교통부 | 1 | [15070850](https://www.data.go.kr/data/15070850/openapi.do) | `presets/realestate/commercial-trade.yaml` |
+| 단독/다가구 매매 실거래가 조회 | 국토교통부 | 1 | [15070816](https://www.data.go.kr/data/15070816/openapi.do) | `presets/realestate/detached-trade.yaml` |
+| 주택가격지수 조회 | 국토교통부 | 1 | [15070935](https://www.data.go.kr/data/15070935/openapi.do) | `presets/realestate/house-price-index.yaml` |
+| 전세가격지수 조회 | 국토교통부 | 1 | [15070952](https://www.data.go.kr/data/15070952/openapi.do) | `presets/realestate/jeonse-price-index.yaml` |
+| 토지 실거래가 조회 | 국토교통부 | 1 | [15070867](https://www.data.go.kr/data/15070867/openapi.do) | `presets/realestate/land-trade.yaml` |
+| 토지이용계획 조회 | 국토교통부 | 1 | [15070918](https://www.data.go.kr/data/15070918/openapi.do) | `presets/realestate/land-use-plan.yaml` |
+| 오피스텔 전월세 실거래가 | 국토교통부 | 1 | — | `presets/realestate/officetel-rent-real.yaml` |
+| 오피스텔 전월세 실거래가 조회 | 국토교통부 | 1 | [15070799](https://www.data.go.kr/data/15070799/openapi.do) | `presets/realestate/officetel-rent.yaml` |
+| 오피스텔 매매 실거래가 | 국토교통부 | 1 | — | `presets/realestate/officetel-trade-real.yaml` |
+| 오피스텔 매매 실거래가 조회 | 국토교통부 | 1 | [15070782](https://www.data.go.kr/data/15070782/openapi.do) | `presets/realestate/officetel-trade.yaml` |
+| 연립다세대 실거래가 | 국토교통부 | 1 | — | `presets/realestate/rowhouse-trade-real.yaml` |
+| 연립다세대 매매 실거래가 조회 | 국토교통부 | 1 | [15070833](https://www.data.go.kr/data/15070833/openapi.do) | `presets/realestate/rowhouse-trade.yaml` |
+
+## 사용 예시
+
+<CodeGroup>
+  ```bash mcp-gen
+  # 카테고리 전체 설치
+  mcp-gen install realestate
+
+  # 특정 프리셋만 설치
+  mcp-gen install realestate/<preset-name>
+  ```
+
+  ```bash 호스팅 Gateway
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATARI_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/realestate-"))'
+  ```
+</CodeGroup>
+
+<Note>
+  이 페이지는 `apps/docs/scripts/build-presets.mjs`가 `presets/realestate/*.yaml`을
+  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
+</Note>

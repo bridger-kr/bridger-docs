@@ -1,6 +1,60 @@
 ---
 title: "행정 · 민원"
-description: "인구, 치안, 재난, 공공시설."
+description: "행정 · 민원 · 인구 · 치안 · 재난 · 공공시설 데이터. 총 20개 프리셋 · 20개 도구."
 ---
 
-<Note>이 페이지는 Phase 6에서 `presets/*.yaml`을 파싱해 자동 생성됩니다.</Note>
+이 카테고리에는 **20개의 프리셋**이 등록되어 있으며, 합산 **20개의 MCP 도구**가 노출됩니다.
+
+<Tip>
+  특정 도구만 사용하고 싶다면 `mcp-gen install civil/<preset-name>` 형식으로 개별 설치할 수 있습니다.
+  아래 표의 **파일** 컬럼이 `<preset-name>` 입니다.
+</Tip>
+
+## 프리셋 목록
+
+| 이름 | 제공기관 | 도구 수 | data.go.kr | 파일 |
+| --- | --- | --- | --- | --- |
+| 사업자등록 상태조회 | 행정안전부·국세청 | 1 | [15071632](https://www.data.go.kr/data/15071632/openapi.do) | `presets/civil/business-registration.yaml` |
+| 민원 통계 조회 | 행정안전부·국세청 | 1 | [15071666](https://www.data.go.kr/data/15071666/openapi.do) | `presets/civil/civil-complaint-stats.yaml` |
+| 민방위 시설 조회 | 행정안전부 | 1 | [15071050](https://www.data.go.kr/data/15071050/openapi.do) | `presets/civil/civil-defense.yaml` |
+| 범죄 통계 조회 | 행정안전부·국세청 | 1 | [15071734](https://www.data.go.kr/data/15071734/openapi.do) | `presets/civil/crime-statistics.yaml` |
+| 재난대피소 조회 | 행정안전부·국세청 | 1 | [15071717](https://www.data.go.kr/data/15071717/openapi.do) | `presets/civil/disaster-shelter.yaml` |
+| 선거 투표율 조회 | 행정안전부·국세청 | 1 | [15071683](https://www.data.go.kr/data/15071683/openapi.do) | `presets/civil/election-turnout.yaml` |
+| 화재 발생 통계 조회 | 행정안전부·국세청 | 1 | [15071751](https://www.data.go.kr/data/15071751/openapi.do) | `presets/civil/fire-incident.yaml` |
+| 국가법령정보 검색 | 법제처 | 1 | [15000115](https://www.data.go.kr/data/15000115/openapi.do) | `presets/civil/law-search.yaml` |
+| 지방재정 통계 조회 | 행정안전부·국세청 | 1 | [15071700](https://www.data.go.kr/data/15071700/openapi.do) | `presets/civil/local-finance.yaml` |
+| 분실물 조회 | 경찰청 | 1 | [15071049](https://www.data.go.kr/data/15071049/openapi.do) | `presets/civil/lost-property.yaml` |
+| 병무 정보 조회 | 병무청 | 1 | [15071046](https://www.data.go.kr/data/15071046/openapi.do) | `presets/civil/military-service.yaml` |
+| 주정차 단속 조회 | 경찰청 | 1 | [15071048](https://www.data.go.kr/data/15071048/openapi.do) | `presets/civil/parking-violation.yaml` |
+| 여권 사무소 조회 | 외교부 | 1 | [15071047](https://www.data.go.kr/data/15071047/openapi.do) | `presets/civil/passport-office.yaml` |
+| 특허 정보 검색 | 특허청 | 1 | — | `presets/civil/patent-search.yaml` |
+| 연령별 인구통계 조회 | 행정안전부·국세청 | 1 | [15071615](https://www.data.go.kr/data/15071615/openapi.do) | `presets/civil/population-age.yaml` |
+| 주민등록 인구통계 조회 | 행정안전부·국세청 | 1 | [15071598](https://www.data.go.kr/data/15071598/openapi.do) | `presets/civil/population-stats.yaml` |
+| 공공와이파이 조회 | 행정안전부·국세청 | 1 | [15071785](https://www.data.go.kr/data/15071785/openapi.do) | `presets/civil/public-wifi.yaml` |
+| 등기부등본 정보 | 대법원 | 1 | — | `presets/civil/real-estate-reg.yaml` |
+| 주민센터 정보 조회 | 행정안전부·국세청 | 1 | [15071649](https://www.data.go.kr/data/15071649/openapi.do) | `presets/civil/resident-center.yaml` |
+| 학군 정보 조회 | 행정안전부·국세청 | 1 | [15071768](https://www.data.go.kr/data/15071768/openapi.do) | `presets/civil/school-district.yaml` |
+
+## 사용 예시
+
+<CodeGroup>
+  ```bash mcp-gen
+  # 카테고리 전체 설치
+  mcp-gen install civil
+
+  # 특정 프리셋만 설치
+  mcp-gen install civil/<preset-name>
+  ```
+
+  ```bash 호스팅 Gateway
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATARI_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/civil-"))'
+  ```
+</CodeGroup>
+
+<Note>
+  이 페이지는 `apps/docs/scripts/build-presets.mjs`가 `presets/civil/*.yaml`을
+  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
+</Note>

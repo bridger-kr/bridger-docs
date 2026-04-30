@@ -1,6 +1,50 @@
 ---
-title: "국토 · 지적"
-description: "국토 정보, 지적 측량, 토지 이용."
+title: "국토 · 토지"
+description: "지적, 건축 인허가, 도시계획, 국토 통계. 총 10개 프리셋 · 10개 도구."
 ---
 
-<Note>이 페이지는 Phase 6에서 `presets/*.yaml`을 파싱해 자동 생성됩니다.</Note>
+이 카테고리에는 **10개의 프리셋**이 등록되어 있으며, 합산 **10개의 MCP 도구**가 노출됩니다.
+
+<Tip>
+  특정 도구만 사용하고 싶다면 `mcp-gen install land/<preset-name>` 형식으로 개별 설치할 수 있습니다.
+  아래 표의 **파일** 컬럼이 `<preset-name>` 입니다.
+</Tip>
+
+## 프리셋 목록
+
+| 이름 | 제공기관 | 도구 수 | data.go.kr | 파일 |
+| --- | --- | --- | --- | --- |
+| 건축물 에너지 조회 | 국토교통부 | 1 | [15071096](https://www.data.go.kr/data/15071096/openapi.do) | `presets/land/building-energy.yaml` |
+| 지적도 조회 | 국토교통부 | 1 | [15071098](https://www.data.go.kr/data/15071098/openapi.do) | `presets/land/cadastral-map.yaml` |
+| 산림자원 조회 | 산림청 | 1 | [15071091](https://www.data.go.kr/data/15071091/openapi.do) | `presets/land/forest-resource.yaml` |
+| 개별공시지가 조회 | 국토교통부 | 1 | [15056932](https://www.data.go.kr/data/15056932/openapi.do) | `presets/land/land-price.yaml` |
+| 토지이용계획 조회 | 국토교통부 | 1 | [15056930](https://www.data.go.kr/data/15056930/openapi.do) | `presets/land/land-use-plan.yaml` |
+| 산지 정보 조회 | 산림청 | 1 | [15071095](https://www.data.go.kr/data/15071095/openapi.do) | `presets/land/mountain-info.yaml` |
+| 하천 정보 조회 | 환경부 | 1 | [15071094](https://www.data.go.kr/data/15071094/openapi.do) | `presets/land/river-info.yaml` |
+| 도로 현황 조회 | 국토교통부 | 1 | [15071093](https://www.data.go.kr/data/15071093/openapi.do) | `presets/land/road-status.yaml` |
+| 지하시설물 조회 | 국토교통부 | 1 | [15071092](https://www.data.go.kr/data/15071092/openapi.do) | `presets/land/underground-facility.yaml` |
+| 도시계획시설 조회 | 국토교통부 | 1 | [15071097](https://www.data.go.kr/data/15071097/openapi.do) | `presets/land/urban-planning.yaml` |
+
+## 사용 예시
+
+<CodeGroup>
+  ```bash mcp-gen
+  # 카테고리 전체 설치
+  mcp-gen install land
+
+  # 특정 프리셋만 설치
+  mcp-gen install land/<preset-name>
+  ```
+
+  ```bash 호스팅 Gateway
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATARI_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/land-"))'
+  ```
+</CodeGroup>
+
+<Note>
+  이 페이지는 `apps/docs/scripts/build-presets.mjs`가 `presets/land/*.yaml`을
+  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
+</Note>
