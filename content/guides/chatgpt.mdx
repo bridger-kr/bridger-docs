@@ -1,6 +1,61 @@
 ---
-title: "ChatGPT에 연결"
-description: "ChatGPT 커스텀 GPT(Action)로 datari를 호출하는 방법."
+title: "ChatGPT에 연결하기"
+description: "ChatGPT의 GPTs(Actions)로 datari를 호출하는 방법 — 약 2분 소요."
 ---
 
-<Note>이 페이지는 Phase 3에서 자동 생성/마이그레이션됩니다.</Note>
+ChatGPT Plus 또는 Team 사용자는 공식 GPT 또는 직접 만든 커스텀 GPT로 datari Gateway를
+호출할 수 있습니다.
+
+<Steps>
+  <Step title="datari GPT 접속">
+    [datari Korea GPT](https://chat.openai.com/g/mcphub-korea)를 엽니다.
+
+    <Note>ChatGPT Plus 또는 Team 구독이 필요합니다. (GPTs/Actions 기능 한정)</Note>
+  </Step>
+
+  <Step title="계정 연결">
+    GPT가 처음 한국 데이터를 조회할 때 datari 계정 연결을 요청합니다. **"허용"**을
+    클릭하면 자동으로 인증이 완료됩니다.
+
+    <Tip>
+      아직 계정이 없다면 [어드민 대시보드](https://admin.datari.kr)에서 무료 계정을 먼저
+      만드세요. 구글/카카오 소셜 로그인을 지원합니다.
+    </Tip>
+  </Step>
+
+  <Step title="바로 사용하기">
+    연결이 완료되면 ChatGPT에게 한국 데이터를 자연어로 물어볼 수 있습니다.
+
+    ```
+    서울 중구 미세먼지 상태 알려줘
+    강남구 학동로 근처 약국 찾아줘
+    오늘 달러 환율 얼마야?
+    ```
+  </Step>
+
+  <Step title="(선택) 커스텀 GPT 만들기">
+    자신만의 GPT에 datari를 연동하고 싶다면 Actions에서 다음 OpenAPI 스펙을 임포트하세요.
+
+    ```text OpenAPI Spec URL
+    https://mcp.datari.kr/openapi.json
+    ```
+
+    GPT Builder에서 **Configure → Actions → Import from URL**로 위 URL을 입력합니다.
+    인증 방식은 **API Key (Bearer Token)** 입니다.
+  </Step>
+</Steps>
+
+## 문제 해결
+
+<AccordionGroup>
+  <Accordion title='"허용" 버튼이 나타나지 않아요'>
+    ChatGPT Plus 구독이 활성화되어 있는지 확인하세요. GPTs 기능은 Plus / Team 전용입니다.
+  </Accordion>
+  <Accordion title="데이터가 조회되지 않아요">
+    일부 공공데이터 API는 야간에 점검될 수 있습니다. 잠시 후 다시 시도해 주세요.
+  </Accordion>
+  <Accordion title="그래도 해결이 안 되면">
+    [hello@datari.kr](mailto:hello@datari.kr) 또는
+    [GitHub Issues](https://github.com/happycastle114/project-two/issues)로 문의해 주세요.
+  </Accordion>
+</AccordionGroup>
