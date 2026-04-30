@@ -1,6 +1,69 @@
 ---
 title: "GET /registry/servers"
-description: "로드된 preset 서버 목록."
+description: "datari Gateway에 로드된 프리셋 서버(MCP 그룹) 카탈로그 조회."
 ---
 
-<Note>이 페이지는 Phase 5에서 자동 생성/마이그레이션됩니다.</Note>
+Gateway가 시작 시 로드한 모든 프리셋 서버 정보를 반환합니다. 각 서버는 1개 이상의 MCP 도구를 가집니다.
+
+## Request
+
+```http
+GET /registry/servers
+```
+
+- 인증: API Key 필요
+- Content-Type: 해당 없음
+
+## Response 200
+
+```json
+{
+  "servers": [
+    {
+      "id": "weather/ultra-shortcast",
+      "name": "기상청 초단기예보",
+      "filePath": "/abs/path/presets/weather/ultra-shortcast.yaml",
+      "baseUrl": "https://apis.data.go.kr/...",
+      "isPublicData": true,
+      "tools": [
+        {
+          "name": "getultrashortcast",
+          "description": "...",
+          "inputSchema": { "type": "object", "properties": {} },
+          "method": "GET",
+          "path": "/getUltraSrtFcst"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 응답 필드
+
+| 필드 | 타입 | 설명 |
+| --- | --- | --- |
+| `servers[]` | array | 프리셋 서버 목록 |
+| `servers[].id` | string | 카테고리/이름 형식의 고유 ID |
+| `servers[].name` | string | 사람이 읽는 이름 |
+| `servers[].filePath` | string | 원본 프리셋 YAML 절대 경로 |
+| `servers[].baseUrl` | string | upstream API base URL |
+| `servers[].isPublicData` | boolean | 공공데이터 미들웨어 활성화 여부 |
+| `servers[].tools[]` | array | 이 서버가 노출하는 MCP 도구 |
+
+## cURL
+
+```bash
+curl -H "x-api-key: $DATARI_API_KEY" https://mcp.datari.kr/registry/servers
+```
+
+## 관련 엔드포인트
+
+<CardGroup cols={2}>
+  <Card title="GET /registry/tools" icon="wrench" href="/content/api-reference/registry-tools">
+    서버 그룹 없이 평탄화된 도구 목록.
+  </Card>
+  <Card title="POST /mcp tools/list" icon="code" href="/content/api-reference/mcp-jsonrpc">
+    MCP 표준 도구 목록 호출.
+  </Card>
+</CardGroup>

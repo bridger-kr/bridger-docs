@@ -1,6 +1,62 @@
 ---
-title: "Gateway API 개요"
-description: "datari Gateway가 노출하는 엔드포인트 요약."
+title: "API Reference"
+description: "datari Gateway가 제공하는 REST · SSE · JSON-RPC 인터페이스 한눈에 보기."
 ---
 
-<Note>이 페이지는 Phase 5에서 자동 생성/마이그레이션됩니다.</Note>
+datari Gateway(`@mcp-hub/gateway`)는 다음 4종류의 인터페이스를 한 도메인에서 노출합니다.
+
+<CardGroup cols={2}>
+  <Card title="Health" icon="heart-pulse" href="/content/api-reference/health">
+    `GET /health` — 라이브니스 체크.
+  </Card>
+  <Card title="Registry" icon="boxes-stacked" href="/content/api-reference/registry-servers">
+    `GET /registry/{servers,tools}` — 로드된 프리셋·도구 카탈로그.
+  </Card>
+  <Card title="MCP JSON-RPC" icon="code" href="/content/api-reference/mcp-jsonrpc">
+    `POST /mcp` — `tools/list`, `tools/call`.
+  </Card>
+  <Card title="MCP SSE" icon="bolt" href="/content/api-reference/mcp-sse">
+    `GET /mcp/sse` — 실시간 도구 실행 이벤트.
+  </Card>
+</CardGroup>
+
+## Base URL
+
+| 환경 | Base URL |
+| --- | --- |
+| 호스팅 (권장) | `https://mcp.datari.kr` |
+| 자체 호스팅 / 로컬 | `http://localhost:8080` |
+
+## 인증 한 줄 요약
+
+모든 보호 엔드포인트는 다음 두 헤더 중 하나를 받습니다.
+
+```http
+x-api-key: dat_live_...
+Authorization: Bearer dat_live_...
+```
+
+전체 인증 흐름·OAuth·에러 코드는 [Authentication](/content/api-reference/authentication)을 참고하세요.
+
+## 공통 오류 형식
+
+```json
+{
+  "error": "Unauthorized",
+  "message": "Valid API key is required."
+}
+```
+
+JSON-RPC 엔드포인트(`/mcp`)는 [JSON-RPC 2.0 에러 객체](https://www.jsonrpc.org/specification#error_object)를 반환합니다.
+
+| 코드 | 의미 |
+| --- | --- |
+| `-32600` | Invalid JSON-RPC request |
+| `-32601` | Method not found |
+| `-32602` | Invalid params (예: tool name 누락) |
+| `-32000` | Internal gateway error |
+
+## Content Types
+
+- 요청/응답: `application/json`
+- SSE 스트림: `text/event-stream`

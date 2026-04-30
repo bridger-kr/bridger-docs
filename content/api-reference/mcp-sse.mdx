@@ -1,6 +1,92 @@
 ---
 title: "GET /mcp/sse"
-description: "SSE 스트림 (gateway/toolResult 이벤트)."
+description: "datari Gateway 실시간 이벤트 스트림 — Server-Sent Events 기반 도구 실행 알림."
 ---
 
-<Note>이 페이지는 Phase 5에서 자동 생성/마이그레이션됩니다.</Note>
+`/mcp/sse`는 Gateway에서 발생한 도구 실행 결과를 실시간으로 받는 SSE 엔드포인트입니다.
+대시보드 라이브 뷰, 멀티 클라이언트 협업, 외부 옵저버블리티 연동에 사용됩니다.
+
+## Request
+
+```http
+GET /mcp/sse HTTP/1.1
+Accept: text/event-stream
+x-api-key: dat_live_...
+```
+
+## 이벤트 종류
+
+### `event: ready`
+
+연결 직후 1회 발행. `clientId`로 추후 식별 가능합니다.
+
+```text
+event: ready
+data: {"ok":true,"clientId":"c_a1b2c3"}
+```
+
+### Heartbeat
+
+주기적으로 SSE 주석(`:heartbeat`)이 브로드캐스트되어 NAT/프록시 타임아웃을 방지합니다.
+
+```text
+:heartbeat
+```
+
+### `event: message` — `gateway/toolResult`
+
+`tools/call` 실행마다 모든 SSE 클라이언트로 브로드캐스트됩니다.
+
+```text
+event: message
+data: {
+  "jsonrpc": "2.0",
+  "method": "gateway/toolResult",
+  "params": {
+    "tool": "getultrashortcast",
+    "upstream": {
+      "method": "GET",
+      "url": "https://apis.data.go.kr/...",
+      "status": 200
+    },
+    "ts": "2026-04-30T07:31:09.412Z"
+  }
+}
+```
+
+## cURL
+
+```bash
+curl -N https://mcp.datari.kr/mcp/sse \
+  -H "x-api-key: $DATARI_API_KEY" \
+  -H "Accept: text/event-stream"
+```
+
+`-N`(--no-buffer) 플래그로 실시간 출력을 받습니다.
+
+## Node.js (EventSource)
+
+```javascript
+import EventSource from "eventsource";
+
+const es = new EventSource("https://mcp.datari.kr/mcp/sse", {
+  headers: { "x-api-key": process.env.DATARI_API_KEY },
+});
+
+es.addEventListener("ready", (e) => {
+  console.log("connected", JSON.parse(e.data));
+});
+
+es.addEventListener("message", (e) => {
+  const ev = JSON.parse(e.data);
+  if (ev.method === "gateway/toolResult") {
+    console.log("tool result", ev.params);
+  }
+});
+```
+
+## 운영 노트
+
+- 동일 API Key로 다중 SSE 연결 가능 (브로드캐스트는 모든 연결로 전송).
+- 5xx 발생 시 클라이언트가 자동 재연결하도록 EventSource 또는 동등 라이브러리 사용 권장.
+- 페이로드 크기는 본문 1KB 이하 — 큰 응답은 본문 대신 해시 + REST 조회를 권장합니다.

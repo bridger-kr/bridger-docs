@@ -1,6 +1,56 @@
 ---
 title: "GET /registry/tools"
-description: "전체 MCP tool 목록."
+description: "datari Gateway가 로드한 모든 MCP 도구 평탄화 목록."
 ---
 
-<Note>이 페이지는 Phase 5에서 자동 생성/마이그레이션됩니다.</Note>
+[`/registry/servers`](/content/api-reference/registry-servers)와 달리 서버 그룹을 풀어 평탄화한
+도구 목록을 반환합니다. 도구 단위로 검색·페이징이 필요한 UI에 적합합니다.
+
+## Request
+
+```http
+GET /registry/tools
+```
+
+- 인증: API Key 필요
+
+## Response 200
+
+```json
+{
+  "tools": [
+    {
+      "name": "getultrashortcast",
+      "description": "...",
+      "inputSchema": { "type": "object", "properties": {} },
+      "method": "GET",
+      "path": "/getUltraSrtFcst"
+    }
+  ]
+}
+```
+
+| 필드 | 타입 | 설명 |
+| --- | --- | --- |
+| `tools[].name` | string | MCP 도구 이름 |
+| `tools[].description` | string | 사람이 읽는 설명 |
+| `tools[].inputSchema` | JSON Schema | 입력 파라미터 스키마 |
+| `tools[].method` | string | upstream HTTP 메서드 |
+| `tools[].path` | string | upstream 경로 (`servers[].baseUrl` 기준) |
+
+## cURL
+
+```bash
+curl -H "x-api-key: $DATARI_API_KEY" https://mcp.datari.kr/registry/tools
+```
+
+## 관련 엔드포인트
+
+<CardGroup cols={2}>
+  <Card title="POST /mcp tools/list" icon="code" href="/content/api-reference/mcp-jsonrpc">
+    MCP 표준 인터페이스로 동일 정보 조회.
+  </Card>
+  <Card title="GET /registry/servers" icon="boxes-stacked" href="/content/api-reference/registry-servers">
+    서버 그룹 단위 카탈로그.
+  </Card>
+</CardGroup>
