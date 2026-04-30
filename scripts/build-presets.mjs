@@ -7,6 +7,14 @@
  * index at apps/docs/content/presets/index.mdx.
  *
  * Idempotent: rewrites every file from scratch on each run.
+ *
+ * NOTE: This is a DEV-TIME generator. Output MDX is committed to the repo
+ * and consumed directly by `mint export` at container build time.
+ *   - Run locally: `npm run build:content` (after editing presets/*.yaml)
+ *   - The Docker build (`apps/docs/Dockerfile`) does NOT execute this script
+ *     because the `presets/` source tree lives at repo root, outside the
+ *     `apps/docs/` build context. Re-running it inside the container would
+ *     also produce no diff (since output is already committed).
  */
 
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";

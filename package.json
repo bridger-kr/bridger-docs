@@ -5,7 +5,8 @@
   "description": "datari documentation site (Mintlify, self-hosted on NKS).",
   "scripts": {
     "dev": "mint dev --port 3334",
-    "build": "node scripts/build-presets.mjs && node scripts/build-api-reference.mjs && mint export --output dist/export.zip",
+    "build": "mint export --output dist/export.zip",
+    "build:content": "node scripts/build-presets.mjs && node scripts/build-api-reference.mjs",
     "preview": "mint dev --port 3334",
     "lint": "mint broken-links",
     "presets": "node scripts/build-presets.mjs",
