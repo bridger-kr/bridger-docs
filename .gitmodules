@@ -1,0 +1,3 @@
+[submodule "vendor/spec"]
+	path = vendor/spec
+	url = https://github.com/happycastle114/datari-spec.git
