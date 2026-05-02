@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@11bd71901bbe5b3a3813ec3892cb8836da29cc3a
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
       - uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd
 
@@ -43,7 +43,7 @@ jobs:
           cache-from: type=gha,scope=datari-docs
           cache-to: type=gha,mode=max,scope=datari-docs
 
-      - uses: actions/checkout@11bd71901bbe5b3a3813ec3892cb8836da29cc3a
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           repository: happycastle114/datari-gitops
           token: ${{ secrets.GITOPS_TOKEN }}
@@ -71,7 +71,7 @@ jobs:
 
       - name: Open PR against datari-gitops
         if: env.skip != 'true'
-        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b5029fe7f90a342
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1
         with:
           path: gitops
           token: ${{ secrets.GITOPS_TOKEN }}
