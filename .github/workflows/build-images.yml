@@ -97,7 +97,8 @@ jobs:
             echo "skip=true" >> "$GITHUB_ENV"
           fi
 
-      - name: Open PR against datari-gitops
+      - id: cpr
+        name: Open PR against datari-gitops
         if: env.skip != 'true'
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1
         with:
@@ -114,3 +115,13 @@ jobs:
             - digest: `${{ steps.push.outputs.digest }}`
             - source commit: https://github.com/happycastle114/datari-docs/commit/${{ github.sha }}
           delete-branch: true
+
+      - name: Enable automerge on digest-bump PR
+        if: steps.cpr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ secrets.GITOPS_TOKEN }}
+          PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+        run: |
+          set -euo pipefail
+          gh pr merge --repo happycastle114/datari-gitops \
+            --squash --auto --delete-branch "$PR_NUMBER"
