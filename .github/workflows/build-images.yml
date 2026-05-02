@@ -22,13 +22,33 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
+      - id: doppler
+        name: Fetch NCR credentials from Doppler
+        uses: dopplerhq/secrets-fetch-action@451892f16195f9ac360e1a5bcbf0b5fd0e957534
+        with:
+          doppler-token: ${{ secrets.DOPPLER_KEY }}
+          inject-env-vars: true
+
+      - name: Validate Doppler-injected secrets
+        run: |
+          set -euo pipefail
+          for v in NCR_REGISTRY NCR_IMAGE_PREFIX NCR_USERNAME NCR_PASSWORD; do
+            len=${#v}
+            val_len=$(eval "echo \${#$v}")
+            if [ "$val_len" -lt 3 ]; then
+              echo "::error::$v is missing or too short in Doppler (len=$val_len)"
+              exit 1
+            fi
+            echo "$v ok (len=$val_len)"
+          done
+
       - uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd
 
       - uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
         with:
-          registry: ${{ secrets.NCR_REGISTRY }}
-          username: ${{ secrets.NCR_USERNAME }}
-          password: ${{ secrets.NCR_PASSWORD }}
+          registry: ${{ env.NCR_REGISTRY }}
+          username: ${{ env.NCR_USERNAME }}
+          password: ${{ env.NCR_PASSWORD }}
 
       - id: push
         uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f
@@ -37,8 +57,8 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
-            ${{ secrets.NCR_REGISTRY }}/${{ secrets.NCR_IMAGE_PREFIX }}/datari-docs:sha-${{ github.sha }}
-            ${{ secrets.NCR_REGISTRY }}/${{ secrets.NCR_IMAGE_PREFIX }}/datari-docs:latest
+            ${{ env.NCR_REGISTRY }}/${{ env.NCR_IMAGE_PREFIX }}/datari-docs:sha-${{ github.sha }}
+            ${{ env.NCR_REGISTRY }}/${{ env.NCR_IMAGE_PREFIX }}/datari-docs:latest
           provenance: false
           cache-from: type=gha,scope=datari-docs
           cache-to: type=gha,mode=max,scope=datari-docs
@@ -52,16 +72,13 @@ jobs:
 
       - name: Patch deployment manifest
         env:
-          REGISTRY: ${{ secrets.NCR_REGISTRY }}
-          PREFIX: ${{ secrets.NCR_IMAGE_PREFIX }}
           DIGEST: ${{ steps.push.outputs.digest }}
         working-directory: gitops
         run: |
           set -euo pipefail
           target="k8s/apps/docs/deployment.yaml"
-          new_image="${REGISTRY}/${PREFIX}/datari-docs@${DIGEST}"
-          # Replace any prior digest pin for this exact repo path.
-          sed -i -E "s|${REGISTRY}/${PREFIX}/datari-docs@sha256:[a-f0-9]+|${new_image}|g" "${target}"
+          new_image="${NCR_REGISTRY}/${NCR_IMAGE_PREFIX}/datari-docs@${DIGEST}"
+          sed -i -E "s|${NCR_REGISTRY}/${NCR_IMAGE_PREFIX}/datari-docs@sha256:[a-f0-9]+|${new_image}|g" "${target}"
           echo "--- diff ---"
           git --no-pager diff "${target}"
           if git diff --quiet "${target}"; then
@@ -82,7 +99,7 @@ jobs:
           body: |
             Automated digest bump from `datari-docs@${{ github.sha }}`.
 
-            - image: `${{ secrets.NCR_REGISTRY }}/${{ secrets.NCR_IMAGE_PREFIX }}/datari-docs`
+            - image: `datari-docs`
             - digest: `${{ steps.push.outputs.digest }}`
             - source commit: https://github.com/happycastle114/datari-docs/commit/${{ github.sha }}
           delete-branch: true
