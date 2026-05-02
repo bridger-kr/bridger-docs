@@ -3,7 +3,7 @@ title: "GET /registry/tools"
 description: "datari Gateway가 로드한 모든 MCP 도구 평탄화 목록."
 ---
 
-[`/registry/servers`](/content/api-reference/registry-servers)와 달리 서버 그룹을 풀어 평탄화한
+[`/registry/servers`](/api-reference/registry-servers)와 달리 서버 그룹을 풀어 평탄화한
 도구 목록을 반환합니다. 도구 단위로 검색·페이징이 필요한 UI에 적합합니다.
 
 ## Request
@@ -47,10 +47,10 @@ curl -H "x-api-key: $DATARI_API_KEY" https://mcp.datari.kr/registry/tools
 ## 관련 엔드포인트
 
 <CardGroup cols={2}>
-  <Card title="POST /mcp tools/list" icon="code" href="/content/api-reference/mcp-jsonrpc">
+  <Card title="POST /mcp tools/list" icon="code" href="/api-reference/mcp-jsonrpc">
     MCP 표준 인터페이스로 동일 정보 조회.
   </Card>
-  <Card title="GET /registry/servers" icon="boxes-stacked" href="/content/api-reference/registry-servers">
+  <Card title="GET /registry/servers" icon="boxes-stacked" href="/api-reference/registry-servers">
     서버 그룹 단위 카탈로그.
   </Card>
 </CardGroup>

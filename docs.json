@@ -76,28 +76,28 @@
           {
             "group": "시작하기",
             "pages": [
-              "content/getting-started/introduction",
-              "content/getting-started/quickstart",
-              "content/getting-started/installation",
-              "content/getting-started/first-tool"
+              "getting-started/introduction",
+              "getting-started/quickstart",
+              "getting-started/installation",
+              "getting-started/first-tool"
             ]
           },
           {
             "group": "가이드",
             "pages": [
-              "content/guides/claude",
-              "content/guides/chatgpt",
-              "content/guides/api",
-              "content/guides/subscribe"
+              "guides/claude",
+              "guides/chatgpt",
+              "guides/api",
+              "guides/subscribe"
             ]
           },
           {
             "group": "개념",
             "pages": [
-              "content/concepts/mcp",
-              "content/concepts/byoapi",
-              "content/concepts/auth-and-security",
-              "content/concepts/architecture"
+              "concepts/mcp",
+              "concepts/byoapi",
+              "concepts/auth-and-security",
+              "concepts/architecture"
             ]
           }
         ]
@@ -108,13 +108,13 @@
           {
             "group": "Gateway API",
             "pages": [
-              "content/api-reference/introduction",
-              "content/api-reference/authentication",
-              "content/api-reference/health",
-              "content/api-reference/registry-servers",
-              "content/api-reference/registry-tools",
-              "content/api-reference/mcp-jsonrpc",
-              "content/api-reference/mcp-sse"
+              "api-reference/introduction",
+              "api-reference/authentication",
+              "api-reference/health",
+              "api-reference/registry-servers",
+              "api-reference/registry-tools",
+              "api-reference/mcp-jsonrpc",
+              "api-reference/mcp-sse"
             ]
           }
         ]
@@ -125,21 +125,21 @@
           {
             "group": "프리셋 카탈로그",
             "pages": [
-              "content/presets/index",
-              "content/presets/civil",
-              "content/presets/culture",
-              "content/presets/economy",
-              "content/presets/education",
-              "content/presets/environment",
-              "content/presets/food",
-              "content/presets/land",
-              "content/presets/law",
-              "content/presets/realestate",
-              "content/presets/safety",
-              "content/presets/science",
-              "content/presets/transportation",
-              "content/presets/weather",
-              "content/presets/welfare"
+              "presets/index",
+              "presets/civil",
+              "presets/culture",
+              "presets/economy",
+              "presets/education",
+              "presets/environment",
+              "presets/food",
+              "presets/land",
+              "presets/law",
+              "presets/realestate",
+              "presets/safety",
+              "presets/science",
+              "presets/transportation",
+              "presets/weather",
+              "presets/welfare"
             ]
           }
         ]
