@@ -3,8 +3,8 @@
  * build-presets.mjs
  *
  * Parses presets/{category}/*.yaml at the repo root and writes one MDX page
- * per category to apps/docs/content/presets/{category}.mdx, plus a master
- * index at apps/docs/content/presets/index.mdx.
+ * per category to apps/docs/presets/{category}.mdx, plus a master
+ * index at apps/docs/presets/index.mdx.
  *
  * Idempotent: rewrites every file from scratch on each run.
  *
@@ -189,7 +189,7 @@ function renderIndexMdx(summary) {
   const cards = summary
     .map((s) => {
       const meta = CATEGORY_META[s.category];
-      return `  <Card title="${meta.title}" icon="${meta.icon}" href="/content/presets/${s.category}">
+      return `  <Card title="${meta.title}" icon="${meta.icon}" href="/presets/${s.category}">
     ${meta.desc}\\
     **${s.total}개 프리셋 · ${s.totalOps}개 도구**
   </Card>`;
@@ -199,7 +199,7 @@ function renderIndexMdx(summary) {
   const rows = summary
     .map((s) => {
       const meta = CATEGORY_META[s.category];
-      return `| [${meta.title}](/content/presets/${s.category}) | ${s.total} | ${s.totalOps} |`;
+      return `| [${meta.title}](/presets/${s.category}) | ${s.total} | ${s.totalOps} |`;
     })
     .join("\n");
 

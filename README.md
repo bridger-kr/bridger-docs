@@ -8,7 +8,7 @@ Mintlify documentation for datari (ko/en) — published at `docs.datari.kr`.
 
 | Path         | Purpose                                                |
 | ------------ | ------------------------------------------------------ |
-| `content/`   | Mintlify pages (Korean + English)                      |
+| `<section>/` | Mintlify pages (`getting-started/`, `concepts/`, `guides/`, `api-reference/`, `presets/`) |
 | `docs.json`  | navigation, theme, anchors                             |
 | `logo/`      | brand assets                                           |
 | `nginx.conf` | static-server config used by the production image     |
