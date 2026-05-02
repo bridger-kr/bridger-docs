@@ -1,0 +1,69 @@
+name: build-images
+# Build the docs container image, push to NHN Cloud Container Registry, then
+# call the reusable digest-bump workflow in datari-gitops to open a PR that
+# updates k8s/apps/docs/deployment.yaml with the new digest. Once that PR
+# merges, deploy-nks.yml in datari-gitops takes over (ArgoCD wait + smoke).
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - '.gitignore'
+      - 'docs/**'
+  workflow_dispatch:
+
+concurrency:
+  group: build-images-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      digest: ${{ steps.push.outputs.digest }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b3a3813ec3892cb8836da29cc3a
+        with:
+          submodules: recursive
+
+      - uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd
+
+      - name: Log in to NHN Cloud Container Registry
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
+        with:
+          registry: 9dbc4756-kr1-registry.container.nhncloud.com
+          username: ${{ secrets.NCR_REGISTRY_USER }}
+          password: ${{ secrets.NCR_REGISTRY_PASSWORD }}
+
+      - id: push
+        name: Build and push image
+        uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            9dbc4756-kr1-registry.container.nhncloud.com/datari-prod/datari-docs:sha-${{ github.sha }}
+            9dbc4756-kr1-registry.container.nhncloud.com/datari-prod/datari-docs:latest
+          provenance: false
+          cache-from: type=gha,scope=datari-docs
+          cache-to: type=gha,mode=max,scope=datari-docs
+
+      - name: Echo digest
+        run: |
+          echo "Pushed datari-docs@${{ steps.push.outputs.digest }}"
+
+  bump-digest:
+    needs: build-and-push
+    uses: happycastle114/datari-gitops/.github/workflows/digest-bump.yml@main
+    with:
+      repo: datari-docs
+      images: |
+        {"datari-docs":"9dbc4756-kr1-registry.container.nhncloud.com/datari-prod/datari-docs@${{ needs.build-and-push.outputs.digest }}"}
+    secrets:
+      GITOPS_PR_TOKEN: ${{ secrets.GITOPS_PR_TOKEN }}
