@@ -1,9 +1,9 @@
 ---
 title: "Authentication"
-description: "datari Gateway 인증 — API Key 헤더, 에러 응답, 테넌트 식별."
+description: "DATA BRIDGE Gateway 인증 — API Key 헤더, 에러 응답, 테넌트 식별."
 ---
 
-datari Gateway는 두 가지 인증 헤더를 받습니다. 둘 중 하나만 보내면 됩니다.
+DATA BRIDGE Gateway는 두 가지 인증 헤더를 받습니다. 둘 중 하나만 보내면 됩니다.
 
 ```http
 x-api-key: dat_live_xxx
@@ -59,7 +59,7 @@ Client Credentials 흐름을 사용합니다.
 
 ```bash
 curl -X POST https://mcp.datari.kr/mcp \
-  -H "x-api-key: $DATARI_API_KEY" \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```

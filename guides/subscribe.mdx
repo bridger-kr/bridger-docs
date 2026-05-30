@@ -1,20 +1,20 @@
 ---
 title: "구독 / API 키 발급"
-description: "datari API 키 발급과 data.go.kr API 활용신청 흐름."
+description: "DATA BRIDGE API 키 발급과 data.go.kr API 활용신청 흐름."
 ---
 
-datari를 사용하려면 두 가지 키가 필요합니다.
+DATA BRIDGE를 사용하려면 두 가지 키가 필요합니다.
 
 <CardGroup cols={2}>
-  <Card title="datari API Key" icon="key" href="https://admin.datari.kr/settings">
-    datari Gateway 호출용. 어드민 대시보드에서 무료 발급.
+  <Card title="DATA BRIDGE API Key" icon="key" href="https://admin.datari.kr/settings">
+    DATA BRIDGE Gateway 호출용. 어드민 대시보드에서 무료 발급.
   </Card>
   <Card title="data.go.kr 인증키" icon="building-columns">
     공공데이터를 사용하려면 data.go.kr에서 API 활용신청이 필요합니다 (즉시 승인되는 경우가 많음).
   </Card>
 </CardGroup>
 
-## datari API Key 발급
+## DATA BRIDGE API Key 발급
 
 <Steps>
   <Step title="어드민 대시보드 접속">
@@ -30,14 +30,14 @@ datari를 사용하려면 두 가지 키가 필요합니다.
     발급된 키는 한 번만 표시됩니다. 환경변수 또는 시크릿 매니저(Vault, Doppler)에 저장하세요.
 
     ```bash
-    export DATARI_API_KEY="dat_live_..."
+    export DATA_BRIDGE_API_KEY="dat_live_..."
     ```
   </Step>
 </Steps>
 
 ## data.go.kr 인증키 신청
 
-datari가 호출하는 공공데이터 API의 상당수는 [공공데이터포털(data.go.kr)](https://www.data.go.kr)
+DATA BRIDGE가 호출하는 공공데이터 API의 상당수는 [공공데이터포털(data.go.kr)](https://www.data.go.kr)
 인증키가 필요합니다. 한 번 발급받은 인증키는 같은 제공기관의 여러 API에 재사용할 수 있는
 경우가 많습니다.
 
@@ -60,13 +60,13 @@ datari가 호출하는 공공데이터 API의 상당수는 [공공데이터포�
     **일반 인증키 (Decoding)** 를 복사하세요.
 
     <Warning>
-      반드시 **Decoding** 키를 사용하세요. Encoding 키(URL 인코딩된 형태)는 datari에서 사용하지
+      반드시 **Decoding** 키를 사용하세요. Encoding 키(URL 인코딩된 형태)는 DATA BRIDGE에서 사용하지
       않습니다.
     </Warning>
   </Step>
 
-  <Step title="datari에 키 입력">
-    datari 어드민 대시보드의 **Settings → Provider Keys**에 복사한 인증키를 입력하면
+  <Step title="DATA BRIDGE에 키 입력">
+    DATA BRIDGE 어드민 대시보드의 **Settings → Provider Keys**에 복사한 인증키를 입력하면
     바로 사용할 수 있습니다. 하나의 인증키로 같은 제공기관의 여러 API를 사용할 수 있는 경우가
     많습니다.
   </Step>
@@ -80,7 +80,7 @@ datari가 호출하는 공공데이터 API의 상당수는 [공공데이터포�
   </Accordion>
   <Accordion title="인증키가 여러 개인데 어떤 걸 써야 하나요?">
     **일반 인증키 (Decoding)** 를 사용하세요. Encoding 키는 URL 인코딩된 형태로,
-    datari에서는 Decoding 키만 사용합니다.
+    DATA BRIDGE에서는 Decoding 키만 사용합니다.
   </Accordion>
   <Accordion title="여기 없는 API도 사용할 수 있나요?">
     OpenAPI 스펙이 있는 어떤 API든 [BYOAPI](/concepts/byoapi)로 직접 등록할 수 있습니다.

@@ -1,6 +1,6 @@
-# datari-docs
+# DATA BRIDGE docs
 
-Mintlify documentation for datari (ko/en) — published at `docs.datari.kr`.
+Mintlify documentation for DATA BRIDGE (ko/en) — published at `docs.datari.kr`.
 
 > **Private.** Image digest bumped into `datari-gitops` via cross-repo PR.
 
@@ -46,4 +46,4 @@ npm run dev    # mintlify dev server on :3000
 
 ## License
 
-Private. © datari.
+Private. © DATA BRIDGE.

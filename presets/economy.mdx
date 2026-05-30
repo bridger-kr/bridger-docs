@@ -47,7 +47,7 @@ description: "환율, 금리, 지표, 소비, 수출입, 시장 통계. 총 19�
 
   ```bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \
-    -H "x-api-key: $DATARI_API_KEY" \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/economy-"))'
   ```

@@ -166,7 +166,7 @@ ${rows}
 
   \`\`\`bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \\
-    -H "x-api-key: $DATARI_API_KEY" \\
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \\
     -H "Content-Type: application/json" \\
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/${category}-"))'
   \`\`\`
@@ -205,10 +205,10 @@ function renderIndexMdx(summary) {
 
   return `---
 title: "카탈로그 인덱스"
-description: "datari가 제공하는 ${summary.length}개 카테고리 · ${grandTotal}개 프리셋 · ${grandOps}개 도구의 전체 인덱스."
+description: "DATA BRIDGE가 제공하는 ${summary.length}개 카테고리 · ${grandTotal}개 프리셋 · ${grandOps}개 도구의 전체 인덱스."
 ---
 
-datari는 공공·민간 OpenAPI를 카테고리별로 정리한 **${grandTotal}개의 프리셋**을 제공합니다.
+DATA BRIDGE는 공공·민간 OpenAPI를 카테고리별로 정리한 **${grandTotal}개의 프리셋**을 제공합니다.
 한 번 설치하면 카테고리 안의 모든 도구를 \`mcp-gen\` CLI 또는 \`mcp.datari.kr\` 호스팅 Gateway에서 즉시 호출할 수 있습니다.
 
 <CardGroup cols={2}>

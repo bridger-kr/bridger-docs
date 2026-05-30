@@ -42,7 +42,7 @@ description: "식품 안전, 농축산물 가격·생산, 수산물 데이터. �
 
   ```bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \
-    -H "x-api-key: $DATARI_API_KEY" \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/food-"))'
   ```

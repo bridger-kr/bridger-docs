@@ -1,9 +1,9 @@
 ---
 title: "전체 아키텍처"
-description: "CLI · Gateway · 미들웨어가 어떻게 맞물려 datari를 구성하는지 살펴봅니다."
+description: "CLI · Gateway · 미들웨어가 어떻게 맞물려 DATA BRIDGE를 구성하는지 살펴봅니다."
 ---
 
-datari는 모노레포 기반의 두 가지 핵심 패키지와 한 개의 카탈로그 자산으로 구성됩니다.
+DATA BRIDGE는 모노레포 기반의 두 가지 핵심 패키지와 한 개의 카탈로그 자산으로 구성됩니다.
 
 ```text
 project-two/
@@ -13,7 +13,7 @@ project-two/
 ├── apps/
 │   ├── dashboard/  # 관리 대시보드 (React + Vite)
 │   └── docs/       # 본 문서 사이트 (Mintlify)
-├── landing/        # datari.kr 랜딩
+├── landing/        # 퍼블릭 랜딩
 └── presets/        # OpenAPI 프리셋 카탈로그 (14개 카테고리, 230+개)
 ```
 
@@ -57,7 +57,7 @@ OpenAPI 스펙 또는 프리셋 YAML에서 **MCP 서버를 생성·설치**하�
         │  MCP over Streamable HTTP
         ▼
    ┌──────────────────────────────────────────────┐
-   │            datari Gateway                     │
+   │            DATA BRIDGE Gateway                     │
    ├──────────────────────────────────────────────┤
    │  1. 인증            (API Key / OAuth 2.0)     │
    │  2. 테넌트 격리                                │

@@ -1,9 +1,9 @@
 ---
 title: "인증 · 시크릿 · 감사 로그"
-description: "API 키, 시크릿 관리, PII 필터, 감사 로그가 datari에서 어떻게 처리되는지 살펴봅니다."
+description: "API 키, 시크릿 관리, PII 필터, 감사 로그가 DATA BRIDGE에서 어떻게 처리되는지 살펴봅니다."
 ---
 
-datari Gateway는 공공·사내 API를 한 도메인으로 노출하는 만큼, 보안 경계가 가장 중요한 책임입니다.
+DATA BRIDGE Gateway는 공공·사내 API를 한 도메인으로 노출하는 만큼, 보안 경계가 가장 중요한 책임입니다.
 다음 4개 레이어가 모든 요청에 적용됩니다.
 
 <CardGroup cols={2}>
@@ -29,7 +29,7 @@ datari Gateway는 공공·사내 API를 한 도메인으로 노출하는 만큼,
 
 ```bash
 curl -X POST https://mcp.datari.kr/mcp \
-  -H "x-api-key: $DATARI_API_KEY" \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
@@ -44,13 +44,13 @@ curl -X POST https://mcp.datari.kr/mcp \
 
 ## 2. 시크릿 관리
 
-datari가 처리하는 시크릿은 다음 세 종류입니다.
+DATA BRIDGE가 처리하는 시크릿은 다음 세 종류입니다.
 
 | 종류 | 예시 | 저장 위치 |
 | --- | --- | --- |
 | 공공데이터 ServiceKey | `data.go.kr` 발급 키 | Doppler / Vault (Gateway 측) |
 | BYOAPI Upstream 토큰 | 사용자 API의 OAuth/HTTP Header 토큰 | Vault per-tenant 격리 |
-| datari API Key | 호출자 인증 키 | DB(해시) + 토큰 자체는 발급 시 1회 노출 |
+| DATA BRIDGE API Key | 호출자 인증 키 | DB(해시) + 토큰 자체는 발급 시 1회 노출 |
 
 **원칙**
 

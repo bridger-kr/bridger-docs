@@ -38,7 +38,7 @@ description: "지적, 건축 인허가, 도시계획, 국토 통계. 총 10개 �
 
   ```bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \
-    -H "x-api-key: $DATARI_API_KEY" \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/land-"))'
   ```

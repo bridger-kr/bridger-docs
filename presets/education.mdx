@@ -43,7 +43,7 @@ description: "학교, 대학, 교육 통계, 학사 데이터. 총 15개 프리�
 
   ```bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \
-    -H "x-api-key: $DATARI_API_KEY" \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/education-"))'
   ```

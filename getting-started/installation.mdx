@@ -1,12 +1,12 @@
 ---
 title: "설치"
-description: "datari CLI(@mcp-hub/cli)와 Gateway(@mcp-hub/gateway) 설치 방법."
+description: "DATA BRIDGE CLI(@mcp-hub/cli)와 Gateway(@mcp-hub/gateway) 설치 방법."
 ---
 
-대부분의 사용 사례에는 **datari 호스팅 Gateway**(`mcp.datari.kr`)면 충분합니다.
+대부분의 사용 사례에는 **DATA BRIDGE 호스팅 Gateway**(`mcp.datari.kr`)면 충분합니다.
 다음 경우에만 직접 설치합니다.
 
-- 사내망/오프라인 환경에서 datari를 운영
+- 사내망/오프라인 환경에서 DATA BRIDGE를 운영
 - OpenAPI 스펙으로부터 MCP 서버를 **로컬에서 생성**
 - Gateway를 **자체 호스팅**하여 미들웨어/감사 로그를 직접 통제
 
@@ -68,7 +68,7 @@ npm start
 
 ```bash
 export PORT=8080
-export DATARI_API_KEY=dat_live_...
+export DATA_BRIDGE_API_KEY=dat_live_...
 export PUBLICDATA_SERVICE_KEY=...
 npm start
 ```
@@ -78,7 +78,7 @@ npm start
 ```bash
 docker run -p 8080:8080 \
   -e PUBLICDATA_SERVICE_KEY=... \
-  ghcr.io/happycastle114/datari-gateway:latest
+  ghcr.io/your-org/data-bridge-gateway:latest
 ```
 
 자세한 운영 흐름(시크릿 관리, 헬스체크, 멀티 인스턴스)은

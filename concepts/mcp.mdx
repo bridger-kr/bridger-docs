@@ -1,6 +1,6 @@
 ---
 title: "Model Context Protocol(MCP)이란?"
-description: "Anthropic의 MCP 표준과 datari가 어떻게 맞물리는지 살펴봅니다."
+description: "Anthropic의 MCP 표준과 DATA BRIDGE가 어떻게 맞물리는지 살펴봅니다."
 ---
 
 **Model Context Protocol (MCP)** 은 Anthropic이 공개한, AI 모델이 외부 도구·데이터·시스템에
@@ -34,9 +34,9 @@ SSE 트랜스포트를 사용합니다.
 | `resources/list`, `resources/read` | 정적/동적 리소스 조회 |
 | `prompts/list`, `prompts/get` | 사전 정의 프롬프트 템플릿 |
 
-## datari와 MCP
+## DATA BRIDGE와 MCP
 
-datari는 **MCP Server 호스팅 플랫폼**입니다. 자체 MCP 서버를 작성·배포·운영하지 않아도,
+DATA BRIDGE는 **MCP Server 호스팅 플랫폼**입니다. 자체 MCP 서버를 작성·배포·운영하지 않아도,
 OpenAPI 스펙만 있으면 즉시 MCP 도구로 변환됩니다.
 
 ```text
@@ -44,7 +44,7 @@ OpenAPI 스펙 (preset YAML 또는 BYOAPI 등록)
         │
         ▼
   ┌─────────────────────────────┐
-  │  datari Gateway              │
+  │  DATA BRIDGE Gateway              │
   │  (mcp.datari.kr/mcp)        │
   ├─────────────────────────────┤
   │  • tools/list                │

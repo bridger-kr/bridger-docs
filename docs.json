@@ -1,8 +1,8 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "datari",
-  "description": "datari 공식 문서 — 230+ 공공데이터 API와 BYOAPI를 AI 도구로 잇는 다리. 인증, 파싱, 에러 처리, 감사 로그, 시크릿 관리.",
+  "name": "DATA BRIDGE",
+  "description": "DATA BRIDGE 공식 문서 — 230+ 공공데이터 API와 BYOAPI를 AI 도구로 잇는 다리. 인증, 파싱, 에러 처리, 감사 로그, 시크릿 관리.",
   "colors": {
     "primary": "#ea580c",
     "light": "#fb923c",
@@ -148,6 +148,6 @@
   },
   "integrations": {},
   "search": {
-    "prompt": "datari 문서 검색…"
+    "prompt": "DATA BRIDGE 문서 검색…"
   }
 }

@@ -1,30 +1,30 @@
 ---
 title: "첫 도구 호출"
-description: "MCP JSON-RPC로 datari에 등록된 도구를 처음 호출해 봅니다."
+description: "MCP JSON-RPC로 DATA BRIDGE에 등록된 도구를 처음 호출해 봅니다."
 ---
 
-이 페이지는 datari Gateway에 연결한 직후 어떤 호출이 어떤 응답으로 돌아오는지를 보여 줍니다.
+이 페이지는 DATA BRIDGE Gateway에 연결한 직후 어떤 호출이 어떤 응답으로 돌아오는지를 보여 줍니다.
 도구 한 개를 골라 입력 → 출력 흐름을 확인하면 그다음부터는 어떤 도구든 동일한 패턴으로
 호출할 수 있습니다.
 
 ## 준비
 
 - [API 키 발급](/guides/subscribe) 완료
-- `DATARI_API_KEY` 환경변수에 키 저장
+- `DATA_BRIDGE_API_KEY` 환경변수에 키 저장
 
 ```bash
-export DATARI_API_KEY="dat_live_..."
+export DATA_BRIDGE_API_KEY="dat_live_..."
 ```
 
 ## 1. 등록된 도구 목록 조회
 
-`tools/list`는 datari에 로드된 **모든 MCP 도구의 메타데이터**를 반환합니다 (`name`, `description`,
+`tools/list`는 DATA BRIDGE에 로드된 **모든 MCP 도구의 메타데이터**를 반환합니다 (`name`, `description`,
 `inputSchema`).
 
 <CodeGroup>
   ```bash cURL
   curl -X POST https://mcp.datari.kr/mcp \
-    -H "x-api-key: $DATARI_API_KEY" \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
   ```
@@ -33,7 +33,7 @@ export DATARI_API_KEY="dat_live_..."
   const res = await fetch("https://mcp.datari.kr/mcp", {
     method: "POST",
     headers: {
-      "x-api-key": process.env.DATARI_API_KEY,
+      "x-api-key": process.env.DATA_BRIDGE_API_KEY,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -50,7 +50,7 @@ export DATARI_API_KEY="dat_live_..."
   r = requests.post(
       "https://mcp.datari.kr/mcp",
       headers={
-          "x-api-key": os.environ["DATARI_API_KEY"],
+          "x-api-key": os.environ["DATA_BRIDGE_API_KEY"],
           "Content-Type": "application/json",
       },
       json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"},
@@ -90,7 +90,7 @@ export DATARI_API_KEY="dat_live_..."
 
 ```bash
 curl -X POST https://mcp.datari.kr/mcp \
-  -H "x-api-key: $DATARI_API_KEY" \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -112,7 +112,7 @@ curl -X POST https://mcp.datari.kr/mcp \
 
 ```bash
 curl -N https://mcp.datari.kr/mcp/sse \
-  -H "x-api-key: $DATARI_API_KEY"
+  -H "x-api-key: $DATA_BRIDGE_API_KEY"
 ```
 
 `gateway/toolResult` 이벤트가 도구 실행마다 브로드캐스트됩니다.
