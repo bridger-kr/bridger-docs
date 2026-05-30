@@ -32,8 +32,6 @@ RUN mkdir -p dist \
 
 FROM mirror.gcr.io/library/nginx:1.29-alpine AS runtime
 
-RUN apk upgrade --no-cache
-
 COPY --from=build /app/dist/site /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 RUN chown -R nginx:nginx /var/cache/nginx /var/run /usr/share/nginx/html
