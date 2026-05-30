@@ -1,27 +1,27 @@
 ---
 title: "Quickstart"
-description: "5분 안에 datari를 통해 첫 MCP 도구를 호출합니다."
+description: "5분 안에 DATA BRIDGE를 통해 첫 MCP 도구를 호출합니다."
 ---
 
-datari를 사용하는 가장 빠른 길은 **datari 호스팅 Gateway**(`mcp.datari.kr`)에 API 키만
-가지고 붙는 것입니다. CLI나 Gateway를 직접 실행할 필요 없이 즉시 시작합니다.
+DATA BRIDGE는 **호스팅 Gateway**(`mcp.datari.kr`)에 API 키로 연결해 사용합니다.
+별도 서버를 설치하거나 운영하지 않아도 바로 시작할 수 있습니다.
 
 ## 1. API 키 발급
 
-[admin.datari.kr](https://admin.datari.kr)에서 무료 계정을 만들고 **Settings → API Keys**에서
-키를 발급받습니다. 자세한 내용은 [구독 가이드](/guides/subscribe)를 참고하세요.
+[admin.datari.kr](https://admin.datari.kr)에서 계정을 만들고 **Settings → API Keys**에서
+키를 발급받습니다. 자세한 내용은 [API 키 가이드](/guides/api-keys)를 참고하세요.
 
 ```bash
-export DATARI_API_KEY="dat_live_..."
+export DATA_BRIDGE_API_KEY="dat_live_..."
 ```
 
 ## 2. 사용 가능한 도구 확인
 
-JSON-RPC `tools/list`로 datari에 등록된 모든 도구 목록을 조회합니다.
+JSON-RPC `tools/list`로 DATA BRIDGE에 등록된 모든 도구 목록을 조회합니다.
 
 ```bash
 curl -X POST https://mcp.datari.kr/mcp \
-  -H "x-api-key: $DATARI_API_KEY" \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
@@ -32,7 +32,7 @@ curl -X POST https://mcp.datari.kr/mcp \
 
 ```bash
 curl -X POST https://mcp.datari.kr/mcp \
-  -H "x-api-key: $DATARI_API_KEY" \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -52,10 +52,10 @@ curl -X POST https://mcp.datari.kr/mcp \
 
 <CardGroup cols={2}>
   <Card title="Claude에 연결" icon="comment" href="/guides/claude">
-    Claude Desktop에서 자연어로 datari 도구 호출.
+    Claude Desktop에서 자연어로 DATA BRIDGE 도구 호출.
   </Card>
   <Card title="ChatGPT에 연결" icon="message" href="/guides/chatgpt">
-    ChatGPT GPTs(Actions)로 datari 호출.
+    ChatGPT GPTs(Actions)로 DATA BRIDGE 호출.
   </Card>
   <Card title="REST / SDK 사용" icon="code" href="/guides/api">
     Node.js · Python SDK로 직접 호출.
@@ -64,8 +64,3 @@ curl -X POST https://mcp.datari.kr/mcp \
     OpenAPI 스펙이 있는 어떤 API든 도구로 변환.
   </Card>
 </CardGroup>
-
-<Note>
-  Gateway를 자체 호스팅하거나 로컬에서 CLI로 MCP 서버를 만들고 싶다면
-  [설치 가이드](/getting-started/installation)를 참고하세요.
-</Note>

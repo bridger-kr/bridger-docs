@@ -6,43 +6,29 @@ description: "법령, 판례, 행정심판, 규제 정보. 총 8개 프리셋 ·
 이 카테고리에는 **8개의 프리셋**이 등록되어 있으며, 합산 **8개의 MCP 도구**가 노출됩니다.
 
 <Tip>
-  특정 도구만 사용하고 싶다면 `mcp-gen install law/<preset-name>` 형식으로 개별 설치할 수 있습니다.
-  아래 표의 **파일** 컬럼이 `<preset-name>` 입니다.
+  필요한 도구 이름은 `tools/list` 응답에서 확인한 뒤 `tools/call`로 바로 호출할 수 있습니다.
 </Tip>
 
 ## 프리셋 목록
 
-| 이름 | 제공기관 | 도구 수 | data.go.kr | 파일 |
-| --- | --- | --- | --- | --- |
-| 행정심판 조회 | 국민권익위원회 | 1 | [15071076](https://www.data.go.kr/data/15071076/openapi.do) | `presets/law/admin-appeal.yaml` |
-| 중재 정보 조회 | 대한상사중재원 | 1 | [15071072](https://www.data.go.kr/data/15071072/openapi.do) | `presets/law/arbitration-info.yaml` |
-| 판례 검색 조회 | 법원행정처 | 1 | [15071078](https://www.data.go.kr/data/15071078/openapi.do) | `presets/law/court-case.yaml` |
-| 법령 해석 조회 | 법제처 | 1 | [15071077](https://www.data.go.kr/data/15071077/openapi.do) | `presets/law/law-interpret.yaml` |
-| 법률 구조 조회 | 대한법률구조공단 | 1 | [15071075](https://www.data.go.kr/data/15071075/openapi.do) | `presets/law/legal-aid.yaml` |
-| 입법예고 조회 | 법제처 | 1 | [15071073](https://www.data.go.kr/data/15071073/openapi.do) | `presets/law/legislation-info.yaml` |
-| 공증 정보 조회 | 대한법률구조공단 | 1 | [15071071](https://www.data.go.kr/data/15071071/openapi.do) | `presets/law/notary-info.yaml` |
-| 등기 정보 조회 | 대법원 | 1 | [15071074](https://www.data.go.kr/data/15071074/openapi.do) | `presets/law/registry-info.yaml` |
+| 이름 | 제공기관 | 도구 수 | data.go.kr |
+| --- | --- | --- | --- |
+| 행정심판 조회 | 국민권익위원회 | 1 | [15071076](https://www.data.go.kr/data/15071076/openapi.do) |
+| 중재 정보 조회 | 대한상사중재원 | 1 | [15071072](https://www.data.go.kr/data/15071072/openapi.do) |
+| 판례 검색 조회 | 법원행정처 | 1 | [15071078](https://www.data.go.kr/data/15071078/openapi.do) |
+| 법령 해석 조회 | 법제처 | 1 | [15071077](https://www.data.go.kr/data/15071077/openapi.do) |
+| 법률 구조 조회 | 대한법률구조공단 | 1 | [15071075](https://www.data.go.kr/data/15071075/openapi.do) |
+| 입법예고 조회 | 법제처 | 1 | [15071073](https://www.data.go.kr/data/15071073/openapi.do) |
+| 공증 정보 조회 | 대한법률구조공단 | 1 | [15071071](https://www.data.go.kr/data/15071071/openapi.do) |
+| 등기 정보 조회 | 대법원 | 1 | [15071074](https://www.data.go.kr/data/15071074/openapi.do) |
 
 ## 사용 예시
 
 <CodeGroup>
-  ```bash mcp-gen
-  # 카테고리 전체 설치
-  mcp-gen install law
-
-  # 특정 프리셋만 설치
-  mcp-gen install law/<preset-name>
-  ```
-
   ```bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \
-    -H "x-api-key: $DATARI_API_KEY" \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/law-"))'
   ```
 </CodeGroup>
-
-<Note>
-  이 페이지는 `apps/docs/scripts/build-presets.mjs`가 `presets/law/*.yaml`을
-  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
-</Note>

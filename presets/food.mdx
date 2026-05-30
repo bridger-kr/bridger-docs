@@ -6,49 +6,35 @@ description: "식품 안전, 농축산물 가격·생산, 수산물 데이터. �
 이 카테고리에는 **14개의 프리셋**이 등록되어 있으며, 합산 **14개의 MCP 도구**가 노출됩니다.
 
 <Tip>
-  특정 도구만 사용하고 싶다면 `mcp-gen install food/<preset-name>` 형식으로 개별 설치할 수 있습니다.
-  아래 표의 **파일** 컬럼이 `<preset-name>` 입니다.
+  필요한 도구 이름은 `tools/list` 응답에서 확인한 뒤 `tools/call`로 바로 호출할 수 있습니다.
 </Tip>
 
 ## 프리셋 목록
 
-| 이름 | 제공기관 | 도구 수 | data.go.kr | 파일 |
-| --- | --- | --- | --- | --- |
-| 농산물 가격 정보 | 농림축산식품부 | 1 | — | `presets/food/agri-price.yaml` |
-| 농산물 작황 조회 | 농촌진흥청 | 1 | [15071070](https://www.data.go.kr/data/15071070/openapi.do) | `presets/food/crop-status.yaml` |
-| 비료 정보 조회 | 농촌진흥청 | 1 | [15071064](https://www.data.go.kr/data/15071064/openapi.do) | `presets/food/fertilizer-info.yaml` |
-| 수산물 시세 정보 | 해양수산부 | 1 | — | `presets/food/fishery-price.yaml` |
-| 식품 리콜 정보 조회 | 식품의약품안전처 | 1 | [15071034](https://www.data.go.kr/data/15071034/openapi.do) | `presets/food/food-recall.yaml` |
-| 축산물 경매 시세 | 축산물품질평가원 | 1 | — | `presets/food/livestock-auction-price.yaml` |
-| 가축 질병 조회 | 농림축산식품부 | 1 | [15071068](https://www.data.go.kr/data/15071068/openapi.do) | `presets/food/livestock-disease.yaml` |
-| 축산물 등급 정보 | 축산물품질평가원 | 1 | — | `presets/food/livestock-grade.yaml` |
-| 산지유통 정보 조회 | 농림축산식품부 | 1 | [15071066](https://www.data.go.kr/data/15071066/openapi.do) | `presets/food/local-market.yaml` |
-| 친환경 인증 조회 | 국립농산물품질관리원 | 1 | [15071067](https://www.data.go.kr/data/15071067/openapi.do) | `presets/food/organic-cert.yaml` |
-| 농약 정보 조회 | 농촌진흥청 | 1 | [15071065](https://www.data.go.kr/data/15071065/openapi.do) | `presets/food/pesticide-info.yaml` |
-| 음식점 위생등급 조회 | 식품의약품안전처 | 1 | [15071033](https://www.data.go.kr/data/15071033/openapi.do) | `presets/food/restaurant-hygiene.yaml` |
-| 수산물 이력 조회 | 해양수산부 | 1 | [15071069](https://www.data.go.kr/data/15071069/openapi.do) | `presets/food/seafood-trace.yaml` |
-| 종자 정보 조회 | 농촌진흥청 | 1 | [15071063](https://www.data.go.kr/data/15071063/openapi.do) | `presets/food/seed-info.yaml` |
+| 이름 | 제공기관 | 도구 수 | data.go.kr |
+| --- | --- | --- | --- |
+| 농산물 가격 정보 | 농림축산식품부 | 1 | — |
+| 농산물 작황 조회 | 농촌진흥청 | 1 | [15071070](https://www.data.go.kr/data/15071070/openapi.do) |
+| 비료 정보 조회 | 농촌진흥청 | 1 | [15071064](https://www.data.go.kr/data/15071064/openapi.do) |
+| 수산물 시세 정보 | 해양수산부 | 1 | — |
+| 식품 리콜 정보 조회 | 식품의약품안전처 | 1 | [15071034](https://www.data.go.kr/data/15071034/openapi.do) |
+| 축산물 경매 시세 | 축산물품질평가원 | 1 | — |
+| 가축 질병 조회 | 농림축산식품부 | 1 | [15071068](https://www.data.go.kr/data/15071068/openapi.do) |
+| 축산물 등급 정보 | 축산물품질평가원 | 1 | — |
+| 산지유통 정보 조회 | 농림축산식품부 | 1 | [15071066](https://www.data.go.kr/data/15071066/openapi.do) |
+| 친환경 인증 조회 | 국립농산물품질관리원 | 1 | [15071067](https://www.data.go.kr/data/15071067/openapi.do) |
+| 농약 정보 조회 | 농촌진흥청 | 1 | [15071065](https://www.data.go.kr/data/15071065/openapi.do) |
+| 음식점 위생등급 조회 | 식품의약품안전처 | 1 | [15071033](https://www.data.go.kr/data/15071033/openapi.do) |
+| 수산물 이력 조회 | 해양수산부 | 1 | [15071069](https://www.data.go.kr/data/15071069/openapi.do) |
+| 종자 정보 조회 | 농촌진흥청 | 1 | [15071063](https://www.data.go.kr/data/15071063/openapi.do) |
 
 ## 사용 예시
 
 <CodeGroup>
-  ```bash mcp-gen
-  # 카테고리 전체 설치
-  mcp-gen install food
-
-  # 특정 프리셋만 설치
-  mcp-gen install food/<preset-name>
-  ```
-
   ```bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \
-    -H "x-api-key: $DATARI_API_KEY" \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/food-"))'
   ```
 </CodeGroup>
-
-<Note>
-  이 페이지는 `apps/docs/scripts/build-presets.mjs`가 `presets/food/*.yaml`을
-  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
-</Note>

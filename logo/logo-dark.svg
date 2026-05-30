@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 32">
   <rect x="0" y="0" width="32" height="32" rx="6" fill="#fb923c"/>
   <text x="16" y="22" font-family="ui-monospace,SFMono-Regular,Menlo,monospace"
-        font-size="16" font-weight="700" text-anchor="middle" fill="#1a1206">d</text>
+        font-size="12" font-weight="700" text-anchor="middle" fill="#1a1206">DB</text>
   <text x="44" y="22" font-family="Pretendard Variable,Pretendard,-apple-system,BlinkMacSystemFont,sans-serif"
-        font-size="18" font-weight="700" fill="#f5f4ee" letter-spacing="-0.02em">datari docs</text>
+        font-size="18" font-weight="700" fill="#f5f4ee" letter-spacing="0">DATA BRIDGE</text>
 </svg>

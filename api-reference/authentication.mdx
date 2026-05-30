@@ -1,9 +1,9 @@
 ---
 title: "Authentication"
-description: "datari Gateway 인증 — API Key 헤더, 에러 응답, 테넌트 식별."
+description: "DATA BRIDGE Gateway 인증 — API Key 헤더, 에러 응답, 테넌트 식별."
 ---
 
-datari Gateway는 두 가지 인증 헤더를 받습니다. 둘 중 하나만 보내면 됩니다.
+DATA BRIDGE Gateway는 두 가지 인증 헤더를 받습니다. 둘 중 하나만 보내면 됩니다.
 
 ```http
 x-api-key: dat_live_xxx
@@ -13,7 +13,7 @@ Authorization: Bearer dat_live_xxx
 ## API Key 발급
 
 [admin.datari.kr](https://admin.datari.kr) → **Settings → API Keys**에서 발급/회수합니다.
-자세한 흐름은 [구독 가이드](/guides/subscribe)를 참고하세요.
+자세한 흐름은 [API 키 가이드](/guides/api-keys)를 참고하세요.
 
 ## 인증 실패 응답
 
@@ -28,21 +28,12 @@ Authorization: Bearer dat_live_xxx
 
 ## 테넌트 식별
 
-엔터프라이즈 플랜에서는 `x-tenant-id` 헤더 또는 API Key 자체로 테넌트가 식별됩니다.
-테넌트별 독립 Rate Limit이 적용됩니다.
+조직 단위로 발급된 API Key는 해당 조직의 테넌트에 연결됩니다.
+필요한 경우 `x-tenant-id` 헤더로 명시할 수 있습니다.
 
 ```http
 x-api-key: tenant-a-key
 x-tenant-id: tenant-a
-```
-
-`TENANT_CONFIG_JSON` 환경변수로 테넌트별 설정을 구성합니다.
-
-```json
-{
-  "tenant-a": { "apiKey": "key-a", "rateLimitPerMin": 200 },
-  "tenant-b": { "apiKey": "key-b", "rateLimitPerMin": 60 }
-}
 ```
 
 ## OAuth 2.0
@@ -59,7 +50,7 @@ Client Credentials 흐름을 사용합니다.
 
 ```bash
 curl -X POST https://mcp.datari.kr/mcp \
-  -H "x-api-key: $DATARI_API_KEY" \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```

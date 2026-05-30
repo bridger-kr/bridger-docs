@@ -2,7 +2,7 @@
   "name": "@datari/docs",
   "private": true,
   "version": "0.1.0",
-  "description": "datari documentation site (Mintlify, self-hosted on NKS).",
+  "description": "DATA BRIDGE documentation site.",
   "scripts": {
     "dev": "mint dev --port 3334",
     "build": "mint export --output dist/export.zip",

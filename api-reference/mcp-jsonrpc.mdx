@@ -3,7 +3,7 @@ title: "POST /mcp (JSON-RPC)"
 description: "MCP 표준 JSON-RPC 2.0 엔드포인트 — tools/list, tools/call."
 ---
 
-datari Gateway의 핵심 MCP 호출 엔드포인트입니다. JSON-RPC 2.0 규격을 그대로 따릅니다.
+DATA BRIDGE Gateway의 핵심 MCP 호출 엔드포인트입니다. JSON-RPC 2.0 규격을 그대로 따릅니다.
 
 ## Request 헤더
 
@@ -24,7 +24,7 @@ x-api-key: dat_live_...
 
 ## tools/list
 
-datari에 등록된 모든 도구의 메타데이터를 반환합니다.
+DATA BRIDGE에 등록된 모든 도구의 메타데이터를 반환합니다.
 
 ### Request
 
@@ -105,14 +105,14 @@ datari에 등록된 모든 도구의 메타데이터를 반환합니다.
 <CodeGroup>
   ```bash tools/list
   curl -X POST https://mcp.datari.kr/mcp \
-    -H "x-api-key: $DATARI_API_KEY" \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
   ```
 
   ```bash tools/call
   curl -X POST https://mcp.datari.kr/mcp \
-    -H "x-api-key: $DATARI_API_KEY" \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{
       "jsonrpc": "2.0",

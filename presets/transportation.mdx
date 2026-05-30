@@ -6,56 +6,42 @@ description: "버스, 지하철, 항공, 철도, 주차, 도로 교통 데이터
 이 카테고리에는 **21개의 프리셋**이 등록되어 있으며, 합산 **21개의 MCP 도구**가 노출됩니다.
 
 <Tip>
-  특정 도구만 사용하고 싶다면 `mcp-gen install transportation/<preset-name>` 형식으로 개별 설치할 수 있습니다.
-  아래 표의 **파일** 컬럼이 `<preset-name>` 입니다.
+  필요한 도구 이름은 `tools/list` 응답에서 확인한 뒤 `tools/call`로 바로 호출할 수 있습니다.
 </Tip>
 
 ## 프리셋 목록
 
-| 이름 | 제공기관 | 도구 수 | data.go.kr | 파일 |
-| --- | --- | --- | --- | --- |
-| 전국 자전거대여소 정보 | 행정안전부 | 1 | [15017319](https://www.data.go.kr/data/15017319/openapi.do) | `presets/transportation/bicycle-rental.yaml` |
-| 버스 도착정보 조회 | 국토교통부·지자체 | 1 | [15070493](https://www.data.go.kr/data/15070493/openapi.do) | `presets/transportation/bus-arrival.yaml` |
-| 버스 위치정보 조회 | 국토교통부·지자체 | 1 | [15070527](https://www.data.go.kr/data/15070527/openapi.do) | `presets/transportation/bus-location.yaml` |
-| 버스 노선정보 조회 | 국토교통부·지자체 | 1 | [15070510](https://www.data.go.kr/data/15070510/openapi.do) | `presets/transportation/bus-route.yaml` |
-| 화물차량 위치 조회 | 국토교통부 | 1 | [15071044](https://www.data.go.kr/data/15071044/openapi.do) | `presets/transportation/cargo-tracking.yaml` |
-| 전기차 충전소 조회 | 국토교통부·지자체 | 1 | [15070680](https://www.data.go.kr/data/15070680/openapi.do) | `presets/transportation/ev-charging.yaml` |
-| 고속도로 CCTV 정보 조회 | 국토교통부·지자체 | 1 | [15070629](https://www.data.go.kr/data/15070629/openapi.do) | `presets/transportation/expressway-cctv.yaml` |
-| 고속도로 교통량 조회 | 국토교통부·지자체 | 1 | [15070612](https://www.data.go.kr/data/15070612/openapi.do) | `presets/transportation/expressway-traffic.yaml` |
-| 항공기 도착정보 조회 | 국토교통부·지자체 | 1 | [15070697](https://www.data.go.kr/data/15070697/openapi.do) | `presets/transportation/flight-arrival.yaml` |
-| 항공기 출발정보 조회 | 국토교통부·지자체 | 1 | [15070714](https://www.data.go.kr/data/15070714/openapi.do) | `presets/transportation/flight-departure.yaml` |
-| 항공 운항 정보 | 인천국제공항공사/한국공항공사 | 1 | — | `presets/transportation/flight-info.yaml` |
-| 공영주차장 정보 조회 | 국토교통부·지자체 | 1 | [15070663](https://www.data.go.kr/data/15070663/openapi.do) | `presets/transportation/parking-public.yaml` |
-| 항만 물동량 조회 | 국토교통부·지자체 | 1 | [15070731](https://www.data.go.kr/data/15070731/openapi.do) | `presets/transportation/port-cargo.yaml` |
-| 연안여객선 운항 조회 | 해양수산부 | 1 | [15071045](https://www.data.go.kr/data/15071045/openapi.do) | `presets/transportation/ship-schedule.yaml` |
-| 지하철 실시간 정보 조회 | 국토교통부·지자체 | 1 | [15070544](https://www.data.go.kr/data/15070544/openapi.do) | `presets/transportation/subway-realtime.yaml` |
-| 지하철 시간표 조회 | 국토교통부·지자체 | 1 | [15070561](https://www.data.go.kr/data/15070561/openapi.do) | `presets/transportation/subway-timetable.yaml` |
-| 전국 택시 업체 정보 | 행정안전부 | 1 | — | `presets/transportation/taxi-company.yaml` |
-| 전국 택시승강장 정보 | 행정안전부 | 1 | [15139230](https://www.data.go.kr/data/15139230/openapi.do) | `presets/transportation/taxi-stand.yaml` |
-| 통행료 조회 | 국토교통부·지자체 | 1 | [15070646](https://www.data.go.kr/data/15070646/openapi.do) | `presets/transportation/toll-fee.yaml` |
-| 열차 운행시간표 조회 | 국토교통부·지자체 | 1 | [15070578](https://www.data.go.kr/data/15070578/openapi.do) | `presets/transportation/train-schedule.yaml` |
-| 열차 좌석현황 조회 | 국토교통부·지자체 | 1 | [15070595](https://www.data.go.kr/data/15070595/openapi.do) | `presets/transportation/train-seat-status.yaml` |
+| 이름 | 제공기관 | 도구 수 | data.go.kr |
+| --- | --- | --- | --- |
+| 전국 자전거대여소 정보 | 행정안전부 | 1 | [15017319](https://www.data.go.kr/data/15017319/openapi.do) |
+| 버스 도착정보 조회 | 국토교통부·지자체 | 1 | [15070493](https://www.data.go.kr/data/15070493/openapi.do) |
+| 버스 위치정보 조회 | 국토교통부·지자체 | 1 | [15070527](https://www.data.go.kr/data/15070527/openapi.do) |
+| 버스 노선정보 조회 | 국토교통부·지자체 | 1 | [15070510](https://www.data.go.kr/data/15070510/openapi.do) |
+| 화물차량 위치 조회 | 국토교통부 | 1 | [15071044](https://www.data.go.kr/data/15071044/openapi.do) |
+| 전기차 충전소 조회 | 국토교통부·지자체 | 1 | [15070680](https://www.data.go.kr/data/15070680/openapi.do) |
+| 고속도로 CCTV 정보 조회 | 국토교통부·지자체 | 1 | [15070629](https://www.data.go.kr/data/15070629/openapi.do) |
+| 고속도로 교통량 조회 | 국토교통부·지자체 | 1 | [15070612](https://www.data.go.kr/data/15070612/openapi.do) |
+| 항공기 도착정보 조회 | 국토교통부·지자체 | 1 | [15070697](https://www.data.go.kr/data/15070697/openapi.do) |
+| 항공기 출발정보 조회 | 국토교통부·지자체 | 1 | [15070714](https://www.data.go.kr/data/15070714/openapi.do) |
+| 항공 운항 정보 | 인천국제공항공사/한국공항공사 | 1 | — |
+| 공영주차장 정보 조회 | 국토교통부·지자체 | 1 | [15070663](https://www.data.go.kr/data/15070663/openapi.do) |
+| 항만 물동량 조회 | 국토교통부·지자체 | 1 | [15070731](https://www.data.go.kr/data/15070731/openapi.do) |
+| 연안여객선 운항 조회 | 해양수산부 | 1 | [15071045](https://www.data.go.kr/data/15071045/openapi.do) |
+| 지하철 실시간 정보 조회 | 국토교통부·지자체 | 1 | [15070544](https://www.data.go.kr/data/15070544/openapi.do) |
+| 지하철 시간표 조회 | 국토교통부·지자체 | 1 | [15070561](https://www.data.go.kr/data/15070561/openapi.do) |
+| 전국 택시 업체 정보 | 행정안전부 | 1 | — |
+| 전국 택시승강장 정보 | 행정안전부 | 1 | [15139230](https://www.data.go.kr/data/15139230/openapi.do) |
+| 통행료 조회 | 국토교통부·지자체 | 1 | [15070646](https://www.data.go.kr/data/15070646/openapi.do) |
+| 열차 운행시간표 조회 | 국토교통부·지자체 | 1 | [15070578](https://www.data.go.kr/data/15070578/openapi.do) |
+| 열차 좌석현황 조회 | 국토교통부·지자체 | 1 | [15070595](https://www.data.go.kr/data/15070595/openapi.do) |
 
 ## 사용 예시
 
 <CodeGroup>
-  ```bash mcp-gen
-  # 카테고리 전체 설치
-  mcp-gen install transportation
-
-  # 특정 프리셋만 설치
-  mcp-gen install transportation/<preset-name>
-  ```
-
   ```bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \
-    -H "x-api-key: $DATARI_API_KEY" \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/transportation-"))'
   ```
 </CodeGroup>
-
-<Note>
-  이 페이지는 `apps/docs/scripts/build-presets.mjs`가 `presets/transportation/*.yaml`을
-  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
-</Note>
