@@ -17,9 +17,6 @@
 FROM mirror.gcr.io/library/node:22-alpine AS build
 WORKDIR /app
 
-# `unzip` is required to expand the `mint export` zip into a flat html tree.
-RUN apk add --no-cache unzip
-
 COPY package.json package-lock.json* ./
 RUN npm install --include=dev --no-audit --no-fund
 
@@ -27,7 +24,7 @@ COPY . .
 
 RUN mkdir -p dist \
   && npm run build \
-  && unzip -q dist/export.zip -d dist/site \
+  && node scripts/extract-export.mjs dist/export.zip dist/site \
   && ls -la dist/site | head -20
 
 FROM mirror.gcr.io/library/nginx:1.29-alpine AS runtime

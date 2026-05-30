@@ -71,8 +71,9 @@ jobs:
             ${{ env.NCR_REGISTRY }}/${{ env.NCR_IMAGE_PREFIX }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}
             ${{ env.NCR_REGISTRY }}/${{ env.NCR_IMAGE_PREFIX }}/${{ env.IMAGE_NAME }}:latest
           provenance: false
-          cache-from: type=gha,scope=datari-docs
-          cache-to: type=gha,mode=max,scope=datari-docs
+          # cache disabled: self-hosted runner has local Docker layer cache;
+          # type=gha requires GitHub Actions cache service which is unreliable
+          # from the NHN Cloud KR1 runner network.
 
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
