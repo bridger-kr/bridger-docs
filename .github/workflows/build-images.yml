@@ -117,12 +117,42 @@ jobs:
             - source commit: https://github.com/happycastle114/datari-docs/commit/${{ github.sha }}
           delete-branch: true
 
-      - name: Enable automerge on digest-bump PR
+      - name: Merge digest-bump PR
         if: steps.cpr.outputs.pull-request-number
-        env:
-          GH_TOKEN: ${{ secrets.GITOPS_TOKEN }}
-          PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
-        run: |
-          set -euo pipefail
-          gh pr merge --repo happycastle114/datari-gitops \
-            --squash --auto --delete-branch "$PR_NUMBER"
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITOPS_TOKEN }}
+          script: |
+            const owner = 'happycastle114'
+            const repo = 'datari-gitops'
+            const pull_number = Number('${{ steps.cpr.outputs.pull-request-number }}')
+
+            // Try direct squash merge first. If GitHub rejects (for example,
+            // pending required checks), fall back to enabling auto-merge.
+            try {
+              const { data } = await github.rest.pulls.merge({
+                owner, repo, pull_number, merge_method: 'squash'
+              })
+              console.log(`PR #${pull_number} merged directly: ${data.sha}`)
+            } catch (mergeErr) {
+              console.log(`Direct merge failed (${mergeErr.message}), enabling auto-merge...`)
+              const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number })
+              try {
+                await github.graphql(`
+                  mutation($id: ID!) {
+                    enablePullRequestAutoMerge(input: { pullRequestId: $id, mergeMethod: SQUASH }) {
+                      pullRequest { number }
+                    }
+                  }`, { id: pr.node_id })
+                console.log(`Auto-merge enabled for PR #${pull_number}`)
+              } catch (autoErr) {
+                if (autoErr.message && autoErr.message.includes('clean status')) {
+                  const { data } = await github.rest.pulls.merge({
+                    owner, repo, pull_number, merge_method: 'squash'
+                  })
+                  console.log(`PR #${pull_number} merged on retry: ${data.sha}`)
+                } else {
+                  throw autoErr
+                }
+              }
+            }
