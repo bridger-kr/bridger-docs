@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1
-
 # ---------------------------------------------------------------------------
 # Self-hosted Mintlify build:
 #   1. Run preset/api-reference generators against repo content
