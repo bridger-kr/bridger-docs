@@ -14,7 +14,7 @@
 # package-lock.json is not always committed alongside content edits.
 # ---------------------------------------------------------------------------
 
-FROM node:22-alpine AS build
+FROM mirror.gcr.io/library/node:22-alpine AS build
 WORKDIR /app
 
 # `unzip` is required to expand the `mint export` zip into a flat html tree.
@@ -30,7 +30,7 @@ RUN mkdir -p dist \
   && unzip -q dist/export.zip -d dist/site \
   && ls -la dist/site | head -20
 
-FROM nginx:1.29-alpine AS runtime
+FROM mirror.gcr.io/library/nginx:1.29-alpine AS runtime
 
 RUN apk upgrade --no-cache
 
