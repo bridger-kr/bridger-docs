@@ -1,73 +1,47 @@
 ---
 title: "전체 아키텍처"
-description: "CLI · Gateway · 미들웨어가 어떻게 맞물려 DATA BRIDGE를 구성하는지 살펴봅니다."
+description: "DATA BRIDGE Gateway가 OpenAPI와 MCP 클라이언트를 연결하는 방식을 설명합니다."
 ---
 
-DATA BRIDGE는 모노레포 기반의 두 가지 핵심 패키지와 한 개의 카탈로그 자산으로 구성됩니다.
-
-```text
-project-two/
-├── packages/
-│   ├── mcp-gen/    # @mcp-hub/cli — CLI
-│   └── gateway/    # @mcp-hub/gateway — 원격 MCP Gateway
-├── apps/
-│   ├── dashboard/  # 관리 대시보드 (React + Vite)
-│   └── docs/       # 본 문서 사이트 (Mintlify)
-├── landing/        # 퍼블릭 랜딩
-└── presets/        # OpenAPI 프리셋 카탈로그 (14개 카테고리, 230+개)
-```
+DATA BRIDGE는 OpenAPI 기반 데이터 소스를 MCP 도구로 변환하고, 하나의 Gateway에서 인증·라우팅·감사 흐름을 처리합니다.
+사용자는 별도 서버를 운영하지 않고 Gateway 엔드포인트를 호출합니다.
 
 ## 구성요소
 
-### `@mcp-hub/cli` (mcp-gen)
-
-OpenAPI 스펙 또는 프리셋 YAML에서 **MCP 서버를 생성·설치**하는 CLI.
-
-- `mcp-gen install <preset>` — 프리셋 기반 MCP 서버 설치 (Claude/Cursor 설정 자동 구성)
-- `mcp-gen list [--category]` — 사용 가능한 프리셋 목록
-- `mcp-gen search <keyword>` — 키워드 검색
-- `mcp-gen generate <openapi-spec>` — 임의 OpenAPI 스펙 → MCP 서버
-
-**스택**: TypeScript · tsup · Commander.js
-
-### `@mcp-hub/gateway` (mcp-gateway)
-
-프리셋과 BYOAPI 등록을 런타임 로드하여 **MCP 도구 레지스트리 + JSON-RPC + SSE 브리지**를 노출하는 원격 서버.
-
-- 프리셋/BYOAPI 자동 로드 → 단일 도구 레지스트리
-- `POST /mcp` — JSON-RPC 2.0 (`tools/list`, `tools/call`)
-- `GET /mcp/sse` — 실시간 이벤트 스트림
-- `GET /registry/{servers,tools}` — REST 카탈로그
-- 공공데이터 미들웨어 (ServiceKey 주입, 좌표 변환, XML 정규화)
-- Enterprise 기능 — PII 필터, 감사 로그, 테넌트 격리
-
-**스택**: TypeScript · Fastify · tsup · Vitest
-
-### Presets (`presets/`)
-
-14개 카테고리, **230+개 OpenAPI YAML**. 각 파일은 `x-publicdata: true`로 공공데이터 미들웨어 활성화 여부를 표기합니다.
-
-자세한 카테고리 목록은 [Presets](/presets/index)를 참고하세요.
+<CardGroup cols={2}>
+  <Card title="Gateway" icon="cloud">
+    MCP JSON-RPC, SSE, Registry API를 노출하는 실행 계층입니다.
+  </Card>
+  <Card title="Tool Registry" icon="boxes-stacked">
+    프리셋과 BYOAPI 등록 도구의 스키마, 권한, 라우팅 정보를 관리합니다.
+  </Card>
+  <Card title="Public Data Adapter" icon="building-columns">
+    공공데이터 인증키 주입, 좌표 변환, XML/JSON 정규화, 에러 매핑을 처리합니다.
+  </Card>
+  <Card title="Admin Dashboard" icon="key">
+    API 키, Provider Keys, 감사 로그를 관리합니다.
+  </Card>
+</CardGroup>
 
 ## 런타임 데이터 흐름
 
 ```text
-   클라이언트 (Claude · Cursor · 커스텀 에이전트)
+   클라이언트 (Claude · Cursor · ChatGPT · 커스텀 앱)
         │
-        │  MCP over Streamable HTTP
+        │  MCP JSON-RPC / SSE / REST
         ▼
    ┌──────────────────────────────────────────────┐
-   │            DATA BRIDGE Gateway                     │
+   │            DATA BRIDGE Gateway               │
    ├──────────────────────────────────────────────┤
    │  1. 인증            (API Key / OAuth 2.0)     │
    │  2. 테넌트 격리                                │
-   │  3. Rate Limiting                              │
+   │  3. 요청 제어                                  │
    │  4. JSON-RPC 디스패치                          │
    │     ├─ tools/list → Registry 조회              │
    │     └─ tools/call → ID 라우팅 → Upstream Proxy │
-   │  5. 공공데이터 미들웨어                          │
+   │  5. 공공데이터 어댑터                           │
    │     ├─ ServiceKey 자동 주입                    │
-   │     ├─ 위경도 → 격자좌표 변환 (기상청)          │
+   │     ├─ 위경도 → 격자좌표 변환                   │
    │     └─ XML/JSON 정규화                         │
    │  6. PII 필터링                                  │
    │  7. 감사 로그 기록                              │
@@ -78,34 +52,19 @@ OpenAPI 스펙 또는 프리셋 YAML에서 **MCP 서버를 생성·설치**하�
    외부 API (공공데이터포털 · 3rd-party SaaS · 사내 API)
 ```
 
-## CLI 흐름 — 로컬 MCP 서버 생성
+## 프리셋 구조
 
-```text
-OpenAPI Spec (.yaml/.json)
-       │
-       ▼
-   ┌──────────────────────┐
-   │  mcp-gen (CLI)        │
-   ├──────────────────────┤
-   │ 1. parseOpenAPI()                — OpenAPI 3.x 파싱
-   │ 2. mapPathsToTools()             — path → MCP tool descriptor
-   │ 3. applyMiddleware()             — 공공데이터 미들웨어 주입
-   │ 4. bundle/install()              — MCP 서버 코드 + 클라이언트 설정 생성
-   └──────────────────────┘
-       │
-       ▼
-   MCP Server (로컬 실행) 또는 Gateway 등록
-```
-
-## 프리셋 YAML 구조
+프리셋은 OpenAPI 스펙과 공공데이터 메타데이터를 함께 가진 도구 정의입니다.
 
 ```yaml
-openapi: '3.0.3'
+openapi: "3.0.3"
 info:
   title: 기상청 초단기예보 API
   description: ...
-  version: '1.0'
-  x-publicdata: true            # 공공데이터 미들웨어 활성화 플래그
+  version: "1.0"
+x-publicdata:
+  provider: 기상청
+  dataGoKrId: "15070051"
 servers:
   - url: https://apis.data.go.kr/...
 paths:
@@ -114,24 +73,7 @@ paths:
       operationId: getUltraSrtFcst
       summary: 초단기예보 조회
       parameters: [...]
-      responses:
-        '200': { description: 성공 }
 ```
-
-## 기술 스택 요약
-
-| 레이어 | 기술 |
-| --- | --- |
-| 언어 | TypeScript (전체) |
-| CLI 빌드 | tsup |
-| Gateway 프레임워크 | Fastify |
-| 프론트엔드 | React + Vite + TailwindCSS |
-| 테스트 | Vitest |
-| 패키지 관리 | npm workspaces |
-| 컨테이너 | Docker |
-| CI/CD | GitHub Actions |
-| 인프라 | NCloud Kubernetes Service (NKS) + ArgoCD |
-| 프리셋 포맷 | OpenAPI 3.x YAML + 확장 메타데이터 |
 
 ## 다음 단계
 

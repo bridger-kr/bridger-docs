@@ -6,44 +6,35 @@ description: "축제, 관광지, 도서관, 공연, 문화유산 데이터. 총 
 이 카테고리에는 **18개의 프리셋**이 등록되어 있으며, 합산 **18개의 MCP 도구**가 노출됩니다.
 
 <Tip>
-  특정 도구만 사용하고 싶다면 `mcp-gen install culture/<preset-name>` 형식으로 개별 설치할 수 있습니다.
-  아래 표의 **파일** 컬럼이 `<preset-name>` 입니다.
+  필요한 도구 이름은 `tools/list` 응답에서 확인한 뒤 `tools/call`로 바로 호출할 수 있습니다.
 </Tip>
 
 ## 프리셋 목록
 
-| 이름 | 제공기관 | 도구 수 | data.go.kr | 파일 |
-| --- | --- | --- | --- | --- |
-| 캠핑장 정보 조회 | 한국관광공사 | 1 | [15071040](https://www.data.go.kr/data/15071040/openapi.do) | `presets/culture/camping-info.yaml` |
-| 문화행사 정보 조회 | 한국관광공사·문화재청 | 1 | [15071530](https://www.data.go.kr/data/15071530/openapi.do) | `presets/culture/cultural-event.yaml` |
-| 축제 정보 조회 | 한국관광공사·문화재청 | 1 | [15071411](https://www.data.go.kr/data/15071411/openapi.do) | `presets/culture/festival-info.yaml` |
-| 한옥체험 숙박 조회 | 한국관광공사·문화재청 | 1 | [15071581](https://www.data.go.kr/data/15071581/openapi.do) | `presets/culture/hanok-stay.yaml` |
-| 문화재 정보 | 국가유산청 | 1 | — | `presets/culture/heritage-search.yaml` |
-| 문화재 정보 조회 | 한국관광공사·문화재청 | 1 | [15071462](https://www.data.go.kr/data/15071462/openapi.do) | `presets/culture/heritage-site.yaml` |
-| 숙박 정보 조회 | 한국관광공사·문화재청 | 1 | [15071428](https://www.data.go.kr/data/15071428/openapi.do) | `presets/culture/hotel-info.yaml` |
-| 전국 도서관 정보 | 행정안전부 | 1 | — | `presets/culture/library-info-v2.yaml` |
-| 도서관 정보 조회 | 한국관광공사·문화재청 | 1 | [15071513](https://www.data.go.kr/data/15071513/openapi.do) | `presets/culture/library-info.yaml` |
-| 전국 영화관 정보 | 문화체육관광부 | 1 | — | `presets/culture/movie-theater.yaml` |
-| 박물관 정보 조회 | 한국관광공사·문화재청 | 1 | [15071479](https://www.data.go.kr/data/15071479/openapi.do) | `presets/culture/museum-info.yaml` |
-| 국립공원 정보 조회 | 한국관광공사·문화재청 | 1 | [15071564](https://www.data.go.kr/data/15071564/openapi.do) | `presets/culture/national-park.yaml` |
-| 공연/전시 정보 | 한국문화정보원 | 1 | — | `presets/culture/performance-exhibition.yaml` |
-| 공연 정보 조회 | 한국관광공사·문화재청 | 1 | [15071496](https://www.data.go.kr/data/15071496/openapi.do) | `presets/culture/performance-info.yaml` |
-| 관광 음식점 조회 | 한국관광공사·문화재청 | 1 | [15071445](https://www.data.go.kr/data/15071445/openapi.do) | `presets/culture/restaurant-tour.yaml` |
-| 체육시설 정보 조회 | 문화체육관광부 | 1 | [15071039](https://www.data.go.kr/data/15071039/openapi.do) | `presets/culture/sports-facility.yaml` |
-| 관광지 정보 조회 | 한국관광공사·문화재청 | 1 | [15071394](https://www.data.go.kr/data/15071394/openapi.do) | `presets/culture/tour-spot.yaml` |
-| 걷기여행 코스 조회 | 한국관광공사·문화재청 | 1 | [15071547](https://www.data.go.kr/data/15071547/openapi.do) | `presets/culture/trail-course.yaml` |
+| 이름 | 제공기관 | 도구 수 | data.go.kr |
+| --- | --- | --- | --- |
+| 캠핑장 정보 조회 | 한국관광공사 | 1 | [15071040](https://www.data.go.kr/data/15071040/openapi.do) |
+| 문화행사 정보 조회 | 한국관광공사·문화재청 | 1 | [15071530](https://www.data.go.kr/data/15071530/openapi.do) |
+| 축제 정보 조회 | 한국관광공사·문화재청 | 1 | [15071411](https://www.data.go.kr/data/15071411/openapi.do) |
+| 한옥체험 숙박 조회 | 한국관광공사·문화재청 | 1 | [15071581](https://www.data.go.kr/data/15071581/openapi.do) |
+| 문화재 정보 | 국가유산청 | 1 | — |
+| 문화재 정보 조회 | 한국관광공사·문화재청 | 1 | [15071462](https://www.data.go.kr/data/15071462/openapi.do) |
+| 숙박 정보 조회 | 한국관광공사·문화재청 | 1 | [15071428](https://www.data.go.kr/data/15071428/openapi.do) |
+| 전국 도서관 정보 | 행정안전부 | 1 | — |
+| 도서관 정보 조회 | 한국관광공사·문화재청 | 1 | [15071513](https://www.data.go.kr/data/15071513/openapi.do) |
+| 전국 영화관 정보 | 문화체육관광부 | 1 | — |
+| 박물관 정보 조회 | 한국관광공사·문화재청 | 1 | [15071479](https://www.data.go.kr/data/15071479/openapi.do) |
+| 국립공원 정보 조회 | 한국관광공사·문화재청 | 1 | [15071564](https://www.data.go.kr/data/15071564/openapi.do) |
+| 공연/전시 정보 | 한국문화정보원 | 1 | — |
+| 공연 정보 조회 | 한국관광공사·문화재청 | 1 | [15071496](https://www.data.go.kr/data/15071496/openapi.do) |
+| 관광 음식점 조회 | 한국관광공사·문화재청 | 1 | [15071445](https://www.data.go.kr/data/15071445/openapi.do) |
+| 체육시설 정보 조회 | 문화체육관광부 | 1 | [15071039](https://www.data.go.kr/data/15071039/openapi.do) |
+| 관광지 정보 조회 | 한국관광공사·문화재청 | 1 | [15071394](https://www.data.go.kr/data/15071394/openapi.do) |
+| 걷기여행 코스 조회 | 한국관광공사·문화재청 | 1 | [15071547](https://www.data.go.kr/data/15071547/openapi.do) |
 
 ## 사용 예시
 
 <CodeGroup>
-  ```bash mcp-gen
-  # 카테고리 전체 설치
-  mcp-gen install culture
-
-  # 특정 프리셋만 설치
-  mcp-gen install culture/<preset-name>
-  ```
-
   ```bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \
@@ -51,8 +42,3 @@ description: "축제, 관광지, 도서관, 공연, 문화유산 데이터. 총 
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/culture-"))'
   ```
 </CodeGroup>
-
-<Note>
-  이 페이지는 `apps/docs/scripts/build-presets.mjs`가 `presets/culture/*.yaml`을
-  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
-</Note>

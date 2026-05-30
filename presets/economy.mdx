@@ -6,45 +6,36 @@ description: "환율, 금리, 지표, 소비, 수출입, 시장 통계. 총 19�
 이 카테고리에는 **19개의 프리셋**이 등록되어 있으며, 합산 **19개의 MCP 도구**가 노출됩니다.
 
 <Tip>
-  특정 도구만 사용하고 싶다면 `mcp-gen install economy/<preset-name>` 형식으로 개별 설치할 수 있습니다.
-  아래 표의 **파일** 컬럼이 `<preset-name>` 입니다.
+  필요한 도구 이름은 `tools/list` 응답에서 확인한 뒤 `tools/call`로 바로 호출할 수 있습니다.
 </Tip>
 
 ## 프리셋 목록
 
-| 이름 | 제공기관 | 도구 수 | data.go.kr | 파일 |
-| --- | --- | --- | --- | --- |
-| 기준금리 조회 | 금융위원회·한국은행 | 1 | [15071156](https://www.data.go.kr/data/15071156/openapi.do) | `presets/economy/base-rate.yaml` |
-| 채권 수익률 조회 | 금융위원회·한국은행 | 1 | [15071020](https://www.data.go.kr/data/15071020/openapi.do) | `presets/economy/bond-yield.yaml` |
-| 카드소비 통계 | 한국은행/금융위원회 | 1 | — | `presets/economy/card-spending-stats.yaml` |
-| 카드소비 통계 조회 | 금융위원회·한국은행 | 1 | [15071071](https://www.data.go.kr/data/15071071/openapi.do) | `presets/economy/card-spending.yaml` |
-| 원자재 가격 조회 | 금융위원회·한국은행 | 1 | [15071037](https://www.data.go.kr/data/15071037/openapi.do) | `presets/economy/commodity-price.yaml` |
-| 소비자물가지수 조회 | 금융위원회·한국은행 | 1 | [15071139](https://www.data.go.kr/data/15071139/openapi.do) | `presets/economy/consumer-price-index.yaml` |
-| 고용 동향 조회 | 통계청 | 1 | [15071042](https://www.data.go.kr/data/15071042/openapi.do) | `presets/economy/employment-stats.yaml` |
-| 환율 조회 | 금융위원회·한국은행 | 1 | [15071003](https://www.data.go.kr/data/15071003/openapi.do) | `presets/economy/exchange-rate.yaml` |
-| 수출입 통계 조회 | 금융위원회·한국은행 | 1 | [15071105](https://www.data.go.kr/data/15071105/openapi.do) | `presets/economy/export-import.yaml` |
-| 핀테크 기업정보 조회 | 금융위원회·한국은행 | 1 | [15071054](https://www.data.go.kr/data/15071054/openapi.do) | `presets/economy/fintech-company.yaml` |
-| 시장지수 조회 | 금융위원회·한국은행 | 1 | [15070986](https://www.data.go.kr/data/15070986/openapi.do) | `presets/economy/market-index.yaml` |
-| 국민연금 가입 현황 | 국민연금공단 | 1 | — | `presets/economy/national-pension-stats.yaml` |
-| 공공요금 정보 | 행정안전부/지자체 | 1 | — | `presets/economy/public-utility-fee.yaml` |
-| 중소기업 지원사업 조회 | 중소벤처기업부 | 1 | [15071041](https://www.data.go.kr/data/15071041/openapi.do) | `presets/economy/small-biz-support.yaml` |
-| 스타트업 투자통계 조회 | 금융위원회·한국은행 | 1 | [15071088](https://www.data.go.kr/data/15071088/openapi.do) | `presets/economy/startup-investment.yaml` |
-| 주식 시세 조회 | 금융위원회·한국은행 | 1 | [15070969](https://www.data.go.kr/data/15070969/openapi.do) | `presets/economy/stock-price.yaml` |
-| 국세 수입현황 조회 | 금융위원회·한국은행 | 1 | [15071173](https://www.data.go.kr/data/15071173/openapi.do) | `presets/economy/tax-revenue.yaml` |
-| 실업률 통계 조회 | 금융위원회·한국은행 | 1 | [15071122](https://www.data.go.kr/data/15071122/openapi.do) | `presets/economy/unemployment-rate.yaml` |
-| 상하수도 요금 정보 | 행정안전부 | 1 | — | `presets/economy/water-sewer-fee.yaml` |
+| 이름 | 제공기관 | 도구 수 | data.go.kr |
+| --- | --- | --- | --- |
+| 기준금리 조회 | 금융위원회·한국은행 | 1 | [15071156](https://www.data.go.kr/data/15071156/openapi.do) |
+| 채권 수익률 조회 | 금융위원회·한국은행 | 1 | [15071020](https://www.data.go.kr/data/15071020/openapi.do) |
+| 카드소비 통계 | 한국은행/금융위원회 | 1 | — |
+| 카드소비 통계 조회 | 금융위원회·한국은행 | 1 | [15071071](https://www.data.go.kr/data/15071071/openapi.do) |
+| 원자재 가격 조회 | 금융위원회·한국은행 | 1 | [15071037](https://www.data.go.kr/data/15071037/openapi.do) |
+| 소비자물가지수 조회 | 금융위원회·한국은행 | 1 | [15071139](https://www.data.go.kr/data/15071139/openapi.do) |
+| 고용 동향 조회 | 통계청 | 1 | [15071042](https://www.data.go.kr/data/15071042/openapi.do) |
+| 환율 조회 | 금융위원회·한국은행 | 1 | [15071003](https://www.data.go.kr/data/15071003/openapi.do) |
+| 수출입 통계 조회 | 금융위원회·한국은행 | 1 | [15071105](https://www.data.go.kr/data/15071105/openapi.do) |
+| 핀테크 기업정보 조회 | 금융위원회·한국은행 | 1 | [15071054](https://www.data.go.kr/data/15071054/openapi.do) |
+| 시장지수 조회 | 금융위원회·한국은행 | 1 | [15070986](https://www.data.go.kr/data/15070986/openapi.do) |
+| 국민연금 가입 현황 | 국민연금공단 | 1 | — |
+| 공공요금 정보 | 행정안전부/지자체 | 1 | — |
+| 중소기업 지원사업 조회 | 중소벤처기업부 | 1 | [15071041](https://www.data.go.kr/data/15071041/openapi.do) |
+| 스타트업 투자통계 조회 | 금융위원회·한국은행 | 1 | [15071088](https://www.data.go.kr/data/15071088/openapi.do) |
+| 주식 시세 조회 | 금융위원회·한국은행 | 1 | [15070969](https://www.data.go.kr/data/15070969/openapi.do) |
+| 국세 수입현황 조회 | 금융위원회·한국은행 | 1 | [15071173](https://www.data.go.kr/data/15071173/openapi.do) |
+| 실업률 통계 조회 | 금융위원회·한국은행 | 1 | [15071122](https://www.data.go.kr/data/15071122/openapi.do) |
+| 상하수도 요금 정보 | 행정안전부 | 1 | — |
 
 ## 사용 예시
 
 <CodeGroup>
-  ```bash mcp-gen
-  # 카테고리 전체 설치
-  mcp-gen install economy
-
-  # 특정 프리셋만 설치
-  mcp-gen install economy/<preset-name>
-  ```
-
   ```bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \
@@ -52,8 +43,3 @@ description: "환율, 금리, 지표, 소비, 수출입, 시장 통계. 총 19�
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/economy-"))'
   ```
 </CodeGroup>
-
-<Note>
-  이 페이지는 `apps/docs/scripts/build-presets.mjs`가 `presets/economy/*.yaml`을
-  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
-</Note>

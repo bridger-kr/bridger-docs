@@ -8,7 +8,7 @@ Claude나 ChatGPT 없이도 DATA BRIDGE Gateway는 REST와 표준 MCP SDK로 직
 <Steps>
   <Step title="API 키 발급">
     [어드민 대시보드](https://admin.datari.kr/settings)에서 API 키를 발급받습니다.
-    [구독 가이드](/guides/subscribe)도 함께 참고하세요.
+    [API 키 가이드](/guides/api-keys)도 함께 참고하세요.
   </Step>
 
   <Step title="REST API 호출">
@@ -141,27 +141,7 @@ Claude나 ChatGPT 없이도 DATA BRIDGE Gateway는 REST와 표준 MCP SDK로 직
 | `POST` | `/api/v1/tools/:id`     | 도구 실행 |
 | `GET`  | `/api/v1/servers`       | 서버 목록 |
 | `POST` | `/api/v1/register`      | BYOAPI 등록 |
-| `GET`  | `/api/v1/usage`         | 사용량 조회 |
 | `GET`  | `/sse`                  | MCP SSE 엔드포인트 |
 | `POST` | `/mcp`                  | JSON-RPC (`tools/list`, `tools/call`) |
 
 전체 스펙은 [API Reference](/api-reference/introduction) 탭을 참고하세요.
-
-## 요청 제한
-
-<CardGroup cols={3}>
-  <Card title="무료" icon="circle">
-    1,000 호출 / 월
-  </Card>
-  <Card title="프로" icon="bolt">
-    50,000 호출 / 월
-  </Card>
-  <Card title="비즈니스" icon="building">
-    무제한
-  </Card>
-</CardGroup>
-
-<Note>
-  본 서비스는 [디지털솔브업](https://digitalsolveup.kr) 지원사업을 통해 무료 제공되므로
-  현재 모든 사용자에게 자유로운 사용 한도를 제공합니다. 정식 요금제는 향후 공지됩니다.
-</Note>

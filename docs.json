@@ -33,10 +33,6 @@
       {
         "label": "Dashboard",
         "href": "https://admin.datari.kr"
-      },
-      {
-        "label": "GitHub",
-        "href": "https://github.com/happycastle114/project-two"
       }
     ],
     "primary": {
@@ -46,9 +42,6 @@
     }
   },
   "footer": {
-    "socials": {
-      "github": "https://github.com/happycastle114/project-two"
-    },
     "links": [
       {
         "header": "Product",
@@ -56,14 +49,6 @@
           { "label": "Landing", "href": "https://datari.kr" },
           { "label": "Dashboard", "href": "https://admin.datari.kr" },
           { "label": "Gateway status", "href": "https://mcp.datari.kr/health" }
-        ]
-      },
-      {
-        "header": "Resources",
-        "items": [
-          { "label": "GitHub", "href": "https://github.com/happycastle114/project-two" },
-          { "label": "License (MIT)", "href": "https://github.com/happycastle114/project-two/blob/main/LICENSE" },
-          { "label": "Contributing", "href": "https://github.com/happycastle114/project-two/blob/main/CONTRIBUTING.md" }
         ]
       }
     ]
@@ -78,7 +63,6 @@
             "pages": [
               "getting-started/introduction",
               "getting-started/quickstart",
-              "getting-started/installation",
               "getting-started/first-tool"
             ]
           },
@@ -88,7 +72,7 @@
               "guides/claude",
               "guides/chatgpt",
               "guides/api",
-              "guides/subscribe"
+              "guides/api-keys"
             ]
           },
           {

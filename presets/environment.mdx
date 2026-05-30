@@ -6,46 +6,37 @@ description: "대기질, 수질, 소음, 진동, 폐기물, 라돈 데이터. �
 이 카테고리에는 **20개의 프리셋**이 등록되어 있으며, 합산 **20개의 MCP 도구**가 노출됩니다.
 
 <Tip>
-  특정 도구만 사용하고 싶다면 `mcp-gen install environment/<preset-name>` 형식으로 개별 설치할 수 있습니다.
-  아래 표의 **파일** 컬럼이 `<preset-name>` 입니다.
+  필요한 도구 이름은 `tools/list` 응답에서 확인한 뒤 `tools/call`로 바로 호출할 수 있습니다.
 </Tip>
 
 ## 프리셋 목록
 
-| 이름 | 제공기관 | 도구 수 | data.go.kr | 파일 |
-| --- | --- | --- | --- | --- |
-| 대기질 예보 조회 | 한국환경공단 | 1 | [15070289](https://www.data.go.kr/data/15070289/openapi.do) | `presets/environment/air-quality-forecast.yaml` |
-| 실시간 대기질 조회 | 한국환경공단 | 1 | [15070272](https://www.data.go.kr/data/15070272/openapi.do) | `presets/environment/air-quality-realtime.yaml` |
-| 먹는물 수질 조회 | 한국환경공단 | 1 | [15070391](https://www.data.go.kr/data/15070391/openapi.do) | `presets/environment/drinking-water.yaml` |
-| 미세먼지 경보 조회 | 한국환경공단 | 1 | [15070306](https://www.data.go.kr/data/15070306/openapi.do) | `presets/environment/fine-dust-warning.yaml` |
-| 산불 위험 정보 조회 | 산림청 | 1 | [15071037](https://www.data.go.kr/data/15071037/openapi.do) | `presets/environment/forest-fire.yaml` |
-| 온실가스 배출량 조회 | 한국환경공단 | 1 | [15070340](https://www.data.go.kr/data/15070340/openapi.do) | `presets/environment/greenhouse-gas.yaml` |
-| 소음 측정 정보 | 한국환경공단 | 1 | — | `presets/environment/noise-monitoring-stats.yaml` |
-| 소음 측정 조회 | 한국환경공단 | 1 | [15070442](https://www.data.go.kr/data/15070442/openapi.do) | `presets/environment/noise-monitoring.yaml` |
-| 해양 수질 정보 조회 | 해양수산부 | 1 | [15071038](https://www.data.go.kr/data/15071038/openapi.do) | `presets/environment/ocean-water.yaml` |
-| 악취정보 조회 | 한국환경공단 | 1 | [15070323](https://www.data.go.kr/data/15070323/openapi.do) | `presets/environment/odor-info.yaml` |
-| 전국 공중화장실 정보 | 행정안전부 | 1 | [15012892](https://www.data.go.kr/data/15012892/openapi.do) | `presets/environment/public-restroom.yaml` |
-| 라돈 농도 조회 | 한국환경공단 | 1 | [15070459](https://www.data.go.kr/data/15070459/openapi.do) | `presets/environment/radon-level.yaml` |
-| 재활용 실적 조회 | 한국환경공단 | 1 | [15070425](https://www.data.go.kr/data/15070425/openapi.do) | `presets/environment/recycling-status.yaml` |
-| 토양오염도 조회 | 한국환경공단 | 1 | [15070476](https://www.data.go.kr/data/15070476/openapi.do) | `presets/environment/soil-contamination.yaml` |
-| 소음/진동 측정 정보 | 한국환경공단 | 1 | — | `presets/environment/vibration-monitoring.yaml` |
-| 폐기물 배출량 조회 | 한국환경공단 | 1 | [15070408](https://www.data.go.kr/data/15070408/openapi.do) | `presets/environment/waste-emission.yaml` |
-| 폐기물 처리 현황 | 한국환경공단/환경부 | 1 | — | `presets/environment/waste-treatment.yaml` |
-| 호소 수질 조회 | 한국환경공단 | 1 | [15070374](https://www.data.go.kr/data/15070374/openapi.do) | `presets/environment/water-quality-lake.yaml` |
-| 실시간 수질 정보 | 한국환경공단 | 1 | — | `presets/environment/water-quality-realtime.yaml` |
-| 하천 수질 조회 | 한국환경공단 | 1 | [15070357](https://www.data.go.kr/data/15070357/openapi.do) | `presets/environment/water-quality-river.yaml` |
+| 이름 | 제공기관 | 도구 수 | data.go.kr |
+| --- | --- | --- | --- |
+| 대기질 예보 조회 | 한국환경공단 | 1 | [15070289](https://www.data.go.kr/data/15070289/openapi.do) |
+| 실시간 대기질 조회 | 한국환경공단 | 1 | [15070272](https://www.data.go.kr/data/15070272/openapi.do) |
+| 먹는물 수질 조회 | 한국환경공단 | 1 | [15070391](https://www.data.go.kr/data/15070391/openapi.do) |
+| 미세먼지 경보 조회 | 한국환경공단 | 1 | [15070306](https://www.data.go.kr/data/15070306/openapi.do) |
+| 산불 위험 정보 조회 | 산림청 | 1 | [15071037](https://www.data.go.kr/data/15071037/openapi.do) |
+| 온실가스 배출량 조회 | 한국환경공단 | 1 | [15070340](https://www.data.go.kr/data/15070340/openapi.do) |
+| 소음 측정 정보 | 한국환경공단 | 1 | — |
+| 소음 측정 조회 | 한국환경공단 | 1 | [15070442](https://www.data.go.kr/data/15070442/openapi.do) |
+| 해양 수질 정보 조회 | 해양수산부 | 1 | [15071038](https://www.data.go.kr/data/15071038/openapi.do) |
+| 악취정보 조회 | 한국환경공단 | 1 | [15070323](https://www.data.go.kr/data/15070323/openapi.do) |
+| 전국 공중화장실 정보 | 행정안전부 | 1 | [15012892](https://www.data.go.kr/data/15012892/openapi.do) |
+| 라돈 농도 조회 | 한국환경공단 | 1 | [15070459](https://www.data.go.kr/data/15070459/openapi.do) |
+| 재활용 실적 조회 | 한국환경공단 | 1 | [15070425](https://www.data.go.kr/data/15070425/openapi.do) |
+| 토양오염도 조회 | 한국환경공단 | 1 | [15070476](https://www.data.go.kr/data/15070476/openapi.do) |
+| 소음/진동 측정 정보 | 한국환경공단 | 1 | — |
+| 폐기물 배출량 조회 | 한국환경공단 | 1 | [15070408](https://www.data.go.kr/data/15070408/openapi.do) |
+| 폐기물 처리 현황 | 한국환경공단/환경부 | 1 | — |
+| 호소 수질 조회 | 한국환경공단 | 1 | [15070374](https://www.data.go.kr/data/15070374/openapi.do) |
+| 실시간 수질 정보 | 한국환경공단 | 1 | — |
+| 하천 수질 조회 | 한국환경공단 | 1 | [15070357](https://www.data.go.kr/data/15070357/openapi.do) |
 
 ## 사용 예시
 
 <CodeGroup>
-  ```bash mcp-gen
-  # 카테고리 전체 설치
-  mcp-gen install environment
-
-  # 특정 프리셋만 설치
-  mcp-gen install environment/<preset-name>
-  ```
-
   ```bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \
@@ -53,8 +44,3 @@ description: "대기질, 수질, 소음, 진동, 폐기물, 라돈 데이터. �
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/environment-"))'
   ```
 </CodeGroup>
-
-<Note>
-  이 페이지는 `apps/docs/scripts/build-presets.mjs`가 `presets/environment/*.yaml`을
-  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
-</Note>

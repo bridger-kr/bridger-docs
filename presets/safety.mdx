@@ -6,40 +6,31 @@ description: "재난 경보, 안전 지표, 응급 상황 데이터. 총 14개 �
 이 카테고리에는 **14개의 프리셋**이 등록되어 있으며, 합산 **14개의 MCP 도구**가 노출됩니다.
 
 <Tip>
-  특정 도구만 사용하고 싶다면 `mcp-gen install safety/<preset-name>` 형식으로 개별 설치할 수 있습니다.
-  아래 표의 **파일** 컬럼이 `<preset-name>` 입니다.
+  필요한 도구 이름은 `tools/list` 응답에서 확인한 뒤 `tools/call`로 바로 호출할 수 있습니다.
 </Tip>
 
 ## 프리셋 목록
 
-| 이름 | 제공기관 | 도구 수 | data.go.kr | 파일 |
-| --- | --- | --- | --- | --- |
-| 건축물 안전 조회 | 국토교통부 | 1 | [15071081](https://www.data.go.kr/data/15071081/openapi.do) | `presets/safety/building-safety.yaml` |
-| 방범용 CCTV 조회 | 경찰청 | 1 | [15071036](https://www.data.go.kr/data/15071036/openapi.do) | `presets/safety/cctv-info.yaml` |
-| 화학물질 정보 조회 | 환경부 | 1 | [15071084](https://www.data.go.kr/data/15071084/openapi.do) | `presets/safety/chemical-info.yaml` |
-| 아동안전 구역 조회 | 행정안전부 | 1 | [15071035](https://www.data.go.kr/data/15071035/openapi.do) | `presets/safety/child-safety.yaml` |
-| 재난문자 상세 조회 | 행정안전부 | 1 | [15071079](https://www.data.go.kr/data/15071079/openapi.do) | `presets/safety/disaster-msg-detail.yaml` |
-| 지진 관측 정보 조회 | 기상청 | 1 | [15071088](https://www.data.go.kr/data/15071088/openapi.do) | `presets/safety/earthquake-obs.yaml` |
-| 승강기 안전 정보 조회 | 한국승강기안전공단 | 1 | [15071082](https://www.data.go.kr/data/15071082/openapi.do) | `presets/safety/elevator-safety.yaml` |
-| 긴급 대피소 조회 | 행정안전부 | 1 | [15071080](https://www.data.go.kr/data/15071080/openapi.do) | `presets/safety/emergency-shelter.yaml` |
-| 소방시설 정보 조회 | 소방청 | 1 | [15071090](https://www.data.go.kr/data/15071090/openapi.do) | `presets/safety/fire-facility.yaml` |
-| 홍수 예보 조회 | 환경부 | 1 | [15071086](https://www.data.go.kr/data/15071086/openapi.do) | `presets/safety/flood-forecast.yaml` |
-| 가스시설 안전 조회 | 한국가스안전공사 | 1 | [15071083](https://www.data.go.kr/data/15071083/openapi.do) | `presets/safety/gas-facility.yaml` |
-| 위험물 시설 조회 | 소방청 | 1 | [15071089](https://www.data.go.kr/data/15071089/openapi.do) | `presets/safety/hazmat-facility.yaml` |
-| 산사태 위험 조회 | 산림청 | 1 | [15071087](https://www.data.go.kr/data/15071087/openapi.do) | `presets/safety/landslide-risk.yaml` |
-| 생활방사선 정보 조회 | 원자력안전위원회 | 1 | [15071085](https://www.data.go.kr/data/15071085/openapi.do) | `presets/safety/radiation-info.yaml` |
+| 이름 | 제공기관 | 도구 수 | data.go.kr |
+| --- | --- | --- | --- |
+| 건축물 안전 조회 | 국토교통부 | 1 | [15071081](https://www.data.go.kr/data/15071081/openapi.do) |
+| 방범용 CCTV 조회 | 경찰청 | 1 | [15071036](https://www.data.go.kr/data/15071036/openapi.do) |
+| 화학물질 정보 조회 | 환경부 | 1 | [15071084](https://www.data.go.kr/data/15071084/openapi.do) |
+| 아동안전 구역 조회 | 행정안전부 | 1 | [15071035](https://www.data.go.kr/data/15071035/openapi.do) |
+| 재난문자 상세 조회 | 행정안전부 | 1 | [15071079](https://www.data.go.kr/data/15071079/openapi.do) |
+| 지진 관측 정보 조회 | 기상청 | 1 | [15071088](https://www.data.go.kr/data/15071088/openapi.do) |
+| 승강기 안전 정보 조회 | 한국승강기안전공단 | 1 | [15071082](https://www.data.go.kr/data/15071082/openapi.do) |
+| 긴급 대피소 조회 | 행정안전부 | 1 | [15071080](https://www.data.go.kr/data/15071080/openapi.do) |
+| 소방시설 정보 조회 | 소방청 | 1 | [15071090](https://www.data.go.kr/data/15071090/openapi.do) |
+| 홍수 예보 조회 | 환경부 | 1 | [15071086](https://www.data.go.kr/data/15071086/openapi.do) |
+| 가스시설 안전 조회 | 한국가스안전공사 | 1 | [15071083](https://www.data.go.kr/data/15071083/openapi.do) |
+| 위험물 시설 조회 | 소방청 | 1 | [15071089](https://www.data.go.kr/data/15071089/openapi.do) |
+| 산사태 위험 조회 | 산림청 | 1 | [15071087](https://www.data.go.kr/data/15071087/openapi.do) |
+| 생활방사선 정보 조회 | 원자력안전위원회 | 1 | [15071085](https://www.data.go.kr/data/15071085/openapi.do) |
 
 ## 사용 예시
 
 <CodeGroup>
-  ```bash mcp-gen
-  # 카테고리 전체 설치
-  mcp-gen install safety
-
-  # 특정 프리셋만 설치
-  mcp-gen install safety/<preset-name>
-  ```
-
   ```bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \
@@ -47,8 +38,3 @@ description: "재난 경보, 안전 지표, 응급 상황 데이터. 총 14개 �
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/safety-"))'
   ```
 </CodeGroup>
-
-<Note>
-  이 페이지는 `apps/docs/scripts/build-presets.mjs`가 `presets/safety/*.yaml`을
-  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
-</Note>

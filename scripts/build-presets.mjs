@@ -127,11 +127,10 @@ function renderCategoryMdx(category, presets) {
       const name = escapeMdxCell(p.displayName || p.title);
       const provider = escapeMdxCell(p.provider || "—");
       const ops = p.opCount;
-      const file = `presets/${category}/${p.file}`;
       const link = p.dataGoKrId
         ? `[${escapeMdxCell(p.dataGoKrId)}](https://www.data.go.kr/data/${p.dataGoKrId}/openapi.do)`
         : "—";
-      return `| ${name} | ${provider} | ${ops} | ${link} | \`${file}\` |`;
+      return `| ${name} | ${provider} | ${ops} | ${link} |`;
     })
     .join("\n");
 
@@ -143,27 +142,18 @@ description: "${meta.desc} 총 ${total}개 프리셋 · ${totalOps}개 도구."
 이 카테고리에는 **${total}개의 프리셋**이 등록되어 있으며, 합산 **${totalOps}개의 MCP 도구**가 노출됩니다.
 
 <Tip>
-  특정 도구만 사용하고 싶다면 \`mcp-gen install ${category}/<preset-name>\` 형식으로 개별 설치할 수 있습니다.
-  아래 표의 **파일** 컬럼이 \`<preset-name>\` 입니다.
+  필요한 도구 이름은 \`tools/list\` 응답에서 확인한 뒤 \`tools/call\`로 바로 호출할 수 있습니다.
 </Tip>
 
 ## 프리셋 목록
 
-| 이름 | 제공기관 | 도구 수 | data.go.kr | 파일 |
-| --- | --- | --- | --- | --- |
+| 이름 | 제공기관 | 도구 수 | data.go.kr |
+| --- | --- | --- | --- |
 ${rows}
 
 ## 사용 예시
 
 <CodeGroup>
-  \`\`\`bash mcp-gen
-  # 카테고리 전체 설치
-  mcp-gen install ${category}
-
-  # 특정 프리셋만 설치
-  mcp-gen install ${category}/<preset-name>
-  \`\`\`
-
   \`\`\`bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \\
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \\
@@ -171,11 +161,6 @@ ${rows}
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/${category}-"))'
   \`\`\`
 </CodeGroup>
-
-<Note>
-  이 페이지는 \`apps/docs/scripts/build-presets.mjs\`가 \`presets/${category}/\*.yaml\`을
-  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
-</Note>
 `;
 }
 
@@ -209,7 +194,7 @@ description: "DATA BRIDGE가 제공하는 ${summary.length}개 카테고리 · $
 ---
 
 DATA BRIDGE는 공공·민간 OpenAPI를 카테고리별로 정리한 **${grandTotal}개의 프리셋**을 제공합니다.
-한 번 설치하면 카테고리 안의 모든 도구를 \`mcp-gen\` CLI 또는 \`mcp.datari.kr\` 호스팅 Gateway에서 즉시 호출할 수 있습니다.
+카테고리별 도구는 DATA BRIDGE 호스팅 Gateway에서 \`tools/list\`로 확인하고 즉시 호출할 수 있습니다.
 
 <CardGroup cols={2}>
 ${cards}
@@ -225,23 +210,11 @@ ${rows}
 ## 빠른 사용
 
 \`\`\`bash
-# 전체 목록 확인
-mcp-gen list
-
-# 카테고리별 필터
-mcp-gen list --category weather
-
-# 키워드 검색
-mcp-gen search 날씨
-
-# 카테고리 단위 설치
-mcp-gen install weather
+curl -X POST https://mcp.datari.kr/mcp \\
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 \`\`\`
-
-<Note>
-  이 페이지는 \`apps/docs/scripts/build-presets.mjs\`가 \`presets/\*\*/\*.yaml\`을
-  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
-</Note>
 `;
 }
 

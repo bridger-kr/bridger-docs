@@ -6,42 +6,33 @@ description: "예보, 경보, 레이더, 자외선, 태풍 데이터. 총 16개 
 이 카테고리에는 **16개의 프리셋**이 등록되어 있으며, 합산 **16개의 MCP 도구**가 노출됩니다.
 
 <Tip>
-  특정 도구만 사용하고 싶다면 `mcp-gen install weather/<preset-name>` 형식으로 개별 설치할 수 있습니다.
-  아래 표의 **파일** 컬럼이 `<preset-name>` 입니다.
+  필요한 도구 이름은 `tools/list` 응답에서 확인한 뒤 `tools/call`로 바로 호출할 수 있습니다.
 </Tip>
 
 ## 프리셋 목록
 
-| 이름 | 제공기관 | 도구 수 | data.go.kr | 파일 |
-| --- | --- | --- | --- | --- |
-| 대기질 측정소 조회 | 환경부 | 1 | [15071043](https://www.data.go.kr/data/15071043/openapi.do) | `presets/weather/air-quality-station.yaml` |
-| 한파영향예보 조회 | 기상청 | 1 | [15070238](https://www.data.go.kr/data/15070238/openapi.do) | `presets/weather/coldwave-impact.yaml` |
-| 가뭄지수 조회 | 기상청 | 1 | [15070204](https://www.data.go.kr/data/15070204/openapi.do) | `presets/weather/drought-index.yaml` |
-| 폭염영향예보 조회 | 기상청 | 1 | [15070221](https://www.data.go.kr/data/15070221/openapi.do) | `presets/weather/heatwave-impact.yaml` |
-| 낙뢰관측 조회 | 기상청 | 1 | [15070153](https://www.data.go.kr/data/15070153/openapi.do) | `presets/weather/lightning-observation.yaml` |
-| 해상예보 조회 | 기상청 | 1 | [15070170](https://www.data.go.kr/data/15070170/openapi.do) | `presets/weather/marine-forecast.yaml` |
-| 중기육상예보 조회 | 기상청 | 1 | [15070085](https://www.data.go.kr/data/15070085/openapi.do) | `presets/weather/mid-land-forecast.yaml` |
-| 중기기온예보 조회 | 기상청 | 1 | [15070102](https://www.data.go.kr/data/15070102/openapi.do) | `presets/weather/mid-temp-forecast.yaml` |
-| 레이더 강수량 조회 | 기상청 | 1 | [15070136](https://www.data.go.kr/data/15070136/openapi.do) | `presets/weather/radar-rainfall.yaml` |
-| 태풍정보 조회 | 기상청 | 1 | [15070119](https://www.data.go.kr/data/15070119/openapi.do) | `presets/weather/typhoon-info.yaml` |
-| 초단기예보 조회 | 기상청 | 1 | [15070051](https://www.data.go.kr/data/15070051/openapi.do) | `presets/weather/ultra-shortcast.yaml` |
-| 자외선지수 조회 | 기상청 | 1 | [15070255](https://www.data.go.kr/data/15070255/openapi.do) | `presets/weather/uv-index.yaml` |
-| 동네예보 조회 | 기상청 | 1 | [15070068](https://www.data.go.kr/data/15070068/openapi.do) | `presets/weather/village-forecast.yaml` |
-| 파고예보 조회 | 기상청 | 1 | [15070187](https://www.data.go.kr/data/15070187/openapi.do) | `presets/weather/wave-forecast.yaml` |
-| 단기예보 조회 | 기상청 | 1 | [15070017](https://www.data.go.kr/data/15070017/openapi.do) | `presets/weather/weather-forecast.yaml` |
-| 기상특보 조회 | 기상청 | 1 | [15070034](https://www.data.go.kr/data/15070034/openapi.do) | `presets/weather/weather-warning.yaml` |
+| 이름 | 제공기관 | 도구 수 | data.go.kr |
+| --- | --- | --- | --- |
+| 대기질 측정소 조회 | 환경부 | 1 | [15071043](https://www.data.go.kr/data/15071043/openapi.do) |
+| 한파영향예보 조회 | 기상청 | 1 | [15070238](https://www.data.go.kr/data/15070238/openapi.do) |
+| 가뭄지수 조회 | 기상청 | 1 | [15070204](https://www.data.go.kr/data/15070204/openapi.do) |
+| 폭염영향예보 조회 | 기상청 | 1 | [15070221](https://www.data.go.kr/data/15070221/openapi.do) |
+| 낙뢰관측 조회 | 기상청 | 1 | [15070153](https://www.data.go.kr/data/15070153/openapi.do) |
+| 해상예보 조회 | 기상청 | 1 | [15070170](https://www.data.go.kr/data/15070170/openapi.do) |
+| 중기육상예보 조회 | 기상청 | 1 | [15070085](https://www.data.go.kr/data/15070085/openapi.do) |
+| 중기기온예보 조회 | 기상청 | 1 | [15070102](https://www.data.go.kr/data/15070102/openapi.do) |
+| 레이더 강수량 조회 | 기상청 | 1 | [15070136](https://www.data.go.kr/data/15070136/openapi.do) |
+| 태풍정보 조회 | 기상청 | 1 | [15070119](https://www.data.go.kr/data/15070119/openapi.do) |
+| 초단기예보 조회 | 기상청 | 1 | [15070051](https://www.data.go.kr/data/15070051/openapi.do) |
+| 자외선지수 조회 | 기상청 | 1 | [15070255](https://www.data.go.kr/data/15070255/openapi.do) |
+| 동네예보 조회 | 기상청 | 1 | [15070068](https://www.data.go.kr/data/15070068/openapi.do) |
+| 파고예보 조회 | 기상청 | 1 | [15070187](https://www.data.go.kr/data/15070187/openapi.do) |
+| 단기예보 조회 | 기상청 | 1 | [15070017](https://www.data.go.kr/data/15070017/openapi.do) |
+| 기상특보 조회 | 기상청 | 1 | [15070034](https://www.data.go.kr/data/15070034/openapi.do) |
 
 ## 사용 예시
 
 <CodeGroup>
-  ```bash mcp-gen
-  # 카테고리 전체 설치
-  mcp-gen install weather
-
-  # 특정 프리셋만 설치
-  mcp-gen install weather/<preset-name>
-  ```
-
   ```bash 호스팅 Gateway
   curl -X POST https://mcp.datari.kr/mcp \
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \
@@ -49,8 +40,3 @@ description: "예보, 경보, 레이더, 자외선, 태풍 데이터. 총 16개 
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/weather-"))'
   ```
 </CodeGroup>
-
-<Note>
-  이 페이지는 `apps/docs/scripts/build-presets.mjs`가 `presets/weather/*.yaml`을
-  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
-</Note>

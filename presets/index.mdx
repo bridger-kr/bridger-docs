@@ -4,7 +4,7 @@ description: "DATA BRIDGE가 제공하는 14개 카테고리 · 230개 프리셋
 ---
 
 DATA BRIDGE는 공공·민간 OpenAPI를 카테고리별로 정리한 **230개의 프리셋**을 제공합니다.
-한 번 설치하면 카테고리 안의 모든 도구를 `mcp-gen` CLI 또는 `mcp.datari.kr` 호스팅 Gateway에서 즉시 호출할 수 있습니다.
+카테고리별 도구는 DATA BRIDGE 호스팅 Gateway에서 `tools/list`로 확인하고 즉시 호출할 수 있습니다.
 
 <CardGroup cols={2}>
   <Card title="행정 · 민원" icon="building-columns" href="/presets/civil">
@@ -88,20 +88,8 @@ DATA BRIDGE는 공공·민간 OpenAPI를 카테고리별로 정리한 **230개�
 ## 빠른 사용
 
 ```bash
-# 전체 목록 확인
-mcp-gen list
-
-# 카테고리별 필터
-mcp-gen list --category weather
-
-# 키워드 검색
-mcp-gen search 날씨
-
-# 카테고리 단위 설치
-mcp-gen install weather
+curl -X POST https://mcp.datari.kr/mcp \
+  -H "x-api-key: " \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
-
-<Note>
-  이 페이지는 `apps/docs/scripts/build-presets.mjs`가 `presets/**/*.yaml`을
-  스캔하여 자동 생성합니다. 직접 수정하지 마세요.
-</Note>

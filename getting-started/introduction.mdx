@@ -7,11 +7,6 @@ DATA BRIDGE는 **데이터** + **다리**의 합성어입니다.
 공공데이터 API의 인증·파싱·에러 처리를 대신하고, AI가 [Model Context Protocol (MCP)](/concepts/mcp) 표준으로
 바로 사용할 수 있도록 도구로 변환합니다. OpenAPI 스펙이 있는 어떤 API든 등록하면 AI 도구가 됩니다.
 
-<Note>
-  본 서비스는 [디지털솔브업](https://digitalsolveup.kr)(과학기술정보통신부 · NIA) 지원사업을 통해
-  **무료 제공**됩니다.
-</Note>
-
 ## DATA BRIDGE가 해결하는 문제
 
 <CardGroup cols={3}>
@@ -26,16 +21,14 @@ DATA BRIDGE는 **데이터** + **다리**의 합성어입니다.
   </Card>
 </CardGroup>
 
-## 핵심 패키지
-
-DATA BRIDGE는 두 개의 NPM 패키지로 구성됩니다.
+## 핵심 구성
 
 <CardGroup cols={2}>
-  <Card title="@mcp-hub/cli" icon="terminal" href="/getting-started/installation">
-    `mcp-gen` — OpenAPI 또는 프리셋 기반 MCP 서버 생성과 설치.
+  <Card title="호스팅 Gateway" icon="cloud" href="/api-reference/introduction">
+    API 키 하나로 프리셋과 등록된 API 도구를 호출합니다.
   </Card>
-  <Card title="@mcp-hub/gateway" icon="cloud" href="/api-reference/introduction">
-    `mcp-gateway` — 프리셋 로드, 도구 레지스트리, JSON-RPC + SSE 브리지.
+  <Card title="프리셋 카탈로그" icon="table" href="/presets/index">
+    공공데이터 API를 카테고리별 MCP 도구로 제공합니다.
   </Card>
 </CardGroup>
 

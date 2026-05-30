@@ -1,88 +1,33 @@
 ---
-title: "설치"
-description: "DATA BRIDGE CLI(@mcp-hub/cli)와 Gateway(@mcp-hub/gateway) 설치 방법."
+title: "환경 설정"
+description: "DATA BRIDGE Gateway를 호출하기 위한 API 키와 기본 엔드포인트를 설정합니다."
 ---
 
-대부분의 사용 사례에는 **DATA BRIDGE 호스팅 Gateway**(`mcp.datari.kr`)면 충분합니다.
-다음 경우에만 직접 설치합니다.
+DATA BRIDGE는 별도 패키지 설치 없이 호스팅 Gateway로 사용할 수 있습니다.
+클라이언트에서는 API 키와 Gateway URL만 설정하면 됩니다.
 
-- 사내망/오프라인 환경에서 DATA BRIDGE를 운영
-- OpenAPI 스펙으로부터 MCP 서버를 **로컬에서 생성**
-- Gateway를 **자체 호스팅**하여 미들웨어/감사 로그를 직접 통제
+## API 키
 
-## 요구사항
-
-- Node.js 20+
-- npm 10+
-
-## CLI (`@mcp-hub/cli`) 설치
-
-`mcp-gen`은 OpenAPI 스펙을 MCP 서버 패키지로 변환하고, Claude/Cursor 설정에 설치합니다.
-
-<CodeGroup>
-  ```bash npm
-  npm install -g @mcp-hub/cli
-  ```
-
-  ```bash pnpm
-  pnpm add -g @mcp-hub/cli
-  ```
-
-  ```bash yarn
-  yarn global add @mcp-hub/cli
-  ```
-</CodeGroup>
-
-설치 확인:
+[admin.datari.kr](https://admin.datari.kr)에서 계정을 만들고 **Settings → API Keys**에서 키를 발급받습니다.
 
 ```bash
-mcp-gen --version
+export DATA_BRIDGE_API_KEY="dat_live_..."
 ```
 
-### 주요 명령
+## Gateway URL
 
 ```bash
-mcp-gen list                       # 사용 가능한 프리셋 목록
-mcp-gen list --category weather    # 카테고리별 필터
-mcp-gen search 날씨                # 키워드 검색
-mcp-gen install weather            # 프리셋으로 MCP 서버 생성
-mcp-gen generate ./openapi.yaml    # OpenAPI 스펙으로부터 생성
+export DATA_BRIDGE_GATEWAY_URL="https://mcp.datari.kr/mcp"
 ```
 
-전체 명령은 [CLI Reference](https://github.com/happycastle114/project-two/blob/main/docs/CLI_REFERENCE.md)
-를 참고하세요.
-
-## Gateway (`@mcp-hub/gateway`) 자체 호스팅
-
-Gateway는 프리셋을 로드하고 MCP JSON-RPC + SSE 브리지를 노출합니다.
+## 연결 확인
 
 ```bash
-git clone https://github.com/happycastle114/project-two
-cd project-two/packages/gateway
-npm install
-npm run build
-npm start
+curl -X POST "$DATA_BRIDGE_GATEWAY_URL" \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
-
-기본 포트는 `3000`입니다. 환경변수로 조정할 수 있습니다.
-
-```bash
-export PORT=8080
-export DATA_BRIDGE_API_KEY=dat_live_...
-export PUBLICDATA_SERVICE_KEY=...
-npm start
-```
-
-### Docker로 실행
-
-```bash
-docker run -p 8080:8080 \
-  -e PUBLICDATA_SERVICE_KEY=... \
-  ghcr.io/your-org/data-bridge-gateway:latest
-```
-
-자세한 운영 흐름(시크릿 관리, 헬스체크, 멀티 인스턴스)은
-[아키텍처 문서](/concepts/architecture)를 참고하세요.
 
 ## 다음 단계
 
@@ -90,7 +35,7 @@ docker run -p 8080:8080 \
   <Card title="첫 도구 호출" icon="play" href="/getting-started/first-tool">
     Gateway에 연결하고 도구를 실행해 봅니다.
   </Card>
-  <Card title="아키텍처 이해" icon="diagram-project" href="/concepts/architecture">
-    CLI · Gateway · Sandbox 구성요소가 어떻게 맞물리는지 살펴봅니다.
+  <Card title="Claude에 연결" icon="message" href="/guides/claude">
+    Claude Desktop에서 DATA BRIDGE 도구를 사용합니다.
   </Card>
 </CardGroup>
