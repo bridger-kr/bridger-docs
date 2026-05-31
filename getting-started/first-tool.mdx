@@ -68,15 +68,15 @@ export DATA_BRIDGE_API_KEY="dat_live_..."
   "result": {
     "tools": [
       {
-        "name": "weather_forecast_short",
-        "description": "기상청 초단기예보 — 한국 도시·구 단위 6시간 내 예보",
+        "name": "getultrashortcast",
+        "description": "기상청 초단기예보 조회 — 공공데이터포털 OpenAPI",
         "inputSchema": {
           "type": "object",
           "properties": {
-            "city": { "type": "string" },
-            "district": { "type": "string" }
-          },
-          "required": ["city", "district"]
+            "searchKeyword": { "type": "string", "description": "검색 키워드" },
+            "pageNo": { "type": "integer", "description": "페이지 번호" },
+            "numOfRows": { "type": "integer", "description": "한 페이지 결과 수" }
+          }
         }
       }
     ]
@@ -97,10 +97,10 @@ curl -X POST https://mcp.datari.kr/mcp \
     "id": 2,
     "method": "tools/call",
     "params": {
-      "name": "weather_forecast_short",
+      "name": "getultrashortcast",
       "arguments": {
-        "city": "서울",
-        "district": "강남구"
+        "searchKeyword": "서울",
+        "numOfRows": 10
       }
     }
   }'

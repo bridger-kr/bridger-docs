@@ -39,10 +39,10 @@ curl -X POST https://mcp.datari.kr/mcp \
     "id": 2,
     "method": "tools/call",
     "params": {
-      "name": "weather_forecast_short",
+      "name": "getultrashortcast",
       "arguments": {
-        "city": "서울",
-        "district": "강남구"
+        "searchKeyword": "서울",
+        "numOfRows": 10
       }
     }
   }'

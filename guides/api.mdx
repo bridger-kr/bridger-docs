@@ -22,12 +22,12 @@ Claude나 ChatGPT 없이도 DATA BRIDGE Gateway는 REST와 표준 MCP SDK로 직
       ```
 
       ```bash 도구 실행
-      curl -X POST https://mcp.datari.kr/api/v1/tools/weather/forecast \
+      curl -X POST https://mcp.datari.kr/api/v1/tools/getweatherforecast/invoke \
         -H "Authorization: Bearer YOUR_API_KEY" \
         -H "Content-Type: application/json" \
         -d '{
-          "city": "서울",
-          "district": "강남구"
+          "nx": 60,
+          "ny": 127
         }'
       ```
     </CodeGroup>
@@ -45,7 +45,7 @@ Claude나 ChatGPT 없이도 DATA BRIDGE Gateway는 REST와 표준 MCP SDK로 직
     import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
 
     const transport = new SSEClientTransport(
-      new URL("https://mcp.datari.kr/sse"),
+      new URL("https://mcp.datari.kr/mcp/sse"),
       {
         requestInit: {
           headers: {
@@ -68,10 +68,10 @@ Claude나 ChatGPT 없이도 DATA BRIDGE Gateway는 REST와 표준 MCP SDK로 직
 
     // 도구 실행
     const result = await client.callTool({
-      name: "weather_forecast",
+      name: "getweatherforecast",
       arguments: {
-        city: "서울",
-        district: "강남구",
+        nx: 60,
+        ny: 127,
       },
     });
     console.log(result);
@@ -94,7 +94,7 @@ Claude나 ChatGPT 없이도 DATA BRIDGE Gateway는 REST와 표준 MCP SDK로 직
         headers = {"Authorization": "Bearer YOUR_API_KEY"}
 
         async with sse_client(
-            "https://mcp.datari.kr/sse",
+            "https://mcp.datari.kr/mcp/sse",
             headers=headers,
         ) as (read, write):
             async with ClientSession(read, write) as session:
@@ -104,8 +104,8 @@ Claude나 ChatGPT 없이도 DATA BRIDGE Gateway는 REST와 표준 MCP SDK로 직
                 print(tools)
 
                 result = await session.call_tool(
-                    "weather_forecast",
-                    arguments={"city": "서울", "district": "강남구"},
+                    "getweatherforecast",
+                    arguments={"nx": 60, "ny": 127},
                 )
                 print(result)
 
@@ -118,18 +118,20 @@ Claude나 ChatGPT 없이도 DATA BRIDGE Gateway는 REST와 표준 MCP SDK로 직
     자세한 흐름은 [BYOAPI 개념 문서](/concepts/byoapi)를 참고하세요.
 
     ```bash API 등록
-    curl -X POST https://mcp.datari.kr/api/v1/register \
+    curl -X POST https://mcp.datari.kr/api/v1/byoapi/register \
       -H "Authorization: Bearer YOUR_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
-        "spec_url": "https://api.example.com/openapi.json",
+        "source": "https://api.example.com/openapi.json",
         "name": "my-service",
-        "auth": {
-          "type": "bearer",
-          "token": "SERVICE_API_KEY"
-        }
+        "category": "custom"
       }'
     ```
+
+    <Note>
+      `source`에는 OpenAPI 스펙의 URL 또는 인라인 스펙 문자열을 전달합니다.
+      `category`를 생략하면 기본값은 `custom`입니다.
+    </Note>
   </Step>
 </Steps>
 
@@ -137,11 +139,12 @@ Claude나 ChatGPT 없이도 DATA BRIDGE Gateway는 REST와 표준 MCP SDK로 직
 
 | 메서드 | 경로 | 설명 |
 | ------ | ----- | ---- |
-| `GET`  | `/api/v1/tools`         | 전체 도구 목록 |
-| `POST` | `/api/v1/tools/:id`     | 도구 실행 |
-| `GET`  | `/api/v1/servers`       | 서버 목록 |
-| `POST` | `/api/v1/register`      | BYOAPI 등록 |
-| `GET`  | `/sse`                  | MCP SSE 엔드포인트 |
-| `POST` | `/mcp`                  | JSON-RPC (`tools/list`, `tools/call`) |
+| `GET`  | `/api/v1/tools`            | 전체 도구 목록 |
+| `POST` | `/api/v1/tools/:name/invoke` | 도구 실행 |
+| `POST` | `/api/v1/byoapi/register`  | BYOAPI 등록 (`{source, name, category}`) |
+| `GET`  | `/registry/servers`        | 프리셋 서버(MCP 그룹) 카탈로그 |
+| `GET`  | `/registry/tools`          | 평탄화된 도구 목록 |
+| `GET`  | `/mcp/sse`                 | MCP SSE 이벤트 스트림 |
+| `POST` | `/mcp`                     | JSON-RPC (`tools/list`, `tools/call`) |
 
 전체 스펙은 [API Reference](/api-reference/introduction) 탭을 참고하세요.
