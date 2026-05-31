@@ -3,20 +3,32 @@ title: "ChatGPT에 연결하기"
 description: "ChatGPT의 GPTs(Actions)로 DATA BRIDGE를 호출하는 방법 — 약 2분 소요."
 ---
 
-GPTs와 Actions를 사용할 수 있는 ChatGPT 워크스페이스에서는 DATA BRIDGE Gateway를 호출할 수 있습니다.
+DATA BRIDGE는 **원격 MCP 서버(Connector)** 로 ChatGPT에 연결됩니다. ChatGPT가 `https://mcp.datari.kr/mcp`에
+직접 붙어, 230+ 한국 공공데이터 도구를 자연어로 사용할 수 있습니다. 인증은 OAuth로 처리됩니다.
+
+<Note>
+  원격 MCP 커넥터는 ChatGPT의 **개발자 모드(Developer Mode)** 또는 커넥터를 지원하는
+  워크스페이스(Enterprise/Team 등)에서 사용할 수 있습니다.
+</Note>
 
 <Steps>
-  <Step title="DATA BRIDGE GPT 접속">
-    [DATA BRIDGE Korea GPT](https://chat.openai.com/g/mcphub-korea)를 엽니다.
+  <Step title="커넥터 추가">
+    ChatGPT **Settings → Connectors → Add(또는 Developer Mode → MCP servers)** 에서
+    원격 MCP 서버 URL로 다음을 입력합니다.
 
+    ```text Remote MCP Server URL
+    https://mcp.datari.kr/mcp
+    ```
+
+    전송 방식은 **Streamable HTTP**입니다.
   </Step>
 
-  <Step title="계정 연결">
-    GPT가 처음 한국 데이터를 조회할 때 DATA BRIDGE 계정 연결을 요청합니다. **"허용"**을
-    클릭하면 자동으로 인증이 완료됩니다.
+  <Step title="OAuth 동의">
+    커넥터를 추가하면 ChatGPT가 OAuth 인증을 시작합니다(Dynamic Client Registration + PKCE).
+    DATA BRIDGE 로그인 후 **동의(Allow)** 를 누르면 연결이 완료됩니다.
 
     <Tip>
-      아직 계정이 없다면 [어드민 대시보드](https://admin.datari.kr)에서 계정을 먼저
+      아직 계정이 없다면 [어드민 대시보드](https://admin.datari.kr)에서 먼저 계정을
       만드세요. 구글/카카오 소셜 로그인을 지원합니다.
     </Tip>
   </Step>
@@ -30,24 +42,18 @@ GPTs와 Actions를 사용할 수 있는 ChatGPT 워크스페이스에서는 DATA
     오늘 달러 환율 얼마야?
     ```
   </Step>
-
-  <Step title="(선택) 커스텀 GPT 만들기">
-    자신만의 GPT에 DATA BRIDGE를 연동하고 싶다면 Actions에서 다음 OpenAPI 스펙을 임포트하세요.
-
-    ```text OpenAPI Spec URL
-    https://mcp.datari.kr/openapi.json
-    ```
-
-    GPT Builder에서 **Configure → Actions → Import from URL**로 위 URL을 입력합니다.
-    인증 방식은 **API Key (Bearer Token)** 입니다.
-  </Step>
 </Steps>
 
 ## 문제 해결
 
 <AccordionGroup>
-  <Accordion title='"허용" 버튼이 나타나지 않아요'>
-    GPT 설정의 Actions 인증 구성이 저장되어 있는지 확인하세요.
+  <Accordion title="커넥터 추가 메뉴가 보이지 않아요">
+    원격 MCP 커넥터는 ChatGPT 개발자 모드 또는 커넥터를 지원하는 플랜에서만 노출됩니다.
+    설정에서 개발자 모드를 활성화했는지 확인하세요.
+  </Accordion>
+  <Accordion title="OAuth 동의 화면이 나타나지 않아요">
+    `https://mcp.datari.kr/mcp` URL이 정확한지, 브라우저 팝업/리디렉션이 차단되지 않았는지
+    확인하세요.
   </Accordion>
   <Accordion title="데이터가 조회되지 않아요">
     일부 공공데이터 API는 야간에 점검될 수 있습니다. 잠시 후 다시 시도해 주세요.
