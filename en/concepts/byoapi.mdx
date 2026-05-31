@@ -1,0 +1,153 @@
+---
+title: "BYOAPI — register your own API"
+description: "A multi-tenant, ID-based pipeline that registers any API with an OpenAPI spec as a DATA BRIDGE tool."
+---
+
+DATA BRIDGE's **BYOAPI (Bring Your Own API)** lets you register any API as an MCP tool on the DATA BRIDGE
+Gateway **without building or deploying a separate container** — as long as you have an OpenAPI spec.
+
+<Note>
+  BYOAPI is **coming soon**. The content below previews how it works; today, tools are provided through
+  the official preset catalog.
+</Note>
+
+## Core idea — registration, not deployment
+
+<CardGroup cols={2}>
+  <Card title="Traditional approach" icon="container-storage">
+    Build, deploy, and operate one container per API. Both cost and management explode.
+  </Card>
+  <Card title="DATA BRIDGE BYOAPI" icon="bolt">
+    Register only the tool definition in the DB. A single Gateway routes by ID → done in seconds.
+  </Card>
+</CardGroup>
+
+```text
+A single DATA BRIDGE Gateway (mcp.datari.kr)
+  ├─ Official preset   tool_id: @datari/weather-ultra-shortcast   → tool: getultrashortcast
+  ├─ Official preset   tool_id: @datari/realestate-apt-trade      → tool: getapttrade
+  ├─ BYOAPI            tool_id: @user123/my-petstore              → tool: listpets, getpetbyid
+  ├─ BYOAPI            tool_id: @company/internal-crm             → tool: ...
+  └─ ... 230+ tools
+```
+
+## Tool names and identifier scheme
+
+DATA BRIDGE has two registration paths with different identifier schemes.
+
+**1. Official presets** — loaded directly by the Gateway from OpenAPI YAML in `vendor/spec`.
+
+- The **Tool ID** (registry registration ID) follows the `@datari/{category}-{name}` format based on the preset file path. e.g. `@datari/weather-ultra-shortcast`. In the in-memory server catalog (`/registry/servers`), the same group is exposed as `servers[].id` = `{category}/{name}` (e.g. `weather/ultra-shortcast`).
+- The **tool name** (`tools[].name`) is derived from the OpenAPI `operationId`: non-alphanumeric characters are replaced with an underscore (`_`), then lowercased. e.g. `getUltraShortcast` → `getultrashortcast`. The tool name itself has no namespace prefix, and you use this name as-is in `tools/call`.
+
+**2. BYOAPI tools** — tools a user registers via `/api/v1/register`.
+
+- The **Tool ID** carries an `@{owner}/{slug}` namespace. e.g. `@user123/my-petstore`, `@company/internal-crm`. If the owner doesn't start with `@`, one is added automatically.
+- Individual tool names are derived from `operationId`, the same as presets. e.g. `listpets`.
+- If no category is specified at registration, the default is `byoapi`; if public data is detected, the matching category is applied.
+
+| Type | Identifier format | Example |
+| --- | --- | --- |
+| Official preset (Tool ID) | `@datari/{category}-{name}` | `@datari/weather-ultra-shortcast` |
+| Official preset (tool name) | derived from `operationId` | `getultrashortcast` |
+| BYOAPI (tool_id) | `@{owner}/{slug}` | `@user123/my-petstore` |
+
+## Registration pipeline
+
+<Steps>
+  <Step title="Ingestion">
+    Provide the OpenAPI spec as a URL, file upload, or inline text.
+  </Step>
+  <Step title="Validation">
+    Check spec validity and the number of convertible endpoints, and compute a fitness score (`score`).
+    If it's invalid or has no convertible endpoints, it's rejected with `422`.
+  </Step>
+  <Step title="Generation">
+    Convert OpenAPI `paths` into MCP Tool definitions (`name`, `description`, `inputSchema`).
+  </Step>
+  <Step title="Registration">
+    Register in the Tool Registry DB — **no container deployment**.
+  </Step>
+  <Step title="Ready">
+    Immediately exposed in `tools/list` on `mcp.datari.kr/mcp`; on `tools/call`, the runtime proxy calls upstream.
+  </Step>
+</Steps>
+
+## Behavior after registration
+
+| Stage | Description |
+| --- | --- |
+| Tool exposure | Registered tools are included in the `tools/list` response. |
+| Call routing | The target API is selected based on the tool ID in the `tools/call` request. |
+| Auth injection | Required headers or tokens are injected into the upstream request per the stored auth config. |
+| Response normalization | The upstream response is returned in a form that's easy for MCP clients to read. |
+
+## tools/list response example
+
+```json
+{
+  "tools": [
+    {
+      "name": "getweatherforecast",
+      "description": "KMA short-term forecast — location-based weather info",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "nx": { "type": "integer", "description": "Forecast point X coordinate" },
+          "ny": { "type": "integer", "description": "Forecast point Y coordinate" }
+        },
+        "required": ["nx", "ny"]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "listpets",
+      "description": "List all pets in the store",
+      "inputSchema": { /* ... */ }
+    }
+  ]
+}
+```
+
+## Data model (summary)
+
+```sql
+CREATE TABLE tool_registrations (
+  id            UUID PRIMARY KEY,
+  owner_id      UUID NOT NULL REFERENCES users(id),
+  tool_id       VARCHAR(128) NOT NULL UNIQUE,   -- preset: @datari/{category}-{name}, BYOAPI: @{owner}/{slug}
+  display_name  VARCHAR(256),
+  description   TEXT,
+  category      VARCHAR(64),
+
+  source_type   VARCHAR(16),     -- preset | byoapi | manual
+  source_spec   TEXT,            -- original OpenAPI (compressed)
+  spec_hash     VARCHAR(64),     -- SHA-256
+
+  upstream_base_url VARCHAR(512),
+  upstream_paths    JSONB,       -- [{method, path, operationId, inputSchema, ...}]
+  auth_config       JSONB        -- {type, header, tokenEndpoint, ...}
+);
+```
+
+You can find the detailed registration screen and field descriptions in the BYOAPI registration flow of the admin dashboard.
+
+<Note>
+  If you'd like your API offered to everyone as a public preset, contact us at
+  [support@datari.kr](mailto:support@datari.kr) or via Channel Talk.
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="API Reference" icon="book" href="/en/api-reference/introduction">
+    Full Registry, MCP JSON-RPC, and SSE spec.
+  </Card>
+  <Card title="Auth & security" icon="shield" href="/en/concepts/auth-and-security">
+    Secret/audit/PII handling for BYOAPI-registered tools.
+  </Card>
+</CardGroup>

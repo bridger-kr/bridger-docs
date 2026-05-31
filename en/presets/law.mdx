@@ -1,0 +1,40 @@
+---
+title: "Law & Administration"
+description: "Statutes, case law, administrative appeals, and regulatory information. 8 presets · 8 tools."
+---
+
+This category has **8 presets** registered, exposing **8 MCP tools** in total.
+
+<Tip>
+  Find the tool name you need in the `tools/list` response, then call it directly with `tools/call`.
+</Tip>
+
+## Preset list
+
+| Name | Provider | Tools | data.go.kr |
+| --- | --- | --- | --- |
+| 행정심판 조회 | 국민권익위원회 | 1 | [15071076](https://www.data.go.kr/data/15071076/openapi.do) |
+| 중재 정보 조회 | 대한상사중재원 | 1 | [15071072](https://www.data.go.kr/data/15071072/openapi.do) |
+| 판례 검색 조회 | 법원행정처 | 1 | [15071078](https://www.data.go.kr/data/15071078/openapi.do) |
+| 법령 해석 조회 | 법제처 | 1 | [15071077](https://www.data.go.kr/data/15071077/openapi.do) |
+| 법률 구조 조회 | 대한법률구조공단 | 1 | [15071075](https://www.data.go.kr/data/15071075/openapi.do) |
+| 입법예고 조회 | 법제처 | 1 | [15071073](https://www.data.go.kr/data/15071073/openapi.do) |
+| 공증 정보 조회 | 대한법률구조공단 | 1 | [15071071](https://www.data.go.kr/data/15071071/openapi.do) |
+| 등기 정보 조회 | 대법원 | 1 | [15071074](https://www.data.go.kr/data/15071074/openapi.do) |
+
+## Usage examples
+
+<CodeGroup>
+  ```bash Query category servers
+  # List the preset servers and tools in this category. (public catalog — no auth required)
+  curl https://mcp.datari.kr/registry/servers \
+    | jq '.servers[] | select(.id | startswith("law/"))'
+  ```
+
+  ```bash Full tool list (MCP)
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
+  ```
+</CodeGroup>

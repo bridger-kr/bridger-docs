@@ -1,0 +1,95 @@
+---
+title: "Catalog index"
+description: "Full index of 14 categories · 230 presets · 230 tools provided by DATA BRIDGE."
+---
+
+DATA BRIDGE provides **230 presets** organizing public and private OpenAPIs by category.
+Tools per category can be discovered via `tools/list` on the DATA BRIDGE hosted Gateway and called immediately.
+
+<CardGroup cols={2}>
+  <Card title="Government & Civil" icon="building-columns" href="/en/presets/civil">
+    Administration, civil services, population, public safety, disaster, and public-facility data.\
+    **20 presets · 20 tools**
+  </Card>
+  <Card title="Culture & Tourism" icon="masks-theater" href="/en/presets/culture">
+    Festival, attraction, library, performance, and cultural-heritage data.\
+    **18 presets · 18 tools**
+  </Card>
+  <Card title="Economy & Finance" icon="chart-line" href="/en/presets/economy">
+    Exchange rates, interest rates, indicators, consumption, trade, and market statistics.\
+    **19 presets · 19 tools**
+  </Card>
+  <Card title="Education" icon="graduation-cap" href="/en/presets/education">
+    School, university, education statistics, and academic data.\
+    **15 presets · 15 tools**
+  </Card>
+  <Card title="Environment" icon="leaf" href="/en/presets/environment">
+    Air quality, water quality, noise, vibration, waste, and radon data.\
+    **20 presets · 20 tools**
+  </Card>
+  <Card title="Food & Agriculture" icon="wheat-awn" href="/en/presets/food">
+    Food safety, agricultural/livestock prices and production, and seafood data.\
+    **14 presets · 14 tools**
+  </Card>
+  <Card title="Land & Territory" icon="map" href="/en/presets/land">
+    Cadastral, building permits, urban planning, and land statistics.\
+    **10 presets · 10 tools**
+  </Card>
+  <Card title="Law & Administration" icon="scale-balanced" href="/en/presets/law">
+    Statutes, case law, administrative appeals, and regulatory information.\
+    **8 presets · 8 tools**
+  </Card>
+  <Card title="Real Estate" icon="house" href="/en/presets/realestate">
+    Apartment/officetel transactions, rentals, cadastral, and building permits.\
+    **17 presets · 17 tools**
+  </Card>
+  <Card title="Safety & Disaster" icon="shield-halved" href="/en/presets/safety">
+    Disaster alerts, safety indicators, and emergency data.\
+    **14 presets · 14 tools**
+  </Card>
+  <Card title="Science & Technology" icon="atom" href="/en/presets/science">
+    Research statistics, patents, and science & technology indicators.\
+    **10 presets · 10 tools**
+  </Card>
+  <Card title="Transportation" icon="bus" href="/en/presets/transportation">
+    Bus, subway, aviation, rail, parking, and road-traffic data.\
+    **21 presets · 21 tools**
+  </Card>
+  <Card title="Weather" icon="cloud-sun-rain" href="/en/presets/weather">
+    Forecast, alert, radar, UV, and typhoon data.\
+    **16 presets · 16 tools**
+  </Card>
+  <Card title="Welfare & Healthcare" icon="hand-holding-medical" href="/en/presets/welfare">
+    Hospital, pharmacy, ER, care, vaccine, and welfare-facility data.\
+    **28 presets · 28 tools**
+  </Card>
+</CardGroup>
+
+## At a glance
+
+| Category | Presets | Tools |
+| --- | --- | --- |
+| [Government & Civil](/en/presets/civil) | 20 | 20 |
+| [Culture & Tourism](/en/presets/culture) | 18 | 18 |
+| [Economy & Finance](/en/presets/economy) | 19 | 19 |
+| [Education](/en/presets/education) | 15 | 15 |
+| [Environment](/en/presets/environment) | 20 | 20 |
+| [Food & Agriculture](/en/presets/food) | 14 | 14 |
+| [Land & Territory](/en/presets/land) | 10 | 10 |
+| [Law & Administration](/en/presets/law) | 8 | 8 |
+| [Real Estate](/en/presets/realestate) | 17 | 17 |
+| [Safety & Disaster](/en/presets/safety) | 14 | 14 |
+| [Science & Technology](/en/presets/science) | 10 | 10 |
+| [Transportation](/en/presets/transportation) | 21 | 21 |
+| [Weather](/en/presets/weather) | 16 | 16 |
+| [Welfare & Healthcare](/en/presets/welfare) | 28 | 28 |
+| **Total** | **230** | **230** |
+
+## Quick start
+
+```bash
+curl -X POST https://mcp.datari.kr/mcp \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```

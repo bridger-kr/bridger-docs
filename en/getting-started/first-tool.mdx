@@ -1,0 +1,129 @@
+---
+title: "Call your first tool"
+description: "Make your first call to a tool registered with DATA BRIDGE using MCP JSON-RPC."
+---
+
+This page shows what request returns what response right after you connect to the DATA BRIDGE Gateway.
+Pick one tool and trace the input → output flow; from then on, you can call any tool with the same
+pattern.
+
+## Prerequisites
+
+- [API key issued](/en/guides/api-keys)
+- Key stored in the `DATA_BRIDGE_API_KEY` environment variable
+
+```bash
+export DATA_BRIDGE_API_KEY="dk_live_..."
+```
+
+## 1. List registered tools
+
+`tools/list` returns the **metadata of every MCP tool** loaded into DATA BRIDGE (`name`, `description`,
+`inputSchema`).
+
+<CodeGroup>
+  ```bash cURL
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  ```
+
+  ```javascript Node.js
+  const res = await fetch("https://mcp.datari.kr/mcp", {
+    method: "POST",
+    headers: {
+      "x-api-key": process.env.DATA_BRIDGE_API_KEY,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/list",
+    }),
+  });
+  console.log(await res.json());
+  ```
+
+  ```python Python
+  import os, requests
+  r = requests.post(
+      "https://mcp.datari.kr/mcp",
+      headers={
+          "x-api-key": os.environ["DATA_BRIDGE_API_KEY"],
+          "Content-Type": "application/json",
+      },
+      json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"},
+  )
+  print(r.json())
+  ```
+</CodeGroup>
+
+The response includes tools with the following structure.
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "tools": [
+      {
+        "name": "getultrashortcast",
+        "description": "KMA ultra-short-term forecast — data.go.kr OpenAPI",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "searchKeyword": { "type": "string", "description": "Search keyword" },
+            "pageNo": { "type": "integer", "description": "Page number" },
+            "numOfRows": { "type": "integer", "description": "Results per page" }
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+## 2. Run a tool
+
+Pick one tool and run it with `tools/call`. The example is an ultra-short-term forecast for Seoul.
+
+```bash
+curl -X POST https://mcp.datari.kr/mcp \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 2,
+    "method": "tools/call",
+    "params": {
+      "name": "getultrashortcast",
+      "arguments": {
+        "searchKeyword": "Seoul",
+        "numOfRows": 10
+      }
+    }
+  }'
+```
+
+## 3. Receive real-time events over SSE
+
+For long-running tools or streaming responses, subscribe to the SSE endpoint (`/mcp/sse`).
+
+```bash
+curl -N https://mcp.datari.kr/mcp/sse \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY"
+```
+
+A `gateway/toolResult` event is delivered to your client for each tool execution.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Connect to Claude" icon="comment" href="/en/guides/claude">
+    Let Claude call the same tools above in natural language.
+  </Card>
+  <Card title="API Reference" icon="book" href="/en/api-reference/introduction">
+    Full JSON-RPC and SSE spec, plus error codes.
+  </Card>
+</CardGroup>

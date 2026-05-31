@@ -1,0 +1,53 @@
+---
+title: "Transportation"
+description: "Bus, subway, aviation, rail, parking, and road-traffic data. 21 presets · 21 tools."
+---
+
+This category has **21 presets** registered, exposing **21 MCP tools** in total.
+
+<Tip>
+  Find the tool name you need in the `tools/list` response, then call it directly with `tools/call`.
+</Tip>
+
+## Preset list
+
+| Name | Provider | Tools | data.go.kr |
+| --- | --- | --- | --- |
+| 전국 자전거대여소 정보 | 행정안전부 | 1 | [15017319](https://www.data.go.kr/data/15017319/openapi.do) |
+| 버스 도착정보 조회 | 국토교통부·지자체 | 1 | [15070493](https://www.data.go.kr/data/15070493/openapi.do) |
+| 버스 위치정보 조회 | 국토교통부·지자체 | 1 | [15070527](https://www.data.go.kr/data/15070527/openapi.do) |
+| 버스 노선정보 조회 | 국토교통부·지자체 | 1 | [15070510](https://www.data.go.kr/data/15070510/openapi.do) |
+| 화물차량 위치 조회 | 국토교통부 | 1 | [15071044](https://www.data.go.kr/data/15071044/openapi.do) |
+| 전기차 충전소 조회 | 국토교통부·지자체 | 1 | [15070680](https://www.data.go.kr/data/15070680/openapi.do) |
+| 고속도로 CCTV 정보 조회 | 국토교통부·지자체 | 1 | [15070629](https://www.data.go.kr/data/15070629/openapi.do) |
+| 고속도로 교통량 조회 | 국토교통부·지자체 | 1 | [15070612](https://www.data.go.kr/data/15070612/openapi.do) |
+| 항공기 도착정보 조회 | 국토교통부·지자체 | 1 | [15070697](https://www.data.go.kr/data/15070697/openapi.do) |
+| 항공기 출발정보 조회 | 국토교통부·지자체 | 1 | [15070714](https://www.data.go.kr/data/15070714/openapi.do) |
+| 항공 운항 정보 | 인천국제공항공사/한국공항공사 | 1 | — |
+| 공영주차장 정보 조회 | 국토교통부·지자체 | 1 | [15070663](https://www.data.go.kr/data/15070663/openapi.do) |
+| 항만 물동량 조회 | 국토교통부·지자체 | 1 | [15070731](https://www.data.go.kr/data/15070731/openapi.do) |
+| 연안여객선 운항 조회 | 해양수산부 | 1 | [15071045](https://www.data.go.kr/data/15071045/openapi.do) |
+| 지하철 실시간 정보 조회 | 국토교통부·지자체 | 1 | [15070544](https://www.data.go.kr/data/15070544/openapi.do) |
+| 지하철 시간표 조회 | 국토교통부·지자체 | 1 | [15070561](https://www.data.go.kr/data/15070561/openapi.do) |
+| 전국 택시 업체 정보 | 행정안전부 | 1 | — |
+| 전국 택시승강장 정보 | 행정안전부 | 1 | [15139230](https://www.data.go.kr/data/15139230/openapi.do) |
+| 통행료 조회 | 국토교통부·지자체 | 1 | [15070646](https://www.data.go.kr/data/15070646/openapi.do) |
+| 열차 운행시간표 조회 | 국토교통부·지자체 | 1 | [15070578](https://www.data.go.kr/data/15070578/openapi.do) |
+| 열차 좌석현황 조회 | 국토교통부·지자체 | 1 | [15070595](https://www.data.go.kr/data/15070595/openapi.do) |
+
+## Usage examples
+
+<CodeGroup>
+  ```bash Query category servers
+  # List the preset servers and tools in this category. (public catalog — no auth required)
+  curl https://mcp.datari.kr/registry/servers \
+    | jq '.servers[] | select(.id | startswith("transportation/"))'
+  ```
+
+  ```bash Full tool list (MCP)
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
+  ```
+</CodeGroup>

@@ -54,77 +54,161 @@
     ]
   },
   "navigation": {
-    "tabs": [
+    "languages": [
       {
-        "tab": "Documentation",
-        "groups": [
+        "language": "ko",
+        "tabs": [
           {
-            "group": "시작하기",
-            "pages": [
-              "getting-started/introduction",
-              "getting-started/installation",
-              "getting-started/quickstart",
-              "getting-started/first-tool"
+            "tab": "Documentation",
+            "groups": [
+              {
+                "group": "시작하기",
+                "pages": [
+                  "getting-started/introduction",
+                  "getting-started/installation",
+                  "getting-started/quickstart",
+                  "getting-started/first-tool"
+                ]
+              },
+              {
+                "group": "가이드",
+                "pages": [
+                  "guides/claude",
+                  "guides/chatgpt",
+                  "guides/api",
+                  "guides/api-keys"
+                ]
+              },
+              {
+                "group": "개념",
+                "pages": [
+                  "concepts/mcp",
+                  "concepts/byoapi",
+                  "concepts/auth-and-security",
+                  "concepts/architecture"
+                ]
+              }
             ]
           },
           {
-            "group": "가이드",
-            "pages": [
-              "guides/claude",
-              "guides/chatgpt",
-              "guides/api",
-              "guides/api-keys"
+            "tab": "API Reference",
+            "groups": [
+              {
+                "group": "Gateway API",
+                "pages": [
+                  "api-reference/introduction",
+                  "api-reference/authentication",
+                  "api-reference/health",
+                  "api-reference/registry-servers",
+                  "api-reference/registry-tools",
+                  "api-reference/mcp-jsonrpc",
+                  "api-reference/mcp-sse"
+                ]
+              }
             ]
           },
           {
-            "group": "개념",
-            "pages": [
-              "concepts/mcp",
-              "concepts/byoapi",
-              "concepts/auth-and-security",
-              "concepts/architecture"
+            "tab": "Presets",
+            "groups": [
+              {
+                "group": "프리셋 카탈로그",
+                "pages": [
+                  "presets/index",
+                  "presets/civil",
+                  "presets/culture",
+                  "presets/economy",
+                  "presets/education",
+                  "presets/environment",
+                  "presets/food",
+                  "presets/land",
+                  "presets/law",
+                  "presets/realestate",
+                  "presets/safety",
+                  "presets/science",
+                  "presets/transportation",
+                  "presets/weather",
+                  "presets/welfare"
+                ]
+              }
             ]
           }
         ]
       },
       {
-        "tab": "API Reference",
-        "groups": [
+        "language": "en",
+        "tabs": [
           {
-            "group": "Gateway API",
-            "pages": [
-              "api-reference/introduction",
-              "api-reference/authentication",
-              "api-reference/health",
-              "api-reference/registry-servers",
-              "api-reference/registry-tools",
-              "api-reference/mcp-jsonrpc",
-              "api-reference/mcp-sse"
+            "tab": "Documentation",
+            "groups": [
+              {
+                "group": "Getting started",
+                "pages": [
+                  "en/getting-started/introduction",
+                  "en/getting-started/installation",
+                  "en/getting-started/quickstart",
+                  "en/getting-started/first-tool"
+                ]
+              },
+              {
+                "group": "Guides",
+                "pages": [
+                  "en/guides/claude",
+                  "en/guides/chatgpt",
+                  "en/guides/api",
+                  "en/guides/api-keys"
+                ]
+              },
+              {
+                "group": "Concepts",
+                "pages": [
+                  "en/concepts/mcp",
+                  "en/concepts/byoapi",
+                  "en/concepts/auth-and-security",
+                  "en/concepts/architecture"
+                ]
+              }
             ]
-          }
-        ]
-      },
-      {
-        "tab": "Presets",
-        "groups": [
+          },
           {
-            "group": "프리셋 카탈로그",
-            "pages": [
-              "presets/index",
-              "presets/civil",
-              "presets/culture",
-              "presets/economy",
-              "presets/education",
-              "presets/environment",
-              "presets/food",
-              "presets/land",
-              "presets/law",
-              "presets/realestate",
-              "presets/safety",
-              "presets/science",
-              "presets/transportation",
-              "presets/weather",
-              "presets/welfare"
+            "tab": "API Reference",
+            "groups": [
+              {
+                "group": "Gateway API",
+                "pages": [
+                  "en/api-reference/introduction",
+                  "en/api-reference/authentication",
+                  "en/api-reference/health",
+                  "en/api-reference/registry-servers",
+                  "en/api-reference/registry-tools",
+                  "en/api-reference/mcp-jsonrpc",
+                  "en/api-reference/mcp-sse"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Presets",
+            "groups": [
+              {
+                "group": "Preset catalog",
+                "pages": [
+                  "en/presets/index",
+                  "en/presets/civil",
+                  "en/presets/culture",
+                  "en/presets/economy",
+                  "en/presets/education",
+                  "en/presets/environment",
+                  "en/presets/food",
+                  "en/presets/land",
+                  "en/presets/law",
+                  "en/presets/realestate",
+                  "en/presets/safety",
+                  "en/presets/science",
+                  "en/presets/transportation",
+                  "en/presets/weather",
+                  "en/presets/welfare"
+                ]
+              }
             ]
           }
         ]

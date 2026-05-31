@@ -16,7 +16,7 @@
  *     already-committed MDX under presets/ is what gets exported.
  */
 
-import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
@@ -27,20 +27,72 @@ const PRESETS_DIR = join(REPO_ROOT, "vendor", "spec", "presets");
 const OUT_DIR = join(REPO_ROOT, "presets");
 
 const CATEGORY_META = {
-  civil:          { title: "행정 · 민원",   icon: "building-columns", desc: "행정 · 민원 · 인구 · 치안 · 재난 · 공공시설 데이터." },
-  culture:        { title: "문화 · 관광",   icon: "masks-theater",     desc: "축제, 관광지, 도서관, 공연, 문화유산 데이터." },
-  economy:        { title: "경제 · 금융",   icon: "chart-line",        desc: "환율, 금리, 지표, 소비, 수출입, 시장 통계." },
-  education:      { title: "교육",          icon: "graduation-cap",    desc: "학교, 대학, 교육 통계, 학사 데이터." },
-  environment:    { title: "환경",          icon: "leaf",              desc: "대기질, 수질, 소음, 진동, 폐기물, 라돈 데이터." },
-  food:           { title: "식품 · 농축산", icon: "wheat-awn",         desc: "식품 안전, 농축산물 가격·생산, 수산물 데이터." },
-  land:           { title: "국토 · 토지",   icon: "map",               desc: "지적, 건축 인허가, 도시계획, 국토 통계." },
-  law:            { title: "법률 · 행정",   icon: "scale-balanced",    desc: "법령, 판례, 행정심판, 규제 정보." },
-  realestate:     { title: "부동산",        icon: "house",             desc: "아파트·오피스텔 실거래, 전월세, 지적·건축 인허가." },
-  safety:         { title: "안전 · 재난",   icon: "shield-halved",     desc: "재난 경보, 안전 지표, 응급 상황 데이터." },
-  science:        { title: "과학 · 기술",   icon: "atom",              desc: "연구 통계, 특허, 과학 기술 지표." },
-  transportation: { title: "교통",          icon: "bus",               desc: "버스, 지하철, 항공, 철도, 주차, 도로 교통 데이터." },
-  weather:        { title: "기상",          icon: "cloud-sun-rain",    desc: "예보, 경보, 레이더, 자외선, 태풍 데이터." },
-  welfare:        { title: "복지 · 의료",   icon: "hand-holding-medical", desc: "병원, 약국, 응급실, 돌봄, 백신, 복지시설 데이터." },
+  civil:          { title: "행정 · 민원",   icon: "building-columns", desc: "행정 · 민원 · 인구 · 치안 · 재난 · 공공시설 데이터.", titleEn: "Government & Civil", descEn: "Administration, civil services, population, public safety, disaster, and public-facility data." },
+  culture:        { title: "문화 · 관광",   icon: "masks-theater",     desc: "축제, 관광지, 도서관, 공연, 문화유산 데이터.", titleEn: "Culture & Tourism", descEn: "Festival, attraction, library, performance, and cultural-heritage data." },
+  economy:        { title: "경제 · 금융",   icon: "chart-line",        desc: "환율, 금리, 지표, 소비, 수출입, 시장 통계.", titleEn: "Economy & Finance", descEn: "Exchange rates, interest rates, indicators, consumption, trade, and market statistics." },
+  education:      { title: "교육",          icon: "graduation-cap",    desc: "학교, 대학, 교육 통계, 학사 데이터.", titleEn: "Education", descEn: "School, university, education statistics, and academic data." },
+  environment:    { title: "환경",          icon: "leaf",              desc: "대기질, 수질, 소음, 진동, 폐기물, 라돈 데이터.", titleEn: "Environment", descEn: "Air quality, water quality, noise, vibration, waste, and radon data." },
+  food:           { title: "식품 · 농축산", icon: "wheat-awn",         desc: "식품 안전, 농축산물 가격·생산, 수산물 데이터.", titleEn: "Food & Agriculture", descEn: "Food safety, agricultural/livestock prices and production, and seafood data." },
+  land:           { title: "국토 · 토지",   icon: "map",               desc: "지적, 건축 인허가, 도시계획, 국토 통계.", titleEn: "Land & Territory", descEn: "Cadastral, building permits, urban planning, and land statistics." },
+  law:            { title: "법률 · 행정",   icon: "scale-balanced",    desc: "법령, 판례, 행정심판, 규제 정보.", titleEn: "Law & Administration", descEn: "Statutes, case law, administrative appeals, and regulatory information." },
+  realestate:     { title: "부동산",        icon: "house",             desc: "아파트·오피스텔 실거래, 전월세, 지적·건축 인허가.", titleEn: "Real Estate", descEn: "Apartment/officetel transactions, rentals, cadastral, and building permits." },
+  safety:         { title: "안전 · 재난",   icon: "shield-halved",     desc: "재난 경보, 안전 지표, 응급 상황 데이터.", titleEn: "Safety & Disaster", descEn: "Disaster alerts, safety indicators, and emergency data." },
+  science:        { title: "과학 · 기술",   icon: "atom",              desc: "연구 통계, 특허, 과학 기술 지표.", titleEn: "Science & Technology", descEn: "Research statistics, patents, and science & technology indicators." },
+  transportation: { title: "교통",          icon: "bus",               desc: "버스, 지하철, 항공, 철도, 주차, 도로 교통 데이터.", titleEn: "Transportation", descEn: "Bus, subway, aviation, rail, parking, and road-traffic data." },
+  weather:        { title: "기상",          icon: "cloud-sun-rain",    desc: "예보, 경보, 레이더, 자외선, 태풍 데이터.", titleEn: "Weather", descEn: "Forecast, alert, radar, UV, and typhoon data." },
+  welfare:        { title: "복지 · 의료",   icon: "hand-holding-medical", desc: "병원, 약국, 응급실, 돌봄, 백신, 복지시설 데이터.", titleEn: "Welfare & Healthcare", descEn: "Hospital, pharmacy, ER, care, vaccine, and welfare-facility data." },
+};
+
+// Per-locale UI strings + path config for the generated preset pages.
+const LOCALES = {
+  ko: {
+    outSubdir: "presets",
+    linkPrefix: "/presets",
+    metaTitle: (m) => m.title,
+    metaDesc: (m) => m.desc,
+    catTitle: (m) => m.title,
+    catDesc: (m, total, ops) => `${m.desc} 총 ${total}개 프리셋 · ${ops}개 도구.`,
+    catIntro: (total, ops) => `이 카테고리에는 **${total}개의 프리셋**이 등록되어 있으며, 합산 **${ops}개의 MCP 도구**가 노출됩니다.`,
+    tip: "필요한 도구 이름은 `tools/list` 응답에서 확인한 뒤 `tools/call`로 바로 호출할 수 있습니다.",
+    listHeading: "## 프리셋 목록",
+    tableHeader: "| 이름 | 제공기관 | 도구 수 | data.go.kr |",
+    usageHeading: "## 사용 예시",
+    serverQueryLabel: "bash 카테고리 서버 조회",
+    serverQueryComment: "# 이 카테고리의 프리셋 서버와 도구를 확인합니다. (공개 카탈로그 — 인증 불필요)",
+    toolsListLabel: "bash 전체 도구 목록 (MCP)",
+    indexTitle: "카탈로그 인덱스",
+    indexDesc: (cats, total, ops) => `DATA BRIDGE가 제공하는 ${cats}개 카테고리 · ${total}개 프리셋 · ${ops}개 도구의 전체 인덱스.`,
+    indexIntro: (total) => `DATA BRIDGE는 공공·민간 OpenAPI를 카테고리별로 정리한 **${total}개의 프리셋**을 제공합니다.\n카테고리별 도구는 DATA BRIDGE 호스팅 Gateway에서 \`tools/list\`로 확인하고 즉시 호출할 수 있습니다.`,
+    cardCount: (total, ops) => `**${total}개 프리셋 · ${ops}개 도구**`,
+    overviewHeading: "## 한눈에 보기",
+    overviewTableHeader: "| 카테고리 | 프리셋 수 | 도구 수 |",
+    totalRow: (total, ops) => `| **합계** | **${total}** | **${ops}** |`,
+    quickHeading: "## 빠른 사용",
+  },
+  en: {
+    outSubdir: "en/presets",
+    linkPrefix: "/en/presets",
+    metaTitle: (m) => m.titleEn,
+    metaDesc: (m) => m.descEn,
+    catTitle: (m) => m.titleEn,
+    catDesc: (m, total, ops) => `${m.descEn} ${total} presets · ${ops} tools.`,
+    catIntro: (total, ops) => `This category has **${total} presets** registered, exposing **${ops} MCP tools** in total.`,
+    tip: "Find the tool name you need in the `tools/list` response, then call it directly with `tools/call`.",
+    listHeading: "## Preset list",
+    tableHeader: "| Name | Provider | Tools | data.go.kr |",
+    usageHeading: "## Usage examples",
+    serverQueryLabel: "bash Query category servers",
+    serverQueryComment: "# List the preset servers and tools in this category. (public catalog — no auth required)",
+    toolsListLabel: "bash Full tool list (MCP)",
+    indexTitle: "Catalog index",
+    indexDesc: (cats, total, ops) => `Full index of ${cats} categories · ${total} presets · ${ops} tools provided by DATA BRIDGE.`,
+    indexIntro: (total) => `DATA BRIDGE provides **${total} presets** organizing public and private OpenAPIs by category.\nTools per category can be discovered via \`tools/list\` on the DATA BRIDGE hosted Gateway and called immediately.`,
+    cardCount: (total, ops) => `**${total} presets · ${ops} tools**`,
+    overviewHeading: "## At a glance",
+    overviewTableHeader: "| Category | Presets | Tools |",
+    totalRow: (total, ops) => `| **Total** | **${total}** | **${ops}** |`,
+    quickHeading: "## Quick start",
+  },
 };
 
 /** @typedef {{ title: string, description: string, provider?: string, displayName?: string, isPublicData: boolean, opCount: number, dataGoKrId?: string, file: string }} PresetInfo */
@@ -115,8 +167,9 @@ function escapeMdxCell(s) {
 /**
  * @param {string} category
  * @param {PresetInfo[]} presets
+ * @param {typeof LOCALES.ko} L
  */
-function renderCategoryMdx(category, presets) {
+function renderCategoryMdx(category, presets, L) {
   const meta = CATEGORY_META[category];
   const total = presets.length;
   const totalOps = presets.reduce((acc, p) => acc + p.opCount, 0);
@@ -134,32 +187,32 @@ function renderCategoryMdx(category, presets) {
     .join("\n");
 
   return `---
-title: "${meta.title}"
-description: "${meta.desc} 총 ${total}개 프리셋 · ${totalOps}개 도구."
+title: "${L.catTitle(meta)}"
+description: "${L.catDesc(meta, total, totalOps)}"
 ---
 
-이 카테고리에는 **${total}개의 프리셋**이 등록되어 있으며, 합산 **${totalOps}개의 MCP 도구**가 노출됩니다.
+${L.catIntro(total, totalOps)}
 
 <Tip>
-  필요한 도구 이름은 \`tools/list\` 응답에서 확인한 뒤 \`tools/call\`로 바로 호출할 수 있습니다.
+  ${L.tip}
 </Tip>
 
-## 프리셋 목록
+${L.listHeading}
 
-| 이름 | 제공기관 | 도구 수 | data.go.kr |
+${L.tableHeader}
 | --- | --- | --- | --- |
 ${rows}
 
-## 사용 예시
+${L.usageHeading}
 
 <CodeGroup>
-  \`\`\`bash 카테고리 서버 조회
-  # 이 카테고리의 프리셋 서버와 도구를 확인합니다. (공개 카탈로그 — 인증 불필요)
+  \`\`\`${L.serverQueryLabel}
+  ${L.serverQueryComment}
   curl https://mcp.datari.kr/registry/servers \\
     | jq '.servers[] | select(.id | startswith("${category}/"))'
   \`\`\`
 
-  \`\`\`bash 전체 도구 목록 (MCP)
+  \`\`\`${L.toolsListLabel}
   curl -X POST https://mcp.datari.kr/mcp \\
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \\
     -H "Content-Type: application/json" \\
@@ -171,17 +224,18 @@ ${rows}
 
 /**
  * @param {Array<{ category: string, total: number, totalOps: number }>} summary
+ * @param {typeof LOCALES.ko} L
  */
-function renderIndexMdx(summary) {
+function renderIndexMdx(summary, L) {
   const grandTotal = summary.reduce((acc, s) => acc + s.total, 0);
   const grandOps = summary.reduce((acc, s) => acc + s.totalOps, 0);
 
   const cards = summary
     .map((s) => {
       const meta = CATEGORY_META[s.category];
-      return `  <Card title="${meta.title}" icon="${meta.icon}" href="/presets/${s.category}">
-    ${meta.desc}\\
-    **${s.total}개 프리셋 · ${s.totalOps}개 도구**
+      return `  <Card title="${L.catTitle(meta)}" icon="${meta.icon}" href="${L.linkPrefix}/${s.category}">
+    ${L.metaDesc(meta)}\\
+    ${L.cardCount(s.total, s.totalOps)}
   </Card>`;
     })
     .join("\n");
@@ -189,30 +243,29 @@ function renderIndexMdx(summary) {
   const rows = summary
     .map((s) => {
       const meta = CATEGORY_META[s.category];
-      return `| [${meta.title}](/presets/${s.category}) | ${s.total} | ${s.totalOps} |`;
+      return `| [${L.catTitle(meta)}](${L.linkPrefix}/${s.category}) | ${s.total} | ${s.totalOps} |`;
     })
     .join("\n");
 
   return `---
-title: "카탈로그 인덱스"
-description: "DATA BRIDGE가 제공하는 ${summary.length}개 카테고리 · ${grandTotal}개 프리셋 · ${grandOps}개 도구의 전체 인덱스."
+title: "${L.indexTitle}"
+description: "${L.indexDesc(summary.length, grandTotal, grandOps)}"
 ---
 
-DATA BRIDGE는 공공·민간 OpenAPI를 카테고리별로 정리한 **${grandTotal}개의 프리셋**을 제공합니다.
-카테고리별 도구는 DATA BRIDGE 호스팅 Gateway에서 \`tools/list\`로 확인하고 즉시 호출할 수 있습니다.
+${L.indexIntro(grandTotal)}
 
 <CardGroup cols={2}>
 ${cards}
 </CardGroup>
 
-## 한눈에 보기
+${L.overviewHeading}
 
-| 카테고리 | 프리셋 수 | 도구 수 |
+${L.overviewTableHeader}
 | --- | --- | --- |
 ${rows}
-| **합계** | **${grandTotal}** | **${grandOps}** |
+${L.totalRow(grandTotal, grandOps)}
 
-## 빠른 사용
+${L.quickHeading}
 
 \`\`\`bash
 curl -X POST https://mcp.datari.kr/mcp \\
@@ -237,28 +290,39 @@ function main() {
     process.exit(1);
   }
 
+  // Read each category once, reuse across locales.
+  const byCategory = new Map();
   const summary = [];
   for (const category of categories) {
     const presets = readCategory(join(PRESETS_DIR, category));
+    byCategory.set(category, presets);
     const totalOps = presets.reduce((acc, p) => acc + p.opCount, 0);
     summary.push({ category, total: presets.length, totalOps });
-    const mdx = renderCategoryMdx(category, presets);
-    const out = join(OUT_DIR, `${category}.mdx`);
-    writeFileSync(out, mdx, "utf8");
-    console.log(
-      `[build-presets] ${category.padEnd(15)} ${String(presets.length).padStart(3)} presets, ${String(totalOps).padStart(3)} ops -> ${out}`,
-    );
   }
 
-  const indexMdx = renderIndexMdx(summary);
-  const indexOut = join(OUT_DIR, "index.mdx");
-  writeFileSync(indexOut, indexMdx, "utf8");
-  console.log(`[build-presets] index -> ${indexOut}`);
+  for (const [locale, L] of Object.entries(LOCALES)) {
+    const localeOutDir = join(REPO_ROOT, ...L.outSubdir.split("/"));
+    mkdirSync(localeOutDir, { recursive: true });
+    for (const category of categories) {
+      const presets = byCategory.get(category);
+      const mdx = renderCategoryMdx(category, presets, L);
+      const out = join(localeOutDir, `${category}.mdx`);
+      writeFileSync(out, mdx, "utf8");
+      const totalOps = presets.reduce((acc, p) => acc + p.opCount, 0);
+      console.log(
+        `[build-presets] [${locale}] ${category.padEnd(15)} ${String(presets.length).padStart(3)} presets, ${String(totalOps).padStart(3)} ops -> ${out}`,
+      );
+    }
+    const indexMdx = renderIndexMdx(summary, L);
+    const indexOut = join(localeOutDir, "index.mdx");
+    writeFileSync(indexOut, indexMdx, "utf8");
+    console.log(`[build-presets] [${locale}] index -> ${indexOut}`);
+  }
 
   const grandTotal = summary.reduce((acc, s) => acc + s.total, 0);
   const grandOps = summary.reduce((acc, s) => acc + s.totalOps, 0);
   console.log(
-    `[build-presets] done: ${categories.length} categories, ${grandTotal} presets, ${grandOps} ops`,
+    `[build-presets] done: ${categories.length} categories, ${grandTotal} presets, ${grandOps} ops (ko + en)`,
   );
 }
 

@@ -1,0 +1,151 @@
+---
+title: "POST /mcp (JSON-RPC)"
+description: "The MCP-standard JSON-RPC 2.0 endpoint — tools/list, tools/call."
+---
+
+The core MCP call endpoint of the DATA BRIDGE Gateway. It follows the JSON-RPC 2.0 spec exactly.
+
+## Request headers
+
+```http
+POST /mcp HTTP/1.1
+Content-Type: application/json
+x-api-key: dk_live_...
+```
+
+## Common error codes
+
+| Code | Meaning |
+| --- | --- |
+| `-32600` | Invalid JSON-RPC request |
+| `-32601` | Method not found |
+| `-32602` | Invalid params (e.g. missing tool name) |
+| `-32000` | Internal gateway error |
+
+## tools/list
+
+Returns metadata for every tool registered with DATA BRIDGE.
+
+### Request
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list"
+}
+```
+
+### Response 200
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "tools": [
+      {
+        "name": "pingtool",
+        "description": "Ping endpoint",
+        "inputSchema": { "type": "object", "properties": {} },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      }
+    ]
+  }
+}
+```
+
+## tools/call
+
+Runs a single tool.
+
+### Request
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "name": "pingtool",
+    "arguments": { "q": "hello" }
+  }
+}
+```
+
+### Response 200
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "tool": "pingtool",
+    "upstream": {
+      "method": "GET",
+      "url": "http://127.0.0.1:9921/ping?q=hello",
+      "status": 200
+    },
+    "data": { "ok": true, "q": "hello" },
+    "cacheStatus": "MISS",
+    "auditId": "aud_..."
+  }
+}
+```
+
+| Field | Description |
+| --- | --- |
+| `result.tool` | Called tool name |
+| `result.upstream.method` | Upstream HTTP method |
+| `result.upstream.url` | Final upstream URL (after middleware injection such as ServiceKey) |
+| `result.upstream.status` | Upstream HTTP status code |
+| `result.data` | Upstream response body (after XML→JSON normalization) |
+| `result.cacheStatus` | Whether the cache was hit (`HIT`/`MISS`, etc.) |
+| `result.auditId` | Audit-log identifier for this call |
+
+## Full cURL examples
+
+<CodeGroup>
+  ```bash tools/list
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  ```
+
+  ```bash tools/call
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "jsonrpc": "2.0",
+      "id": 2,
+      "method": "tools/call",
+      "params": {
+        "name": "pingtool",
+        "arguments": { "q": "hello" }
+      }
+    }'
+  ```
+</CodeGroup>
+
+## Automatic public-data middleware behavior
+
+When calling a tool from a preset with `isPublicData=true`, the following are applied automatically.
+
+1. ServiceKey injection (`PUBLIC_DATA_SERVICE_KEY`)
+2. `lat/lon` → `nx/ny` grid coordinate conversion (KMA DFS)
+3. XML/JSON payload normalization
+4. Public-data error code → human-readable message mapping
+
+| Code | Message |
+| --- | --- |
+| `00` | OK |
+| `30` | Unregistered service key |
+| `31` | Expired service key |
+| `32` | Unregistered IP |
+| other | `Unknown public-data error (<code>)` |

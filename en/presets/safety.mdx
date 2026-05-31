@@ -1,0 +1,46 @@
+---
+title: "Safety & Disaster"
+description: "Disaster alerts, safety indicators, and emergency data. 14 presets · 14 tools."
+---
+
+This category has **14 presets** registered, exposing **14 MCP tools** in total.
+
+<Tip>
+  Find the tool name you need in the `tools/list` response, then call it directly with `tools/call`.
+</Tip>
+
+## Preset list
+
+| Name | Provider | Tools | data.go.kr |
+| --- | --- | --- | --- |
+| 건축물 안전 조회 | 국토교통부 | 1 | [15071081](https://www.data.go.kr/data/15071081/openapi.do) |
+| 방범용 CCTV 조회 | 경찰청 | 1 | [15071036](https://www.data.go.kr/data/15071036/openapi.do) |
+| 화학물질 정보 조회 | 환경부 | 1 | [15071084](https://www.data.go.kr/data/15071084/openapi.do) |
+| 아동안전 구역 조회 | 행정안전부 | 1 | [15071035](https://www.data.go.kr/data/15071035/openapi.do) |
+| 재난문자 상세 조회 | 행정안전부 | 1 | [15071079](https://www.data.go.kr/data/15071079/openapi.do) |
+| 지진 관측 정보 조회 | 기상청 | 1 | [15071088](https://www.data.go.kr/data/15071088/openapi.do) |
+| 승강기 안전 정보 조회 | 한국승강기안전공단 | 1 | [15071082](https://www.data.go.kr/data/15071082/openapi.do) |
+| 긴급 대피소 조회 | 행정안전부 | 1 | [15071080](https://www.data.go.kr/data/15071080/openapi.do) |
+| 소방시설 정보 조회 | 소방청 | 1 | [15071090](https://www.data.go.kr/data/15071090/openapi.do) |
+| 홍수 예보 조회 | 환경부 | 1 | [15071086](https://www.data.go.kr/data/15071086/openapi.do) |
+| 가스시설 안전 조회 | 한국가스안전공사 | 1 | [15071083](https://www.data.go.kr/data/15071083/openapi.do) |
+| 위험물 시설 조회 | 소방청 | 1 | [15071089](https://www.data.go.kr/data/15071089/openapi.do) |
+| 산사태 위험 조회 | 산림청 | 1 | [15071087](https://www.data.go.kr/data/15071087/openapi.do) |
+| 생활방사선 정보 조회 | 원자력안전위원회 | 1 | [15071085](https://www.data.go.kr/data/15071085/openapi.do) |
+
+## Usage examples
+
+<CodeGroup>
+  ```bash Query category servers
+  # List the preset servers and tools in this category. (public catalog — no auth required)
+  curl https://mcp.datari.kr/registry/servers \
+    | jq '.servers[] | select(.id | startswith("safety/"))'
+  ```
+
+  ```bash Full tool list (MCP)
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
+  ```
+</CodeGroup>

@@ -1,0 +1,121 @@
+---
+title: "Auth · Secrets · Audit logs"
+description: "How API keys, secret management, the PII filter, and audit logs are handled in DATA BRIDGE."
+---
+
+Because the DATA BRIDGE Gateway exposes public data and self-registered APIs under a single domain, the
+security boundary is its most important responsibility. The following four layers apply to every request.
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key">
+    Identify the caller via API Key / OAuth 2.0.
+  </Card>
+  <Card title="Secret management" icon="lock">
+    Isolate public-data ServiceKeys and BYOAPI tokens in Vault.
+  </Card>
+  <Card title="PII filter" icon="user-shield">
+    Mask personal-information patterns in responses.
+  </Card>
+  <Card title="Audit log" icon="clipboard-check">
+    Track who called which tool, and when.
+  </Card>
+</CardGroup>
+
+## 1. Authentication
+
+### API Key
+
+The simplest method, used by most users.
+
+```bash
+curl -X POST https://mcp.datari.kr/mcp \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+- Header: `x-api-key` or `Authorization: Bearer <key>`
+- Issue/revoke keys at [admin.datari.kr](https://admin.datari.kr) → **Settings → API Keys**
+- Keys can be revoked instantly whenever needed.
+
+### OAuth 2.0
+
+Used when you need organization-level permission management. It supports two flows — Authorization Code
+and Client Credentials — and the detailed spec is covered in
+[API Reference → Authentication](/en/api-reference/authentication).
+
+## 2. Secret management
+
+DATA BRIDGE handles three kinds of secrets.
+
+| Type | Example | Storage |
+| --- | --- | --- |
+| Public-data ServiceKey | Key issued by `data.go.kr` | Vault (Gateway side) |
+| BYOAPI upstream token | OAuth/HTTP header token for the user's API | Vault, per-tenant isolation |
+| DATA BRIDGE API Key | Caller authentication key (`dk_live_…`) | DB (hashed) + the token itself is shown once at issuance |
+
+**Principles**
+
+- Secrets are never included in logs, responses, or MCP metadata.
+- The public-data middleware injects the ServiceKey automatically, so users don't need to handle the key.
+- On BYOAPI registration, the token a user enters is encrypted and stored in Vault, then immediately removed from memory.
+
+## 3. PII filter
+
+The following patterns are automatically masked in the response body (including nested JSON).
+
+- Resident registration number (`\d{6}-\d{7}` → `******-*******`)
+- Mobile phone number (`***-****-****`)
+- Credit card number (13–19 digit sequences → `****-****-****-****`)
+- Email (`***@***.***`)
+
+## 4. Audit log
+
+Every `tools/call` is recorded with the following fields.
+
+```json
+{
+  "timestamp": "2026-04-30T07:31:09.412Z",
+  "type": "tool_call",
+  "action": "tools/call",
+  "userId": "usr_...",
+  "tenantId": "tnt_...",
+  "tool": "getweatherforecast",
+  "toolId": "@datari/weather-ultra-shortcast",
+  "params": { "...": "masking applied" },
+  "status": 200,
+  "duration": 312,
+  "success": true
+}
+```
+
+| Field | Description |
+| --- | --- |
+| `timestamp` | ISO 8601 record time |
+| `userId` / `tenantId` | Caller and tenant identifiers |
+| `tool` / `toolId` | Called tool name and registration ID |
+| `params` | Input parameters (stored after masking PII/secret fields) |
+| `status` | Upstream HTTP status code |
+| `duration` | Processing time (ms) |
+| `success` | Whether it succeeded |
+
+- Sensitive fields in input parameters are stored after masking, and secrets are never recorded.
+- Secret operations (`secret.store`, `secret.read`, `secret.rotate`, `secret.revoke`) record only an opaque reference (`opaqueRef`) separately instead of the value.
+- Search and download via `GET /api/v1/audit/logs` at [admin.datari.kr](https://admin.datari.kr) → **Audit**.
+
+## 5. Network boundary
+
+- All traffic is TLS 1.3 (wildcard certificate `*.datari.kr`, cert-manager + Let's Encrypt).
+- The Gateway defaults to a Kubernetes NetworkPolicy `default-deny`, reachable only from explicitly allowed ingress sources.
+- Pods use `runAsNonRoot` + `readOnlyRootFilesystem` + a least-privilege SecurityContext.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="API Reference: Auth" icon="key" href="/en/api-reference/authentication">
+    Headers, error codes, OAuth flows.
+  </Card>
+  <Card title="Architecture" icon="diagram-project" href="/en/concepts/architecture">
+    Where authentication, middleware, and logging run.
+  </Card>
+</CardGroup>

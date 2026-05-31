@@ -1,0 +1,50 @@
+---
+title: "Culture & Tourism"
+description: "Festival, attraction, library, performance, and cultural-heritage data. 18 presets · 18 tools."
+---
+
+This category has **18 presets** registered, exposing **18 MCP tools** in total.
+
+<Tip>
+  Find the tool name you need in the `tools/list` response, then call it directly with `tools/call`.
+</Tip>
+
+## Preset list
+
+| Name | Provider | Tools | data.go.kr |
+| --- | --- | --- | --- |
+| 캠핑장 정보 조회 | 한국관광공사 | 1 | [15071040](https://www.data.go.kr/data/15071040/openapi.do) |
+| 문화행사 정보 조회 | 한국관광공사·문화재청 | 1 | [15071530](https://www.data.go.kr/data/15071530/openapi.do) |
+| 축제 정보 조회 | 한국관광공사·문화재청 | 1 | [15071411](https://www.data.go.kr/data/15071411/openapi.do) |
+| 한옥체험 숙박 조회 | 한국관광공사·문화재청 | 1 | [15071581](https://www.data.go.kr/data/15071581/openapi.do) |
+| 문화재 정보 | 국가유산청 | 1 | — |
+| 문화재 정보 조회 | 한국관광공사·문화재청 | 1 | [15071462](https://www.data.go.kr/data/15071462/openapi.do) |
+| 숙박 정보 조회 | 한국관광공사·문화재청 | 1 | [15071428](https://www.data.go.kr/data/15071428/openapi.do) |
+| 전국 도서관 정보 | 행정안전부 | 1 | — |
+| 도서관 정보 조회 | 한국관광공사·문화재청 | 1 | [15071513](https://www.data.go.kr/data/15071513/openapi.do) |
+| 전국 영화관 정보 | 문화체육관광부 | 1 | — |
+| 박물관 정보 조회 | 한국관광공사·문화재청 | 1 | [15071479](https://www.data.go.kr/data/15071479/openapi.do) |
+| 국립공원 정보 조회 | 한국관광공사·문화재청 | 1 | [15071564](https://www.data.go.kr/data/15071564/openapi.do) |
+| 공연/전시 정보 | 한국문화정보원 | 1 | — |
+| 공연 정보 조회 | 한국관광공사·문화재청 | 1 | [15071496](https://www.data.go.kr/data/15071496/openapi.do) |
+| 관광 음식점 조회 | 한국관광공사·문화재청 | 1 | [15071445](https://www.data.go.kr/data/15071445/openapi.do) |
+| 체육시설 정보 조회 | 문화체육관광부 | 1 | [15071039](https://www.data.go.kr/data/15071039/openapi.do) |
+| 관광지 정보 조회 | 한국관광공사·문화재청 | 1 | [15071394](https://www.data.go.kr/data/15071394/openapi.do) |
+| 걷기여행 코스 조회 | 한국관광공사·문화재청 | 1 | [15071547](https://www.data.go.kr/data/15071547/openapi.do) |
+
+## Usage examples
+
+<CodeGroup>
+  ```bash Query category servers
+  # List the preset servers and tools in this category. (public catalog — no auth required)
+  curl https://mcp.datari.kr/registry/servers \
+    | jq '.servers[] | select(.id | startswith("culture/"))'
+  ```
+
+  ```bash Full tool list (MCP)
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
+  ```
+</CodeGroup>

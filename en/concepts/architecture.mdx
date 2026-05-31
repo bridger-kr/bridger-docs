@@ -1,0 +1,87 @@
+---
+title: "Overall architecture"
+description: "How the DATA BRIDGE Gateway connects OpenAPI sources to MCP clients."
+---
+
+DATA BRIDGE converts OpenAPI-based data sources into MCP tools and handles authentication, routing, and
+auditing in a single Gateway. Users call the Gateway endpoint without operating any servers of their own.
+
+## Components
+
+<CardGroup cols={2}>
+  <Card title="Gateway" icon="cloud">
+    The execution layer that exposes MCP JSON-RPC, SSE, and the Registry API.
+  </Card>
+  <Card title="Tool Registry" icon="boxes-stacked">
+    Manages schemas, permissions, and routing for preset and BYOAPI-registered tools.
+  </Card>
+  <Card title="Public Data Adapter" icon="building-columns">
+    Handles public-data service-key injection, coordinate conversion, XML/JSON normalization, and error mapping.
+  </Card>
+  <Card title="Admin Dashboard" icon="key">
+    Manages API keys, Provider Keys, and audit logs.
+  </Card>
+</CardGroup>
+
+## Runtime data flow
+
+```text
+   Client (Claude · Cursor · ChatGPT · custom app)
+        │
+        │  MCP JSON-RPC / SSE / REST
+        ▼
+   ┌──────────────────────────────────────────────┐
+   │            DATA BRIDGE Gateway               │
+   ├──────────────────────────────────────────────┤
+   │  1. Authentication  (API Key / OAuth 2.0)     │
+   │  2. Tenant isolation                           │
+   │  3. Request control                            │
+   │  4. JSON-RPC dispatch                          │
+   │     ├─ tools/list → Registry lookup            │
+   │     └─ tools/call → ID routing → Upstream Proxy│
+   │  5. Public Data Adapter                        │
+   │     ├─ ServiceKey auto-injection               │
+   │     ├─ lat/lon → grid conversion               │
+   │     └─ XML/JSON normalization                  │
+   │  6. PII filtering                              │
+   │  7. Audit logging                              │
+   │  8. SSE event delivery (per tenant)            │
+   └──────────────────────────────────────────────┘
+        │
+        ▼
+   External APIs (data.go.kr · 3rd-party SaaS · self-registered APIs)
+```
+
+## Preset structure
+
+A preset is a tool definition that carries both an OpenAPI spec and public-data metadata.
+
+```yaml
+openapi: "3.0.3"
+info:
+  title: KMA Ultra-Short-Term Forecast API
+  description: ...
+  version: "1.0"
+x-publicdata:
+  provider: KMA
+  dataGoKrId: "15070051"
+servers:
+  - url: https://apis.data.go.kr/...
+paths:
+  /getUltraSrtFcst:
+    get:
+      operationId: getUltraSrtFcst
+      summary: Ultra-short-term forecast lookup
+      parameters: [...]
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="BYOAPI" icon="plug" href="/en/concepts/byoapi">
+    How to register an arbitrary OpenAPI spec as a tool.
+  </Card>
+  <Card title="Auth & security" icon="shield" href="/en/concepts/auth-and-security">
+    API keys, secrets, PII filtering, audit logs.
+  </Card>
+</CardGroup>

@@ -1,0 +1,101 @@
+---
+title: "GET /mcp/sse"
+description: "DATA BRIDGE Gateway real-time event stream — Server-Sent Events for tool-execution notifications."
+---
+
+`/mcp/sse` is an SSE endpoint that delivers tool-execution results from the Gateway in real time.
+It's used for dashboard live views, multi-client collaboration, and external observability integrations.
+
+## Request
+
+```http
+GET /mcp/sse HTTP/1.1
+Accept: text/event-stream
+x-api-key: dk_live_...
+```
+
+## Event types
+
+### `event: ready`
+
+Emitted once right after connecting. Identifiable later via `clientId` (`sse_` prefix).
+
+```text
+event: ready
+data: {"ok":true,"clientId":"sse_3f2a1c9b-..."}
+```
+
+### Heartbeat
+
+An SSE comment (`: keepalive`) is sent periodically to prevent NAT/proxy timeouts.
+
+```text
+: keepalive
+```
+
+### `event: message` — `gateway/toolResult`
+
+The `tools/call` result is delivered **only to the relevant client (tenant)**. It is not broadcast to
+everyone, in order to prevent cross-tenant data leakage. To target a client, pass `_clientId` along with
+the `tools/call`.
+
+```text
+event: message
+data: {
+  "jsonrpc": "2.0",
+  "method": "gateway/toolResult",
+  "params": {
+    "tool": "getultrashortcast",
+    "upstream": {
+      "method": "GET",
+      "url": "https://apis.data.go.kr/...",
+      "status": 200
+    }
+  }
+}
+```
+
+### `event: byoapi`
+
+The progress of a BYOAPI registration job is delivered to the client that requested the registration.
+
+```text
+event: byoapi
+data: {"jobId":"...","status":"registered","job":{ ... }}
+```
+
+## cURL
+
+```bash
+curl -N https://mcp.datari.kr/mcp/sse \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "Accept: text/event-stream"
+```
+
+The `-N` (--no-buffer) flag gives you real-time output.
+
+## Node.js (EventSource)
+
+```javascript
+import EventSource from "eventsource";
+
+const es = new EventSource("https://mcp.datari.kr/mcp/sse", {
+  headers: { "x-api-key": process.env.DATA_BRIDGE_API_KEY },
+});
+
+es.addEventListener("ready", (e) => {
+  console.log("connected", JSON.parse(e.data));
+});
+
+es.addEventListener("message", (e) => {
+  const ev = JSON.parse(e.data);
+  if (ev.method === "gateway/toolResult") {
+    console.log("tool result", ev.params);
+  }
+});
+```
+
+## Operational notes
+
+- Events are delivered only to the connected client (tenant) and never leak to other tenants.
+- On 5xx errors, use EventSource or an equivalent library so the client reconnects automatically.

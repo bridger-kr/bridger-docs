@@ -1,0 +1,77 @@
+---
+title: "Connect to Claude"
+description: "How to use Korean public data directly in Claude Desktop via DATA BRIDGE MCP — about 2 minutes."
+---
+
+Once Claude Desktop connects to the DATA BRIDGE Gateway over SSE, you can use 230+ public-data tools
+in natural language with no extra installation.
+
+<Steps>
+  <Step title="Install Claude Desktop">
+    If you don't have Claude Desktop yet, download it from the [official Anthropic site](https://claude.ai/download).
+    Both macOS and Windows are supported.
+  </Step>
+
+  <Step title="Open the MCP config file">
+    In the Claude Desktop menu, click **Claude → Settings → Developer → Edit Config**.
+
+    Config file location:
+
+    <CodeGroup>
+      ```text macOS
+      ~/Library/Application Support/Claude/claude_desktop_config.json
+      ```
+      ```text Windows
+      %APPDATA%\Claude\claude_desktop_config.json
+      ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Add the DATA BRIDGE MCP server">
+    Add the following to the config file.
+
+    ```json claude_desktop_config.json
+    {
+      "mcpServers": {
+        "data-bridge": {
+          "url": "https://mcp.datari.kr/mcp/sse",
+          "headers": {
+            "Authorization": "Bearer YOUR_API_KEY"
+          }
+        }
+      }
+    }
+    ```
+
+    <Tip>
+      You can issue an API key from the [admin dashboard](https://admin.datari.kr) after creating an account.
+    </Tip>
+  </Step>
+
+  <Step title="Restart Claude and start using it">
+    After saving the config, fully quit and relaunch Claude Desktop. You can now ask about Korean
+    public data in natural language.
+
+    ```
+    What's the weather in Gangnam-gu, Seoul today?
+    Show me apartment transaction prices in Banpo-dong.
+    Look up the Samsung Electronics stock price.
+    ```
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="I don't see any tools">
+    Fully quit and relaunch Claude Desktop. Verify the JSON in the config file is valid (missing
+    commas or quotes).
+  </Accordion>
+  <Accordion title="I get an authentication error">
+    Confirm the API key was entered correctly, and re-issue it from the
+    [admin dashboard](https://admin.datari.kr) if needed.
+  </Accordion>
+  <Accordion title="Still not working?">
+    Contact us at [support@datari.kr](mailto:support@datari.kr) or via Channel Talk.
+  </Accordion>
+</AccordionGroup>
