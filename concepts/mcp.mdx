@@ -56,8 +56,9 @@ OpenAPI 스펙 (preset YAML 또는 BYOAPI 등록)
    Claude / Cursor / 커스텀 에이전트
 ```
 
-- 한 도메인(`mcp.datari.kr`)에 **수백 개 도구**가 이름으로 다중화됩니다 (`getweatherforecast`,
-  `getapttrade`...). 서버 그룹은 `{category}/{name}` 형식의 ID로 구분됩니다.
+- 한 도메인(`mcp.datari.kr`)에 **수백 개 도구**가 이름으로 다중화됩니다 (`getultrashortcast`,
+  `getapttrade`...). 공식 프리셋 서버는 `{category}/{name}` 형식 ID로, BYOAPI 도구는
+  `@{owner}/{slug}` 네임스페이스로 구분됩니다.
 - Server를 별도로 띄울 필요 없이 **API Key 한 개**로 모든 등록 도구 사용.
 - 클라이언트는 어떤 MCP 호환 클라이언트(Claude Desktop, Cursor, ChatGPT Actions 어댑터, 자체 SDK)든 그대로 동작.
 

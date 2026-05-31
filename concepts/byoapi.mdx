@@ -19,31 +19,33 @@ DATA BRIDGE의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 �
 
 ```text
 하나의 DATA BRIDGE Gateway (mcp.datari.kr)
-  ├─ getweatherforecast        (server id: weather/forecast)
-  ├─ getbusarrival             (server id: transportation/bus-arrival)
-  ├─ getmycustomdata           (server id: custom/my-custom-api)
-  ├─ getinternalcrm            (server id: custom/internal-crm)
+  ├─ 공식 프리셋   server id: weather/ultra-shortcast  → tool: getultrashortcast
+  ├─ 공식 프리셋   server id: realestate/apt-trade     → tool: getapttrade
+  ├─ BYOAPI       tool_id: @user123/my-petstore       → tool: listpets, getpetbyid
+  ├─ BYOAPI       tool_id: @company/internal-crm      → tool: ...
   └─ ... 230+ tools
 ```
 
-## Tool 이름과 서버 ID 체계
+## 도구 이름과 식별자 체계
 
-각 프리셋·BYOAPI는 하나의 **서버(MCP 그룹)** 로 등록되며, 서버는 1개 이상의 도구를 가집니다.
+DATA BRIDGE에는 두 가지 등록 경로가 있고, 식별자 체계가 다릅니다.
 
-- **도구 이름**(`tools[].name`)은 OpenAPI `operationId`에서 파생됩니다. 소문자로 변환하고 영숫자가 아닌 문자는 제거합니다. 예: `getUltraSrtFcst` → `getultrashortcast`.
-- **서버 ID**(`servers[].id`)는 `{category}/{name}` 형식으로 그룹을 구분합니다. 예: `weather/ultra-shortcast`, `realestate/apt-trade`.
+**1. 공식 프리셋** — `vendor/spec`의 OpenAPI YAML에서 Gateway가 직접 로드합니다.
 
-| 구분 | 서버 ID 예시 | 도구 이름 예시 |
+- **서버 ID**(`servers[].id`)는 프리셋 파일 경로 기반의 `{category}/{name}` 형식입니다. 예: `weather/ultra-shortcast`, `realestate/apt-trade`.
+- **도구 이름**(`tools[].name`)은 OpenAPI `operationId`에서 파생됩니다. 소문자로 변환하고 영숫자가 아닌 문자는 제거합니다. 예: `getUltraShortcast` → `getultrashortcast`. 네임스페이스 접두사는 없습니다.
+
+**2. BYOAPI 도구** — 사용자가 `/api/v1/register`로 등록한 도구입니다.
+
+- **Tool ID**는 `@{owner}/{slug}` 네임스페이스를 가집니다. 예: `@user123/my-petstore`, `@company/internal-crm`. owner가 `@`로 시작하지 않으면 자동으로 `@`가 붙습니다.
+- 개별 도구 이름은 프리셋과 동일하게 `operationId`에서 파생된 이름입니다. 예: `listpets`.
+- 등록 시 카테고리를 지정하지 않으면 기본값은 `byoapi`이며, 공개 데이터로 감지되면 해당 카테고리가 적용됩니다.
+
+| 구분 | 식별자 형식 | 예시 |
 | --- | --- | --- |
-| 공식 프리셋 | `weather/forecast` | `getweatherforecast` |
-| 공공데이터 카테고리 | `realestate/apt-trade` | `getapttrade` |
-| 사용자 커스텀(BYOAPI) | `custom/my-petstore` | `listpets`, `getpetbyid` |
-
-**규칙**
-
-- 도구 이름은 `tools/list` 응답의 `name`으로 그대로 `tools/call`에 사용합니다.
-- BYOAPI 등록 시 `category`를 지정하지 않으면 기본값은 `custom`입니다.
-- 서버 ID는 카테고리와 이름 조합으로 Gateway 내에서 unique합니다.
+| 공식 프리셋 (서버 ID) | `{category}/{name}` | `weather/ultra-shortcast` |
+| 공식 프리셋 (도구 이름) | `operationId` 파생 | `getultrashortcast` |
+| BYOAPI (tool_id) | `@{owner}/{slug}` | `@user123/my-petstore` |
 
 ## 등록 파이프라인
 
@@ -111,7 +113,7 @@ DATA BRIDGE의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 �
 CREATE TABLE tool_registrations (
   id            UUID PRIMARY KEY,
   owner_id      UUID NOT NULL REFERENCES users(id),
-  server_id     VARCHAR(128) NOT NULL UNIQUE,   -- {category}/{name}, 예: weather/forecast
+  tool_id       VARCHAR(128) NOT NULL UNIQUE,   -- BYOAPI: @{owner}/{slug}, 프리셋: {category}/{name}
   display_name  VARCHAR(256),
   description   TEXT,
   category      VARCHAR(64),
