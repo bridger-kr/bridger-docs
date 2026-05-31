@@ -2,19 +2,18 @@
 /**
  * build-presets.mjs
  *
- * Parses presets/{category}/*.yaml at the repo root and writes one MDX page
- * per category to apps/docs/presets/{category}.mdx, plus a master
- * index at apps/docs/presets/index.mdx.
+ * Parses vendor/spec/presets/{category}/*.yaml (the datari-spec submodule,
+ * the single source of truth) and writes one MDX page per category to
+ * presets/{category}.mdx, plus a master index at presets/index.mdx.
  *
  * Idempotent: rewrites every file from scratch on each run.
  *
  * NOTE: This is a DEV-TIME generator. Output MDX is committed to the repo
  * and consumed directly by `mint export` at container build time.
- *   - Run locally: `npm run build:content` (after editing presets/*.yaml)
- *   - The Docker build (`apps/docs/Dockerfile`) does NOT execute this script
- *     because the `presets/` source tree lives at repo root, outside the
- *     `apps/docs/` build context. Re-running it inside the container would
- *     also produce no diff (since output is already committed).
+ *   - Run locally: `npm run build:content` (after the vendor/spec submodule
+ *     is updated to a new SHA, or when editing the templates here).
+ *   - The Docker build (`Dockerfile`) does NOT execute this script; the
+ *     already-committed MDX under presets/ is what gets exported.
  */
 
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
@@ -23,9 +22,9 @@ import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = resolve(__dirname, "..", "..", "..");
-const PRESETS_DIR = join(REPO_ROOT, "presets");
-const OUT_DIR = join(REPO_ROOT, "apps", "docs", "content", "presets");
+const REPO_ROOT = resolve(__dirname, "..");
+const PRESETS_DIR = join(REPO_ROOT, "vendor", "spec", "presets");
+const OUT_DIR = join(REPO_ROOT, "presets");
 
 const CATEGORY_META = {
   civil:          { title: "행정 · 민원",   icon: "building-columns", desc: "행정 · 민원 · 인구 · 치안 · 재난 · 공공시설 데이터." },
@@ -154,11 +153,17 @@ ${rows}
 ## 사용 예시
 
 <CodeGroup>
-  \`\`\`bash 호스팅 Gateway
+  \`\`\`bash 카테고리 서버 조회
+  # 이 카테고리의 프리셋 서버와 도구를 확인합니다.
+  curl -H "x-api-key: $DATA_BRIDGE_API_KEY" https://mcp.datari.kr/registry/servers \\
+    | jq '.servers[] | select(.id | startswith("${category}/"))'
+  \`\`\`
+
+  \`\`\`bash 전체 도구 목록 (MCP)
   curl -X POST https://mcp.datari.kr/mcp \\
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \\
     -H "Content-Type: application/json" \\
-    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[] | select(.name | startswith("@mcphub/${category}-"))'
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
   \`\`\`
 </CodeGroup>
 `;

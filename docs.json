@@ -62,6 +62,7 @@
             "group": "시작하기",
             "pages": [
               "getting-started/introduction",
+              "getting-started/installation",
               "getting-started/quickstart",
               "getting-started/first-tool"
             ]
