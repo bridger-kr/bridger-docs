@@ -11,7 +11,7 @@ Gateway가 시작 시 로드한 모든 프리셋 서버 정보를 반환합니�
 GET /registry/servers
 ```
 
-- 인증: API Key 필요
+- 인증: 불필요 — 프리셋 카탈로그는 공개 정보이며 로그인 전에도 조회할 수 있습니다.
 - Content-Type: 해당 없음
 
 ## Response 200
@@ -54,7 +54,7 @@ GET /registry/servers
 ## cURL
 
 ```bash
-curl -H "x-api-key: $DATA_BRIDGE_API_KEY" https://mcp.datari.kr/registry/servers
+curl https://mcp.datari.kr/registry/servers
 ```
 
 ## 관련 엔드포인트

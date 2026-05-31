@@ -11,7 +11,7 @@ DATA BRIDGE Gateway는 공공·사내 API를 한 도메인으로 노출하는 �
     API Key / OAuth 2.0 으로 호출자 식별.
   </Card>
   <Card title="시크릿 관리" icon="lock">
-    공공데이터 ServiceKey, BYOAPI 토큰을 Vault/Doppler에 격리.
+    공공데이터 ServiceKey, BYOAPI 토큰을 Vault에 격리.
   </Card>
   <Card title="PII 필터" icon="user-shield">
     응답에서 개인정보 패턴을 마스킹.
@@ -48,9 +48,9 @@ DATA BRIDGE가 처리하는 시크릿은 다음 세 종류입니다.
 
 | 종류 | 예시 | 저장 위치 |
 | --- | --- | --- |
-| 공공데이터 ServiceKey | `data.go.kr` 발급 키 | Doppler / Vault (Gateway 측) |
+| 공공데이터 ServiceKey | `data.go.kr` 발급 키 | Vault (Gateway 측) |
 | BYOAPI Upstream 토큰 | 사용자 API의 OAuth/HTTP Header 토큰 | Vault per-tenant 격리 |
-| DATA BRIDGE API Key | 호출자 인증 키 | DB(해시) + 토큰 자체는 발급 시 1회 노출 |
+| DATA BRIDGE API Key | 호출자 인증 키 (`dk_live_…`) | DB(해시) + 토큰 자체는 발급 시 1회 노출 |
 
 **원칙**
 
@@ -60,37 +60,46 @@ DATA BRIDGE가 처리하는 시크릿은 다음 세 종류입니다.
 
 ## 3. PII 필터
 
-응답 본문에서 다음 패턴을 자동 마스킹합니다.
+응답 본문(중첩 JSON 포함)에서 다음 패턴을 자동 마스킹합니다.
 
-- 주민등록번호 (`\d{6}-\d{7}`)
-- 휴대전화 번호
-- 신용카드 번호 (Luhn 검증)
-- 이메일 (옵션, 테넌트별 설정)
-
-마스킹 정책은 테넌트별로 켜기/끄기/엄격 모드로 조정할 수 있습니다.
+- 주민등록번호 (`\d{6}-\d{7}` → `******-*******`)
+- 휴대전화 번호 (`***-****-****`)
+- 신용카드 번호 (13~19자리 숫자열 → `****-****-****-****`)
+- 이메일 (`***@***.***`)
 
 ## 4. 감사 로그
 
-모든 `tools/call`은 다음 필드와 함께 영구 저장됩니다.
+모든 `tools/call`은 다음 필드와 함께 기록됩니다.
 
 ```json
 {
-  "ts": "2026-04-30T07:31:09.412Z",
-  "tenant_id": "...",
-  "actor": "api_key:dat_live_***",
+  "timestamp": "2026-04-30T07:31:09.412Z",
+  "type": "tool_call",
+  "action": "tools/call",
+  "userId": "usr_...",
+  "tenantId": "tnt_...",
   "tool": "getweatherforecast",
-  "request_hash": "sha256:...",
-  "response_size": 4218,
-  "status": "ok",
-  "latency_ms": 312,
-  "ip": "203.0.113.42",
-  "user_agent": "claude-desktop/0.7.3"
+  "toolId": "@datari/weather-ultra-shortcast",
+  "params": { "...": "마스킹 적용" },
+  "status": 200,
+  "duration": 312,
+  "success": true
 }
 ```
 
-- 응답 본문은 저장하지 않고 SHA-256 해시만 보관 (PII 보호 + 재현 가능성 균형)
-- 보존 기간은 조직 설정에 따라 관리됩니다.
-- [admin.datari.kr](https://admin.datari.kr) → **Audit**에서 검색·다운로드
+| 필드 | 설명 |
+| --- | --- |
+| `timestamp` | ISO 8601 기록 시각 |
+| `userId` / `tenantId` | 호출자·테넌트 식별자 |
+| `tool` / `toolId` | 호출된 도구 이름과 등록 ID |
+| `params` | 입력 파라미터 (PII·시크릿 필드 마스킹 후 저장) |
+| `status` | upstream HTTP 상태 코드 |
+| `duration` | 처리 시간(ms) |
+| `success` | 성공 여부 |
+
+- 입력 파라미터의 민감 필드는 마스킹 후 저장되며, 시크릿은 절대 기록되지 않습니다.
+- 시크릿 작업(`secret.store`·`secret.read`·`secret.rotate`·`secret.revoke`)은 값 대신 불투명 참조(`opaqueRef`)만 별도 기록합니다.
+- [admin.datari.kr](https://admin.datari.kr) → **Audit**에서 `GET /api/v1/audit/logs`로 검색·다운로드합니다.
 
 ## 5. 네트워크 경계
 

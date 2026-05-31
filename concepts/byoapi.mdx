@@ -19,10 +19,10 @@ DATA BRIDGE의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 �
 
 ```text
 하나의 DATA BRIDGE Gateway (mcp.datari.kr)
-  ├─ 공식 프리셋   server id: weather/ultra-shortcast  → tool: getultrashortcast
-  ├─ 공식 프리셋   server id: realestate/apt-trade     → tool: getapttrade
-  ├─ BYOAPI       tool_id: @user123/my-petstore       → tool: listpets, getpetbyid
-  ├─ BYOAPI       tool_id: @company/internal-crm      → tool: ...
+  ├─ 공식 프리셋   tool_id: @datari/weather-ultra-shortcast   → tool: getultrashortcast
+  ├─ 공식 프리셋   tool_id: @datari/realestate-apt-trade      → tool: getapttrade
+  ├─ BYOAPI       tool_id: @user123/my-petstore              → tool: listpets, getpetbyid
+  ├─ BYOAPI       tool_id: @company/internal-crm             → tool: ...
   └─ ... 230+ tools
 ```
 
@@ -32,8 +32,8 @@ DATA BRIDGE에는 두 가지 등록 경로가 있고, 식별자 체계가 다릅
 
 **1. 공식 프리셋** — `vendor/spec`의 OpenAPI YAML에서 Gateway가 직접 로드합니다.
 
-- **서버 ID**(`servers[].id`)는 프리셋 파일 경로 기반의 `{category}/{name}` 형식입니다. 예: `weather/ultra-shortcast`, `realestate/apt-trade`.
-- **도구 이름**(`tools[].name`)은 OpenAPI `operationId`에서 파생됩니다. 소문자로 변환하고 영숫자가 아닌 문자는 제거합니다. 예: `getUltraShortcast` → `getultrashortcast`. 네임스페이스 접두사는 없습니다.
+- **Tool ID**(레지스트리 등록 ID)는 프리셋 파일 경로 기반의 `@datari/{category}-{name}` 형식입니다. 예: `@datari/weather-ultra-shortcast`. 인메모리 서버 카탈로그(`/registry/servers`)에서는 동일 그룹이 `servers[].id` = `{category}/{name}`(예: `weather/ultra-shortcast`)로 노출됩니다.
+- **도구 이름**(`tools[].name`)은 OpenAPI `operationId`에서 파생됩니다. 영숫자가 아닌 문자를 밑줄(`_`)로 치환한 뒤 소문자로 변환합니다. 예: `getUltraShortcast` → `getultrashortcast`. 도구 이름 자체에는 네임스페이스 접두사가 없으며, `tools/call`에는 이 이름을 그대로 사용합니다.
 
 **2. BYOAPI 도구** — 사용자가 `/api/v1/register`로 등록한 도구입니다.
 
@@ -43,7 +43,7 @@ DATA BRIDGE에는 두 가지 등록 경로가 있고, 식별자 체계가 다릅
 
 | 구분 | 식별자 형식 | 예시 |
 | --- | --- | --- |
-| 공식 프리셋 (서버 ID) | `{category}/{name}` | `weather/ultra-shortcast` |
+| 공식 프리셋 (Tool ID) | `@datari/{category}-{name}` | `@datari/weather-ultra-shortcast` |
 | 공식 프리셋 (도구 이름) | `operationId` 파생 | `getultrashortcast` |
 | BYOAPI (tool_id) | `@{owner}/{slug}` | `@user123/my-petstore` |
 
@@ -54,7 +54,8 @@ DATA BRIDGE에는 두 가지 등록 경로가 있고, 식별자 체계가 다릅
     OpenAPI 스펙을 URL · 파일 업로드 · 인라인 텍스트 중 하나로 입력합니다.
   </Step>
   <Step title="Validation">
-    스펙 유효성·보안 스캔·MCP 변환 적합성 점수를 계산합니다.
+    스펙 유효성과 변환 가능한 엔드포인트 수를 점검하고 적합성 점수(`score`)를 계산합니다.
+    유효하지 않거나 변환할 엔드포인트가 없으면 `422`로 거부됩니다.
   </Step>
   <Step title="Generation">
     OpenAPI `paths`를 MCP Tool 정의로 변환합니다 (`name`, `description`, `inputSchema`).
@@ -113,7 +114,7 @@ DATA BRIDGE에는 두 가지 등록 경로가 있고, 식별자 체계가 다릅
 CREATE TABLE tool_registrations (
   id            UUID PRIMARY KEY,
   owner_id      UUID NOT NULL REFERENCES users(id),
-  tool_id       VARCHAR(128) NOT NULL UNIQUE,   -- BYOAPI: @{owner}/{slug}, 프리셋: {category}/{name}
+  tool_id       VARCHAR(128) NOT NULL UNIQUE,   -- 프리셋: @datari/{category}-{name}, BYOAPI: @{owner}/{slug}
   display_name  VARCHAR(256),
   description   TEXT,
   category      VARCHAR(64),

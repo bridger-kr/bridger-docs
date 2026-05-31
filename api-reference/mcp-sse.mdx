@@ -11,31 +11,33 @@ description: "DATA BRIDGE Gateway 실시간 이벤트 스트림 — Server-Sent 
 ```http
 GET /mcp/sse HTTP/1.1
 Accept: text/event-stream
-x-api-key: dat_live_...
+x-api-key: dk_live_...
 ```
 
 ## 이벤트 종류
 
 ### `event: ready`
 
-연결 직후 1회 발행. `clientId`로 추후 식별 가능합니다.
+연결 직후 1회 발행. `clientId`(`sse_` 접두사)로 추후 식별 가능합니다.
 
 ```text
 event: ready
-data: {"ok":true,"clientId":"c_a1b2c3"}
+data: {"ok":true,"clientId":"sse_3f2a1c9b-..."}
 ```
 
 ### Heartbeat
 
-주기적으로 SSE 주석(`:heartbeat`)이 브로드캐스트되어 NAT/프록시 타임아웃을 방지합니다.
+주기적으로 SSE 주석(`: keepalive`)이 전송되어 NAT/프록시 타임아웃을 방지합니다.
 
 ```text
-:heartbeat
+: keepalive
 ```
 
 ### `event: message` — `gateway/toolResult`
 
-`tools/call` 실행마다 모든 SSE 클라이언트로 브로드캐스트됩니다.
+`tools/call` 실행 결과가 **해당 클라이언트(테넌트)에게만** 전송됩니다. 교차 테넌트 데이터 유출을
+막기 위해 전체 브로드캐스트하지 않습니다. 클라이언트를 지정하려면 `tools/call` 시
+`_clientId`를 함께 전달합니다.
 
 ```text
 event: message
@@ -48,10 +50,18 @@ data: {
       "method": "GET",
       "url": "https://apis.data.go.kr/...",
       "status": 200
-    },
-    "ts": "2026-04-30T07:31:09.412Z"
+    }
   }
 }
+```
+
+### `event: byoapi`
+
+BYOAPI 등록 작업의 진행 상태가 등록을 요청한 클라이언트에게 전송됩니다.
+
+```text
+event: byoapi
+data: {"jobId":"...","status":"registered","job":{ ... }}
 ```
 
 ## cURL
@@ -87,6 +97,5 @@ es.addEventListener("message", (e) => {
 
 ## 운영 노트
 
-- 동일 API Key로 다중 SSE 연결 가능 (브로드캐스트는 모든 연결로 전송).
+- 이벤트는 연결한 클라이언트(테넌트)에게만 전송되며, 다른 테넌트로 새지 않습니다.
 - 5xx 발생 시 클라이언트가 자동 재연결하도록 EventSource 또는 동등 라이브러리 사용 권장.
-- 페이로드 크기는 본문 1KB 이하 — 큰 응답은 본문 대신 해시 + REST 조회를 권장합니다.

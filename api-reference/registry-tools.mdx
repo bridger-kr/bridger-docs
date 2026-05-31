@@ -12,7 +12,7 @@ description: "DATA BRIDGE Gateway가 로드한 모든 MCP 도구 평탄화 목�
 GET /registry/tools
 ```
 
-- 인증: API Key 필요
+- 인증: 불필요 — 프리셋 카탈로그는 공개 정보이며 로그인 전에도 조회할 수 있습니다.
 
 ## Response 200
 
@@ -41,7 +41,7 @@ GET /registry/tools
 ## cURL
 
 ```bash
-curl -H "x-api-key: $DATA_BRIDGE_API_KEY" https://mcp.datari.kr/registry/tools
+curl https://mcp.datari.kr/registry/tools
 ```
 
 ## 관련 엔드포인트
