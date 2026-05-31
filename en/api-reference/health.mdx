@@ -1,0 +1,77 @@
+---
+title: "GET /health"
+description: "DATA BRIDGE Gateway liveness health-check endpoint."
+---
+
+The lightest endpoint for checking whether the service has started up correctly.
+It requires no authentication and can be used directly for load balancers and Kubernetes liveness probes.
+
+## Request
+
+```http
+GET /health
+```
+
+- Authentication: none
+- Content-Type: not applicable
+
+## Response 200
+
+```json
+{
+  "status": "healthy",
+  "service": "mcp-gateway",
+  "timestamp": "2026-02-09T05:00:00.000Z"
+}
+```
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `status` | `"healthy"` | Started up normally |
+| `service` | string | Service identifier (`mcp-gateway`) |
+| `timestamp` | ISO 8601 | Response generation time |
+
+## Related endpoints
+
+| Endpoint | Auth | Description |
+| --- | --- | --- |
+| `GET /health` | none | Liveness — always returns `status: healthy` |
+| `GET /health/ready` | none | Readiness — checks dependencies like DB and Redis. `200 healthy` when OK, `503 degraded` on failure |
+| `GET /health/detailed` | API Key | Detailed report including per-dependency status and latency (latencyMs) |
+
+`/health/ready` response example (dependency check):
+
+```json
+{
+  "status": "healthy",
+  "service": "mcp-gateway",
+  "timestamp": "2026-02-09T05:00:00.000Z",
+  "checks": {
+    "database": { "status": "healthy", "latencyMs": 3 },
+    "redis": { "status": "healthy", "latencyMs": 1 }
+  }
+}
+```
+
+## cURL
+
+```bash
+curl https://mcp.datari.kr/health
+```
+
+## Kubernetes probe example
+
+```yaml
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 5
+```

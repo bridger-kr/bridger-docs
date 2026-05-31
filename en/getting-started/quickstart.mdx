@@ -1,0 +1,66 @@
+---
+title: "Quickstart"
+description: "Call your first MCP tool through DATA BRIDGE in under 5 minutes."
+---
+
+DATA BRIDGE is used by connecting to the **hosted Gateway** (`mcp.datari.kr`) with an API key.
+You can start right away — no separate server to install or operate.
+
+## 1. Issue an API key
+
+Create an account at [admin.datari.kr](https://admin.datari.kr) and issue a key under
+**Settings → API Keys**. See the [API key guide](/en/guides/api-keys) for details.
+
+```bash
+export DATA_BRIDGE_API_KEY="dk_live_..."
+```
+
+## 2. List available tools
+
+Use JSON-RPC `tools/list` to retrieve every tool registered with DATA BRIDGE.
+
+```bash
+curl -X POST https://mcp.datari.kr/mcp \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+## 3. Call your first tool
+
+Run a single tool for real. The example below calls the KMA ultra-short-term forecast.
+
+```bash
+curl -X POST https://mcp.datari.kr/mcp \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 2,
+    "method": "tools/call",
+    "params": {
+      "name": "getultrashortcast",
+      "arguments": {
+        "searchKeyword": "Seoul",
+        "numOfRows": 10
+      }
+    }
+  }'
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Connect to Claude" icon="comment" href="/en/guides/claude">
+    Call DATA BRIDGE tools in natural language from Claude Desktop.
+  </Card>
+  <Card title="Connect to ChatGPT" icon="message" href="/en/guides/chatgpt">
+    Use DATA BRIDGE via ChatGPT.
+  </Card>
+  <Card title="Use REST / SDK" icon="code" href="/en/guides/api">
+    Call directly with the Node.js or Python SDK.
+  </Card>
+  <Card title="Register your own API (BYOAPI)" icon="plug" href="/en/concepts/byoapi">
+    Turn any API with an OpenAPI spec into a tool.
+  </Card>
+</CardGroup>

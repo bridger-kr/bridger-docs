@@ -1,0 +1,153 @@
+---
+title: "Call directly via REST / MCP SDK"
+description: "Developer guide for calling the DATA BRIDGE Gateway via REST, MCP SDK, and BYOAPI without an AI client."
+---
+
+Even without Claude or ChatGPT, the DATA BRIDGE Gateway can be called directly via REST and the standard MCP SDK.
+
+<Steps>
+  <Step title="Issue an API key">
+    Issue an API key from the [admin dashboard](https://admin.datari.kr/settings).
+    See the [API key guide](/en/guides/api-keys) as well.
+  </Step>
+
+  <Step title="Call the REST API">
+    Call the standard REST endpoints.
+
+    <CodeGroup>
+      ```bash List tools (registered tools)
+      curl -X GET https://mcp.datari.kr/api/v1/tools \
+        -H "Authorization: Bearer YOUR_API_KEY" \
+        -H "Content-Type: application/json"
+      ```
+
+      ```bash Get a single tool
+      curl -X GET https://mcp.datari.kr/api/v1/tools/TOOL_ID \
+        -H "Authorization: Bearer YOUR_API_KEY"
+      ```
+    </CodeGroup>
+
+    <Note>
+      REST is for **listing, retrieving, registering, and managing** tools. Tool **execution** is done
+      via MCP JSON-RPC `tools/call` (`POST /mcp`). See the MCP SDK examples below.
+    </Note>
+  </Step>
+
+  <Step title="MCP SDK integration (Node.js)">
+    To integrate programmatically, use the official MCP SDK.
+
+    ```bash Install
+    npm install @modelcontextprotocol/sdk
+    ```
+
+    ```javascript client.js
+    import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+    import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
+
+    const transport = new SSEClientTransport(
+      new URL("https://mcp.datari.kr/mcp/sse"),
+      {
+        requestInit: {
+          headers: {
+            Authorization: "Bearer YOUR_API_KEY",
+          },
+        },
+      }
+    );
+
+    const client = new Client({
+      name: "my-app",
+      version: "1.0.0",
+    });
+
+    await client.connect(transport);
+
+    // List tools
+    const tools = await client.listTools();
+    console.log(tools);
+
+    // Run a tool
+    const result = await client.callTool({
+      name: "getweatherforecast",
+      arguments: {
+        nx: 60,
+        ny: 127,
+      },
+    });
+    console.log(result);
+    ```
+  </Step>
+
+  <Step title="MCP SDK integration (Python)">
+    You can implement the same flow in Python.
+
+    ```bash Install
+    pip install mcp
+    ```
+
+    ```python client.py
+    from mcp import ClientSession
+    from mcp.client.sse import sse_client
+    import asyncio
+
+    async def main():
+        headers = {"Authorization": "Bearer YOUR_API_KEY"}
+
+        async with sse_client(
+            "https://mcp.datari.kr/mcp/sse",
+            headers=headers,
+        ) as (read, write):
+            async with ClientSession(read, write) as session:
+                await session.initialize()
+
+                tools = await session.list_tools()
+                print(tools)
+
+                result = await session.call_tool(
+                    "getweatherforecast",
+                    arguments={"nx": 60, "ny": 127},
+                )
+                print(result)
+
+    asyncio.run(main())
+    ```
+  </Step>
+
+  <Step title="BYOAPI — register your own API (coming soon)">
+    Any API with an OpenAPI spec can be registered as a DATA BRIDGE tool. (coming soon)
+    See the [BYOAPI concept doc](/en/concepts/byoapi) for the full flow.
+
+    ```bash Register an API
+    curl -X POST https://mcp.datari.kr/api/v1/register \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "spec_url": "https://api.example.com/openapi.json",
+        "name": "my-service",
+        "auth": { "type": "bearer", "token": "SERVICE_API_KEY" },
+        "visibility": "private"
+      }'
+    ```
+
+    <Note>
+      Either `spec_url` (remote spec) or `spec_raw` (inline spec string) plus `name` is required.
+      Registration is processed asynchronously and the response returns a `job_id`.
+      Check progress with `GET /api/v1/register/:id/status`.
+    </Note>
+  </Step>
+</Steps>
+
+## API reference summary
+
+| Method | Path | Description |
+| ------ | ----- | ---- |
+| `GET`  | `/api/v1/tools`               | List registered tools |
+| `GET`  | `/api/v1/tools/:toolId`       | Get a single tool |
+| `POST` | `/api/v1/register`            | BYOAPI registration (`{spec_url\|spec_raw, name, auth, visibility}`) |
+| `GET`  | `/api/v1/register/:id/status` | BYOAPI registration job status |
+| `GET`  | `/registry/servers`           | Preset server (MCP group) catalog |
+| `GET`  | `/registry/tools`             | Flattened tool list |
+| `GET`  | `/mcp/sse`                    | MCP SSE event stream |
+| `POST` | `/mcp`                        | JSON-RPC (`tools/list`, `tools/call`) — tool execution |
+
+See the [API Reference](/en/api-reference/introduction) tab for the full spec.

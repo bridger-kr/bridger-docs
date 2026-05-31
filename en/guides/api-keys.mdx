@@ -1,0 +1,87 @@
+---
+title: "Issue API keys"
+description: "How to set up your DATA BRIDGE API key and your data.go.kr service key."
+---
+
+You need two keys to use DATA BRIDGE.
+
+<CardGroup cols={2}>
+  <Card title="DATA BRIDGE API Key" icon="key" href="https://admin.datari.kr/settings">
+    For calling the DATA BRIDGE Gateway. Issued from the admin dashboard.
+  </Card>
+  <Card title="data.go.kr service key" icon="building-columns">
+    To use public data, you need to apply for API access on data.go.kr (often approved instantly).
+  </Card>
+</CardGroup>
+
+## Issue a DATA BRIDGE API Key
+
+<Steps>
+  <Step title="Open the admin dashboard">
+    Create an account at [admin.datari.kr](https://admin.datari.kr).
+    Google / Kakao social login is supported.
+  </Step>
+
+  <Step title="Create an API key">
+    Click **Settings → API Keys → Create new key** and it's issued instantly.
+  </Step>
+
+  <Step title="Store the key securely">
+    The issued key is shown only once. Store it in an environment variable or a secret manager (e.g. Vault).
+
+    ```bash
+    export DATA_BRIDGE_API_KEY="dk_live_..."
+    ```
+  </Step>
+</Steps>
+
+## Apply for a data.go.kr service key
+
+Many of the public-data APIs that DATA BRIDGE calls require a
+[Public Data Portal (data.go.kr)](https://www.data.go.kr) service key. A single service key can often
+be reused across multiple APIs from the same provider.
+
+<Steps>
+  <Step title="Sign up at data.go.kr">
+    Register on the [sign-up page](https://www.data.go.kr/uim/psi/mem/joinIdPwSlct/view.do).
+    Skip this step if you already have an account.
+  </Step>
+
+  <Step title='Click "Apply" on the API you want'>
+    Press the **Apply** button for the API you want, from the Provider Keys screen in
+    [admin.datari.kr](https://admin.datari.kr) or on data.go.kr.
+
+    <Tip>You can keep the purpose of use brief. (e.g. "Data lookup for an AI service")</Tip>
+  </Step>
+
+  <Step title="Copy the service key after approval">
+    Most APIs are **approved instantly**. After approval, copy the
+    **general key (Decoding)** from
+    [My Page → Usage management](https://www.data.go.kr/iim/api/selectAPIAcInfo.do).
+
+    <Warning>
+      Always use the **Decoding** key. The Encoding key (URL-encoded form) is not used by DATA BRIDGE.
+    </Warning>
+  </Step>
+
+  <Step title="Enter the key in DATA BRIDGE">
+    Enter the copied service key under **Settings → Provider Keys** in the DATA BRIDGE admin dashboard
+    and you can start using it. A single service key can often be used across multiple APIs from the
+    same provider.
+  </Step>
+</Steps>
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="My access application isn't approved">
+    Most are auto-approved instantly, but some APIs require provider review. They're usually approved within 1–3 days.
+  </Accordion>
+  <Accordion title="I have multiple keys — which one do I use?">
+    Use the **general key (Decoding)**. The Encoding key is URL-encoded, and DATA BRIDGE only uses the Decoding key.
+  </Accordion>
+  <Accordion title="Can I use an API that isn't listed here?">
+    Any API with an OpenAPI spec can be registered directly via [BYOAPI](/en/concepts/byoapi). (coming soon)
+    If you'd like your API added as a public preset, contact us at [support@datari.kr](mailto:support@datari.kr) or via Channel Talk.
+  </Accordion>
+</AccordionGroup>

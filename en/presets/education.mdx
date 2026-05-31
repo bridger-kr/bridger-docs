@@ -1,0 +1,47 @@
+---
+title: "Education"
+description: "School, university, education statistics, and academic data. 15 presets · 15 tools."
+---
+
+This category has **15 presets** registered, exposing **15 MCP tools** in total.
+
+<Tip>
+  Find the tool name you need in the `tools/list` response, then call it directly with `tools/call`.
+</Tip>
+
+## Preset list
+
+| Name | Provider | Tools | data.go.kr |
+| --- | --- | --- | --- |
+| 학원·교습소 정보 조회 | 교육부 | 1 | [15071203](https://www.data.go.kr/data/15071203/openapi.do) |
+| 방과후학교 정보 조회 | 교육부 | 1 | [15071199](https://www.data.go.kr/data/15071199/openapi.do) |
+| 진로 정보 조회 | 교육부 | 1 | [15071195](https://www.data.go.kr/data/15071195/openapi.do) |
+| 교육 통계 조회 | 한국교육개발원 | 1 | [15043766](https://www.data.go.kr/data/15043766/openapi.do) |
+| 유치원 정보 조회 | 교육부 | 1 | [15071196](https://www.data.go.kr/data/15071196/openapi.do) |
+| 평생교육 기관 조회 | 교육부 | 1 | [15071202](https://www.data.go.kr/data/15071202/openapi.do) |
+| 장학금 정보 조회 | 한국장학재단 | 1 | [15068531](https://www.data.go.kr/data/15068531/openapi.do) |
+| 학교 환경 정보 조회 | 교육부 | 1 | [15071197](https://www.data.go.kr/data/15071197/openapi.do) |
+| 학교 도서관 정보 조회 | 교육부 | 1 | [15071200](https://www.data.go.kr/data/15071200/openapi.do) |
+| 학교 급식 정보 조회 | 교육부 | 1 | [15069697](https://www.data.go.kr/data/15069697/openapi.do) |
+| 학교 안전 정보 조회 | 교육부 | 1 | [15071198](https://www.data.go.kr/data/15071198/openapi.do) |
+| 특수교육 정보 조회 | 교육부 | 1 | [15071201](https://www.data.go.kr/data/15071201/openapi.do) |
+| 교원 통계 조회 | 한국교육개발원 | 1 | [15043768](https://www.data.go.kr/data/15043768/openapi.do) |
+| 대학 등록금 조회 | 한국교육개발원 | 1 | [15071113](https://www.data.go.kr/data/15071113/openapi.do) |
+| 대학 정보 조회 | 한국교육개발원 | 1 | [15071109](https://www.data.go.kr/data/15071109/openapi.do) |
+
+## Usage examples
+
+<CodeGroup>
+  ```bash Query category servers
+  # List the preset servers and tools in this category. (public catalog — no auth required)
+  curl https://mcp.datari.kr/registry/servers \
+    | jq '.servers[] | select(.id | startswith("education/"))'
+  ```
+
+  ```bash Full tool list (MCP)
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
+  ```
+</CodeGroup>

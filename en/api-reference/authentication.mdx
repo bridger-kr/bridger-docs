@@ -1,0 +1,57 @@
+---
+title: "Authentication"
+description: "DATA BRIDGE Gateway authentication — API Key headers, error responses, tenant identification."
+---
+
+The DATA BRIDGE Gateway accepts two authentication headers. Send just one of them.
+
+```http
+x-api-key: dk_live_xxx
+Authorization: Bearer dk_live_xxx
+```
+
+## Issuing an API Key
+
+Issue/revoke keys at [admin.datari.kr](https://admin.datari.kr) → **Settings → API Keys**.
+See the [API key guide](/en/guides/api-keys) for the full flow.
+
+## Authentication failure response
+
+If the key is missing or invalid, **401 Unauthorized** is returned.
+
+```json
+{
+  "error": "Unauthorized",
+  "message": "Valid API key is required."
+}
+```
+
+## Tenant identification
+
+A tenant is identified **by API Key only**. A key issued at the organization level is automatically
+linked to that organization's tenant.
+
+<Warning>
+  The `x-tenant-id` and `x-user-id` headers sent by clients are **ignored and stripped** by the Gateway
+  to prevent ownership spoofing. The tenant is determined solely by the authenticated API Key.
+</Warning>
+
+## OAuth 2.0
+
+When you need organization-level permission management or SSO integration, use the OAuth 2.0
+Authorization Code or Client Credentials flow.
+
+<Note>
+  OAuth client registration is currently in beta and can be requested at
+  [admin.datari.kr](https://admin.datari.kr). After issuance, pass the access token the same way in the
+  `Authorization: Bearer ...` header.
+</Note>
+
+## cURL example
+
+```bash
+curl -X POST https://mcp.datari.kr/mcp \
+  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```

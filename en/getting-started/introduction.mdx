@@ -1,0 +1,46 @@
+---
+title: "What is DATA BRIDGE?"
+description: "A bridge that lets AI use 230+ public-data APIs and BYOAPI directly through the MCP standard."
+---
+
+DATA BRIDGE is a blend of **data** + **bridge**.
+It handles authentication, parsing, and error handling for public-data APIs on your behalf, and converts them into tools that AI can use directly through the [Model Context Protocol (MCP)](/en/concepts/mcp) standard. Any API with an OpenAPI spec becomes an AI tool once registered.
+
+## Problems DATA BRIDGE solves
+
+<CardGroup cols={3}>
+  <Card title="OpenAPI → MCP conversion" icon="arrow-right-arrow-left">
+    Wiring OpenAPI documents into AI agent tools is hard. DATA BRIDGE converts them automatically.
+  </Card>
+  <Card title="Public-data adapter" icon="building-columns">
+    It handles the complex parts of integration for you — auth keys, coordinate conversion (lat/lon → grid), error-code mapping, and more.
+  </Card>
+  <Card title="Centralized management" icon="server">
+    Beyond local MCP servers, manage MCP tools centrally across team and remote environments.
+  </Card>
+</CardGroup>
+
+## Core components
+
+<CardGroup cols={2}>
+  <Card title="Hosted Gateway" icon="cloud" href="/en/api-reference/introduction">
+    Call preset and registered API tools with a single API key.
+  </Card>
+  <Card title="Preset catalog" icon="table" href="/en/presets/index">
+    Public-data APIs served as MCP tools, organized by category.
+  </Card>
+</CardGroup>
+
+## Next steps
+
+<Steps>
+  <Step title="Get started in 5 minutes with the Quickstart">
+    Call your first tool in the [Quickstart](/en/getting-started/quickstart).
+  </Step>
+  <Step title="Connect to Claude / ChatGPT">
+    Follow the [Claude](/en/guides/claude) or [ChatGPT](/en/guides/chatgpt) guide.
+  </Step>
+  <Step title="Register your own API (BYOAPI, coming soon)">
+    Register your own service with an OpenAPI spec as a tool via [BYOAPI](/en/concepts/byoapi). (coming soon)
+  </Step>
+</Steps>

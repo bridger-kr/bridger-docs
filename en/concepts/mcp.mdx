@@ -1,0 +1,82 @@
+---
+title: "What is the Model Context Protocol (MCP)?"
+description: "A look at Anthropic's MCP standard and how DATA BRIDGE fits into it."
+---
+
+The **Model Context Protocol (MCP)** is an open protocol released by Anthropic for AI models to access
+external tools, data, and systems in a standardized way. It's based on JSON-RPC 2.0 and uses STDIO or
+HTTP + SSE transports.
+
+## Core concepts
+
+<CardGroup cols={2}>
+  <Card title="Server" icon="server">
+    A process that exposes tools (`tools`), resources (`resources`), and prompts (`prompts`).
+  </Card>
+  <Card title="Client" icon="plug">
+    Claude Desktop, Cursor, custom agents — attach to a Server and call tools.
+  </Card>
+  <Card title="Tool" icon="wrench">
+    A callable function with a name, description, and input schema (JSON Schema).
+  </Card>
+  <Card title="Transport" icon="route">
+    Two standard transports: STDIO (local process) or Streamable HTTP (remote).
+  </Card>
+</CardGroup>
+
+## Standard methods
+
+The MCP methods the DATA BRIDGE Gateway currently handles are as follows.
+
+| Method | Purpose | DATA BRIDGE |
+| --- | --- | --- |
+| `initialize` | Handshake — exchange protocol version and capabilities | Supported |
+| `notifications/initialized` | Initialization-complete notification | Supported |
+| `tools/list` | Retrieve metadata of exposed tools | Supported |
+| `tools/call` | Run a tool — takes `name` + `arguments` and returns the result | Supported |
+| `resources/list`, `resources/read` | Query static/dynamic resources | Not supported (tools-focused) |
+| `prompts/list`, `prompts/get` | Predefined prompt templates | Not supported (tools-focused) |
+
+<Note>
+  DATA BRIDGE is a **tools-focused** gateway. `resources/*` and `prompts/*` are standard MCP methods
+  but are not handled by the Gateway today; any other method responds with `Method not found`.
+</Note>
+
+## DATA BRIDGE and MCP
+
+DATA BRIDGE is an **MCP Server hosting platform**. Without writing, deploying, or operating your own
+MCP server, any OpenAPI spec is instantly converted into MCP tools.
+
+```text
+OpenAPI spec (preset YAML or BYOAPI registration)
+        │
+        ▼
+  ┌─────────────────────────────┐
+  │  DATA BRIDGE Gateway              │
+  │  (mcp.datari.kr/mcp)        │
+  ├─────────────────────────────┤
+  │  • tools/list                │
+  │  • tools/call                │
+  │  • SSE event stream          │
+  └─────────────────────────────┘
+        │
+        ▼
+   Claude / Cursor / custom agents
+```
+
+- A single domain (`mcp.datari.kr`) multiplexes **hundreds of tools** by name (`getultrashortcast`,
+  `getapttrade`...). Official preset servers are distinguished by `{category}/{name}` IDs, while BYOAPI
+  tools use the `@{owner}/{slug}` namespace.
+- Use all registered tools with **a single API Key** — no need to spin up a separate Server.
+- Clients work as-is with any MCP-compatible client (Claude Desktop, Cursor, a ChatGPT Actions adapter, your own SDK).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="View the architecture" icon="diagram-project" href="/en/concepts/architecture">
+    How the Gateway, Registry, and middleware fit together.
+  </Card>
+  <Card title="Call your first tool" icon="play" href="/en/getting-started/first-tool">
+    Run a real JSON-RPC call yourself.
+  </Card>
+</CardGroup>

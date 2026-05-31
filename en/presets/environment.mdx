@@ -1,0 +1,52 @@
+---
+title: "Environment"
+description: "Air quality, water quality, noise, vibration, waste, and radon data. 20 presets · 20 tools."
+---
+
+This category has **20 presets** registered, exposing **20 MCP tools** in total.
+
+<Tip>
+  Find the tool name you need in the `tools/list` response, then call it directly with `tools/call`.
+</Tip>
+
+## Preset list
+
+| Name | Provider | Tools | data.go.kr |
+| --- | --- | --- | --- |
+| 대기질 예보 조회 | 한국환경공단 | 1 | [15070289](https://www.data.go.kr/data/15070289/openapi.do) |
+| 실시간 대기질 조회 | 한국환경공단 | 1 | [15070272](https://www.data.go.kr/data/15070272/openapi.do) |
+| 먹는물 수질 조회 | 한국환경공단 | 1 | [15070391](https://www.data.go.kr/data/15070391/openapi.do) |
+| 미세먼지 경보 조회 | 한국환경공단 | 1 | [15070306](https://www.data.go.kr/data/15070306/openapi.do) |
+| 산불 위험 정보 조회 | 산림청 | 1 | [15071037](https://www.data.go.kr/data/15071037/openapi.do) |
+| 온실가스 배출량 조회 | 한국환경공단 | 1 | [15070340](https://www.data.go.kr/data/15070340/openapi.do) |
+| 소음 측정 정보 | 한국환경공단 | 1 | — |
+| 소음 측정 조회 | 한국환경공단 | 1 | [15070442](https://www.data.go.kr/data/15070442/openapi.do) |
+| 해양 수질 정보 조회 | 해양수산부 | 1 | [15071038](https://www.data.go.kr/data/15071038/openapi.do) |
+| 악취정보 조회 | 한국환경공단 | 1 | [15070323](https://www.data.go.kr/data/15070323/openapi.do) |
+| 전국 공중화장실 정보 | 행정안전부 | 1 | [15012892](https://www.data.go.kr/data/15012892/openapi.do) |
+| 라돈 농도 조회 | 한국환경공단 | 1 | [15070459](https://www.data.go.kr/data/15070459/openapi.do) |
+| 재활용 실적 조회 | 한국환경공단 | 1 | [15070425](https://www.data.go.kr/data/15070425/openapi.do) |
+| 토양오염도 조회 | 한국환경공단 | 1 | [15070476](https://www.data.go.kr/data/15070476/openapi.do) |
+| 소음/진동 측정 정보 | 한국환경공단 | 1 | — |
+| 폐기물 배출량 조회 | 한국환경공단 | 1 | [15070408](https://www.data.go.kr/data/15070408/openapi.do) |
+| 폐기물 처리 현황 | 한국환경공단/환경부 | 1 | — |
+| 호소 수질 조회 | 한국환경공단 | 1 | [15070374](https://www.data.go.kr/data/15070374/openapi.do) |
+| 실시간 수질 정보 | 한국환경공단 | 1 | — |
+| 하천 수질 조회 | 한국환경공단 | 1 | [15070357](https://www.data.go.kr/data/15070357/openapi.do) |
+
+## Usage examples
+
+<CodeGroup>
+  ```bash Query category servers
+  # List the preset servers and tools in this category. (public catalog — no auth required)
+  curl https://mcp.datari.kr/registry/servers \
+    | jq '.servers[] | select(.id | startswith("environment/"))'
+  ```
+
+  ```bash Full tool list (MCP)
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
+  ```
+</CodeGroup>

@@ -1,0 +1,51 @@
+---
+title: "Economy & Finance"
+description: "Exchange rates, interest rates, indicators, consumption, trade, and market statistics. 19 presets · 19 tools."
+---
+
+This category has **19 presets** registered, exposing **19 MCP tools** in total.
+
+<Tip>
+  Find the tool name you need in the `tools/list` response, then call it directly with `tools/call`.
+</Tip>
+
+## Preset list
+
+| Name | Provider | Tools | data.go.kr |
+| --- | --- | --- | --- |
+| 기준금리 조회 | 금융위원회·한국은행 | 1 | [15071156](https://www.data.go.kr/data/15071156/openapi.do) |
+| 채권 수익률 조회 | 금융위원회·한국은행 | 1 | [15071020](https://www.data.go.kr/data/15071020/openapi.do) |
+| 카드소비 통계 | 한국은행/금융위원회 | 1 | — |
+| 카드소비 통계 조회 | 금융위원회·한국은행 | 1 | [15071071](https://www.data.go.kr/data/15071071/openapi.do) |
+| 원자재 가격 조회 | 금융위원회·한국은행 | 1 | [15071037](https://www.data.go.kr/data/15071037/openapi.do) |
+| 소비자물가지수 조회 | 금융위원회·한국은행 | 1 | [15071139](https://www.data.go.kr/data/15071139/openapi.do) |
+| 고용 동향 조회 | 통계청 | 1 | [15071042](https://www.data.go.kr/data/15071042/openapi.do) |
+| 환율 조회 | 금융위원회·한국은행 | 1 | [15071003](https://www.data.go.kr/data/15071003/openapi.do) |
+| 수출입 통계 조회 | 금융위원회·한국은행 | 1 | [15071105](https://www.data.go.kr/data/15071105/openapi.do) |
+| 핀테크 기업정보 조회 | 금융위원회·한국은행 | 1 | [15071054](https://www.data.go.kr/data/15071054/openapi.do) |
+| 시장지수 조회 | 금융위원회·한국은행 | 1 | [15070986](https://www.data.go.kr/data/15070986/openapi.do) |
+| 국민연금 가입 현황 | 국민연금공단 | 1 | — |
+| 공공요금 정보 | 행정안전부/지자체 | 1 | — |
+| 중소기업 지원사업 조회 | 중소벤처기업부 | 1 | [15071041](https://www.data.go.kr/data/15071041/openapi.do) |
+| 스타트업 투자통계 조회 | 금융위원회·한국은행 | 1 | [15071088](https://www.data.go.kr/data/15071088/openapi.do) |
+| 주식 시세 조회 | 금융위원회·한국은행 | 1 | [15070969](https://www.data.go.kr/data/15070969/openapi.do) |
+| 국세 수입현황 조회 | 금융위원회·한국은행 | 1 | [15071173](https://www.data.go.kr/data/15071173/openapi.do) |
+| 실업률 통계 조회 | 금융위원회·한국은행 | 1 | [15071122](https://www.data.go.kr/data/15071122/openapi.do) |
+| 상하수도 요금 정보 | 행정안전부 | 1 | — |
+
+## Usage examples
+
+<CodeGroup>
+  ```bash Query category servers
+  # List the preset servers and tools in this category. (public catalog — no auth required)
+  curl https://mcp.datari.kr/registry/servers \
+    | jq '.servers[] | select(.id | startswith("economy/"))'
+  ```
+
+  ```bash Full tool list (MCP)
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
+  ```
+</CodeGroup>

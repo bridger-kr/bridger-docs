@@ -1,0 +1,49 @@
+---
+title: "Real Estate"
+description: "Apartment/officetel transactions, rentals, cadastral, and building permits. 17 presets · 17 tools."
+---
+
+This category has **17 presets** registered, exposing **17 MCP tools** in total.
+
+<Tip>
+  Find the tool name you need in the `tools/list` response, then call it directly with `tools/call`.
+</Tip>
+
+## Preset list
+
+| Name | Provider | Tools | data.go.kr |
+| --- | --- | --- | --- |
+| 아파트 전월세 실거래가 조회 | 국토교통부 | 1 | [15070765](https://www.data.go.kr/data/15070765/openapi.do) |
+| 아파트 매매 실거래가 조회 | 국토교통부 | 1 | [15070748](https://www.data.go.kr/data/15070748/openapi.do) |
+| 건축물대장 조회 | 국토교통부 | 1 | [15070884](https://www.data.go.kr/data/15070884/openapi.do) |
+| 건축인허가 조회 | 국토교통부 | 1 | [15070901](https://www.data.go.kr/data/15070901/openapi.do) |
+| 상업용 부동산 실거래가 | 국토교통부 | 1 | — |
+| 상업업무용 실거래가 조회 | 국토교통부 | 1 | [15070850](https://www.data.go.kr/data/15070850/openapi.do) |
+| 단독/다가구 매매 실거래가 조회 | 국토교통부 | 1 | [15070816](https://www.data.go.kr/data/15070816/openapi.do) |
+| 주택가격지수 조회 | 국토교통부 | 1 | [15070935](https://www.data.go.kr/data/15070935/openapi.do) |
+| 전세가격지수 조회 | 국토교통부 | 1 | [15070952](https://www.data.go.kr/data/15070952/openapi.do) |
+| 토지 실거래가 조회 | 국토교통부 | 1 | [15070867](https://www.data.go.kr/data/15070867/openapi.do) |
+| 토지이용계획 조회 | 국토교통부 | 1 | [15070918](https://www.data.go.kr/data/15070918/openapi.do) |
+| 오피스텔 전월세 실거래가 | 국토교통부 | 1 | — |
+| 오피스텔 전월세 실거래가 조회 | 국토교통부 | 1 | [15070799](https://www.data.go.kr/data/15070799/openapi.do) |
+| 오피스텔 매매 실거래가 | 국토교통부 | 1 | — |
+| 오피스텔 매매 실거래가 조회 | 국토교통부 | 1 | [15070782](https://www.data.go.kr/data/15070782/openapi.do) |
+| 연립다세대 실거래가 | 국토교통부 | 1 | — |
+| 연립다세대 매매 실거래가 조회 | 국토교통부 | 1 | [15070833](https://www.data.go.kr/data/15070833/openapi.do) |
+
+## Usage examples
+
+<CodeGroup>
+  ```bash Query category servers
+  # List the preset servers and tools in this category. (public catalog — no auth required)
+  curl https://mcp.datari.kr/registry/servers \
+    | jq '.servers[] | select(.id | startswith("realestate/"))'
+  ```
+
+  ```bash Full tool list (MCP)
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
+  ```
+</CodeGroup>

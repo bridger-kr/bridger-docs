@@ -1,0 +1,61 @@
+---
+title: "API Reference"
+description: "An at-a-glance view of the REST, SSE, and JSON-RPC interfaces the DATA BRIDGE Gateway provides."
+---
+
+The DATA BRIDGE Gateway exposes the following four kinds of interfaces under a single domain.
+
+<CardGroup cols={2}>
+  <Card title="Health" icon="heart-pulse" href="/en/api-reference/health">
+    `GET /health` — liveness check.
+  </Card>
+  <Card title="Registry" icon="boxes-stacked" href="/en/api-reference/registry-servers">
+    `GET /registry/{servers,tools}` — catalog of loaded presets and tools.
+  </Card>
+  <Card title="MCP JSON-RPC" icon="code" href="/en/api-reference/mcp-jsonrpc">
+    `POST /mcp` — `tools/list`, `tools/call`.
+  </Card>
+  <Card title="MCP SSE" icon="bolt" href="/en/api-reference/mcp-sse">
+    `GET /mcp/sse` — real-time tool execution events.
+  </Card>
+</CardGroup>
+
+## Base URL
+
+| Environment | Base URL |
+| --- | --- |
+| Hosted (recommended) | `https://mcp.datari.kr` |
+
+## Authentication in one line
+
+Every protected endpoint accepts one of the following two headers.
+
+```http
+x-api-key: dk_live_...
+Authorization: Bearer dk_live_...
+```
+
+See [Authentication](/en/api-reference/authentication) for the full auth flow, OAuth, and error codes.
+
+## Common error format
+
+```json
+{
+  "error": "Unauthorized",
+  "message": "Valid API key is required."
+}
+```
+
+The JSON-RPC endpoint (`/mcp`) returns a [JSON-RPC 2.0 error object](https://www.jsonrpc.org/specification#error_object).
+
+| Code | Meaning |
+| --- | --- |
+| `-32600` | Invalid JSON-RPC request |
+| `-32601` | Method not found |
+| `-32602` | Invalid params (e.g. missing tool name) |
+| `-32000` | Internal gateway error |
+
+## Content Types
+
+- Request/response: `application/json`
+- SSE stream: `text/event-stream`

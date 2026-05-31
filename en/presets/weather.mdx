@@ -1,0 +1,48 @@
+---
+title: "Weather"
+description: "Forecast, alert, radar, UV, and typhoon data. 16 presets · 16 tools."
+---
+
+This category has **16 presets** registered, exposing **16 MCP tools** in total.
+
+<Tip>
+  Find the tool name you need in the `tools/list` response, then call it directly with `tools/call`.
+</Tip>
+
+## Preset list
+
+| Name | Provider | Tools | data.go.kr |
+| --- | --- | --- | --- |
+| 대기질 측정소 조회 | 환경부 | 1 | [15071043](https://www.data.go.kr/data/15071043/openapi.do) |
+| 한파영향예보 조회 | 기상청 | 1 | [15070238](https://www.data.go.kr/data/15070238/openapi.do) |
+| 가뭄지수 조회 | 기상청 | 1 | [15070204](https://www.data.go.kr/data/15070204/openapi.do) |
+| 폭염영향예보 조회 | 기상청 | 1 | [15070221](https://www.data.go.kr/data/15070221/openapi.do) |
+| 낙뢰관측 조회 | 기상청 | 1 | [15070153](https://www.data.go.kr/data/15070153/openapi.do) |
+| 해상예보 조회 | 기상청 | 1 | [15070170](https://www.data.go.kr/data/15070170/openapi.do) |
+| 중기육상예보 조회 | 기상청 | 1 | [15070085](https://www.data.go.kr/data/15070085/openapi.do) |
+| 중기기온예보 조회 | 기상청 | 1 | [15070102](https://www.data.go.kr/data/15070102/openapi.do) |
+| 레이더 강수량 조회 | 기상청 | 1 | [15070136](https://www.data.go.kr/data/15070136/openapi.do) |
+| 태풍정보 조회 | 기상청 | 1 | [15070119](https://www.data.go.kr/data/15070119/openapi.do) |
+| 초단기예보 조회 | 기상청 | 1 | [15070051](https://www.data.go.kr/data/15070051/openapi.do) |
+| 자외선지수 조회 | 기상청 | 1 | [15070255](https://www.data.go.kr/data/15070255/openapi.do) |
+| 동네예보 조회 | 기상청 | 1 | [15070068](https://www.data.go.kr/data/15070068/openapi.do) |
+| 파고예보 조회 | 기상청 | 1 | [15070187](https://www.data.go.kr/data/15070187/openapi.do) |
+| 단기예보 조회 | 기상청 | 1 | [15070017](https://www.data.go.kr/data/15070017/openapi.do) |
+| 기상특보 조회 | 기상청 | 1 | [15070034](https://www.data.go.kr/data/15070034/openapi.do) |
+
+## Usage examples
+
+<CodeGroup>
+  ```bash Query category servers
+  # List the preset servers and tools in this category. (public catalog — no auth required)
+  curl https://mcp.datari.kr/registry/servers \
+    | jq '.servers[] | select(.id | startswith("weather/"))'
+  ```
+
+  ```bash Full tool list (MCP)
+  curl -X POST https://mcp.datari.kr/mcp \
+    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
+  ```
+</CodeGroup>
