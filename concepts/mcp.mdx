@@ -26,13 +26,21 @@ SSE 트랜스포트를 사용합니다.
 
 ## 표준 메서드
 
-| 메서드 | 용도 |
-| --- | --- |
-| `initialize` | 핸드셰이크 — 프로토콜 버전, capabilities 교환 |
-| `tools/list` | Server가 노출하는 도구 메타데이터 조회 |
-| `tools/call` | 도구 실행 — `name` + `arguments`를 받아 결과 반환 |
-| `resources/list`, `resources/read` | 정적/동적 리소스 조회 |
-| `prompts/list`, `prompts/get` | 사전 정의 프롬프트 템플릿 |
+DATA BRIDGE Gateway가 현재 처리하는 MCP 메서드는 다음과 같습니다.
+
+| 메서드 | 용도 | DATA BRIDGE |
+| --- | --- | --- |
+| `initialize` | 핸드셰이크 — 프로토콜 버전, capabilities 교환 | 지원 |
+| `notifications/initialized` | 초기화 완료 알림 | 지원 |
+| `tools/list` | 노출하는 도구 메타데이터 조회 | 지원 |
+| `tools/call` | 도구 실행 — `name` + `arguments`를 받아 결과 반환 | 지원 |
+| `resources/list`, `resources/read` | 정적/동적 리소스 조회 | 미지원 (도구 중심) |
+| `prompts/list`, `prompts/get` | 사전 정의 프롬프트 템플릿 | 미지원 (도구 중심) |
+
+<Note>
+  DATA BRIDGE는 **도구(tools) 중심** 게이트웨이입니다. `resources/*`·`prompts/*`는 MCP 표준
+  메서드이지만 현재 Gateway에서는 처리하지 않으며, 그 외 메서드는 `Method not found`로 응답합니다.
+</Note>
 
 ## DATA BRIDGE와 MCP
 

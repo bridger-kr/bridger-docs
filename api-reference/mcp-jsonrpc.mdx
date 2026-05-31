@@ -10,7 +10,7 @@ DATA BRIDGE Gateway의 핵심 MCP 호출 엔드포인트입니다. JSON-RPC 2.0 
 ```http
 POST /mcp HTTP/1.1
 Content-Type: application/json
-x-api-key: dat_live_...
+x-api-key: dk_live_...
 ```
 
 ## 공통 에러 코드
@@ -19,7 +19,7 @@ x-api-key: dat_live_...
 | --- | --- |
 | `-32600` | Invalid JSON-RPC request |
 | `-32601` | Method not found |
-| `-32602` | Invalid params (예: tool name 누락) |
+| `-32602` | Invalid params (예: 도구 이름 누락) |
 | `-32000` | Internal gateway error |
 
 ## tools/list
@@ -48,8 +48,11 @@ DATA BRIDGE에 등록된 모든 도구의 메타데이터를 반환합니다.
         "name": "pingtool",
         "description": "Ping endpoint",
         "inputSchema": { "type": "object", "properties": {} },
-        "method": "GET",
-        "path": "/ping"
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
       }
     ]
   }
@@ -87,7 +90,9 @@ DATA BRIDGE에 등록된 모든 도구의 메타데이터를 반환합니다.
       "url": "http://127.0.0.1:9921/ping?q=hello",
       "status": 200
     },
-    "data": { "ok": true, "q": "hello" }
+    "data": { "ok": true, "q": "hello" },
+    "cacheStatus": "MISS",
+    "auditId": "aud_..."
   }
 }
 ```
@@ -99,6 +104,8 @@ DATA BRIDGE에 등록된 모든 도구의 메타데이터를 반환합니다.
 | `result.upstream.url` | upstream 최종 URL (ServiceKey 등 미들웨어 주입 후) |
 | `result.upstream.status` | upstream HTTP 상태 코드 |
 | `result.data` | upstream 응답 본문 (XML→JSON 정규화 후) |
+| `result.cacheStatus` | 캐시 적중 여부 (`HIT`/`MISS` 등) |
+| `result.auditId` | 이 호출의 감사 로그 식별자 |
 
 ## cURL 전체 예시
 
@@ -140,4 +147,5 @@ DATA BRIDGE에 등록된 모든 도구의 메타데이터를 반환합니다.
 | `00` | 정상 |
 | `30` | 등록되지 않은 서비스키 |
 | `31` | 활용기간 만료 서비스키 |
+| `32` | 등록되지 않은 IP |
 | 기타 | `알 수 없는 공공데이터 에러 (<code>)` |

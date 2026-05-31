@@ -28,8 +28,8 @@ description: "지적, 건축 인허가, 도시계획, 국토 통계. 총 10개 �
 
 <CodeGroup>
   ```bash 카테고리 서버 조회
-  # 이 카테고리의 프리셋 서버와 도구를 확인합니다.
-  curl -H "x-api-key: $DATA_BRIDGE_API_KEY" https://mcp.datari.kr/registry/servers \
+  # 이 카테고리의 프리셋 서버와 도구를 확인합니다. (공개 카탈로그 — 인증 불필요)
+  curl https://mcp.datari.kr/registry/servers \
     | jq '.servers[] | select(.id | startswith("land/"))'
   ```
 

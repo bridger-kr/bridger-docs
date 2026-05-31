@@ -31,8 +31,8 @@ DATA BRIDGE Gateway는 다음 4종류의 인터페이스를 한 도메인에서 
 모든 보호 엔드포인트는 다음 두 헤더 중 하나를 받습니다.
 
 ```http
-x-api-key: dat_live_...
-Authorization: Bearer dat_live_...
+x-api-key: dk_live_...
+Authorization: Bearer dk_live_...
 ```
 
 전체 인증 흐름·OAuth·에러 코드는 [Authentication](/api-reference/authentication)을 참고하세요.
@@ -52,7 +52,7 @@ JSON-RPC 엔드포인트(`/mcp`)는 [JSON-RPC 2.0 에러 객체](https://www.jso
 | --- | --- |
 | `-32600` | Invalid JSON-RPC request |
 | `-32601` | Method not found |
-| `-32602` | Invalid params (예: tool name 누락) |
+| `-32602` | Invalid params (예: 도구 이름 누락) |
 | `-32000` | Internal gateway error |
 
 ## Content Types
