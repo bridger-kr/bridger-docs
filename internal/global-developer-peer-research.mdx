@@ -1,0 +1,402 @@
+---
+title: "Global Developer Peer Research"
+description: "Internal positioning memo: where Datari (DATA BRIDGE) sits among global API-to-agent infrastructure peers, the ICP/wedge, a MAU-based business model, and a prioritized backlog. Not navigation-linked."
+---
+
+<Note>
+  **Internal memo — not customer-facing.** This page is intentionally excluded from `docs.json`
+  navigation. It exists to align positioning, pricing intuition, and roadmap. Claims about peers are
+  cited inline; claims about Datari are grounded in this repo's own docs and the live gateway
+  (`https://mcp.datari.kr/health` → `{"status":"ok"}`, checked at authoring time). Where a source
+  could not be confirmed, the text says so explicitly.
+</Note>
+
+## 0. What Datari actually is (grounding)
+
+Per this repo's own docs, Datari (brand: **DATA BRIDGE**) is a **hosted, tool-centric MCP gateway**
+that turns OpenAPI specs into MCP tools and serves them from one endpoint
+(`mcp.datari.kr/mcp`). Concretely:
+
+- **230 presets across 14 categories**, each an OpenAPI spec plus public-data metadata, mostly
+  Korean public-data (공공데이터포털) APIs — weather, real-estate transactions, transit, welfare,
+  environment, etc. (`presets/index.mdx`).
+- **A public-data adapter** that injects `ServiceKey`, converts lat/long → grid coordinates,
+  normalizes XML/JSON, and maps error codes (`concepts/architecture.mdx`).
+- **MCP surface limited to `tools/list` + `tools/call`** (plus `initialize` /
+  `notifications/initialized`); `resources/*` and `prompts/*` are intentionally unsupported
+  (`concepts/mcp.mdx`).
+- **BYOAPI** (register-not-deploy): a user submits an OpenAPI spec, it becomes a tool row in a
+  registry, routed by ID at runtime — **listed as "coming soon"** in the current docs
+  (`concepts/byoapi.mdx`). Honesty note: BYOAPI is not yet GA, so any positioning that leans on it is
+  forward-looking, not shippable traction.
+
+So Datari is two things stacked: **(a)** a curated catalog of Korean public-data tools with a real
+adapter moat, and **(b)** a generic "OpenAPI → MCP" gateway that is partially built. The peer
+analysis below is most useful when read against *that* split.
+
+---
+
+## 1. Peer landscape
+
+The market splits into six clusters. Datari touches three of them (MCP gateway, unified API, dev-experience).
+
+| Cluster | What they sell | Representative peers |
+| --- | --- | --- |
+| MCP runtime / tool-calling gateway | One endpoint → many tools, managed auth, governance | Composio, Arcade, Pipedream Connect, h6s.ai, HAPI/mcp.com.ai |
+| Unified API | Normalized schemas or code-first infra across many SaaS | Merge.dev, Apideck, Nango |
+| Enterprise-readiness primitives | SSO/SCIM/RBAC/audit as building blocks | WorkOS |
+| Dev-experience / docs / SDKs | SDK generation, API docs, playgrounds | Stainless, Mintlify |
+| Agent data access | Web search/scrape as agent tools | Firecrawl, Tavily |
+| Archetype / gold standard | Developer-first API company playbook | Stripe |
+
+### 1.1 h6s.ai — the closest "wrapper" comparable
+
+h6s ships a **local `npx` MCP server** (`@h6s-ai/cli mcp`), keyed by `H6S_API_KEY`, exposing **6
+tools** (`h6s_catalog`, `h6s_list_providers`, `h6s_list_schemas`, `h6s_get_schema`,
+`h6s_list_credentials`, `h6s_fetch_data`) over **Korean financial-institution data** (banks,
+홈택스/hometax, corporate cards) with a macro-style `h6s_fetch_data` that handles collect → poll →
+return. Source: [h6s.ai/docs/mcp](https://h6s.ai/docs/mcp) (reachable, HTTP 200 at authoring time).
+
+- **Same neighborhood as Datari:** Korea-centric, credential-heavy data domains, MCP delivery.
+- **Different shape:** h6s runs **locally via npx** and exposes a **handful of generic "fetch"
+  tools** with discovery tools layered on top; Datari runs a **hosted gateway** with **one named tool
+  per operation** (`getultrashortcast`, `getapttrade`, …). h6s optimizes for "one universal fetch +
+  schema discovery"; Datari optimizes for "many concrete, pre-shaped tools."
+- **Read for Datari:** the npx-local pattern is a credible alternative the same buyer will consider.
+  Datari's counter is hosting + central management + the public-data adapter, not "we have an MCP."
+
+### 1.2 Composio — the enterprise MCP gateway benchmark
+
+Composio (Sampark Inc, YC W24) is an **MCP gateway + tool-calling platform** with **1,000+ managed
+integrations**, per-team scoped MCP endpoints, SSO/SCIM, action-level RBAC, OAuth lifecycle
+management, and audit logging (metadata-only).
+Sources: [composio.dev/mcp-gateway](https://composio.dev/mcp-gateway),
+[Building vs Buying an Enterprise MCP Gateway](https://composio.dev/content/building-vs-buying-an-enterprise-mcp-gateway).
+
+- **Pricing (usage-based tool calls):** Free 20k calls/mo; "Ridiculously Cheap" ~$29/mo for 200k
+  calls + $0.299/1k overage; "Serious Business" ~$229/mo for 2M calls + $0.249/1k; Enterprise custom.
+  Sources: [docs.composio.dev/toolkits/premium-tools](https://docs.composio.dev/toolkits/premium-tools),
+  [theaiagentindex.com/agents/composio](https://theaiagentindex.com/agents/composio) (verified live
+  May 2026 per that index).
+- **The argument they make:** the proxy is ~5% of the work; the other 95% is the governance wrapper
+  (identity federation, per-user OAuth maintenance, audit, compliance). They frame Year-1 internal
+  build at **$200K–$400K** and 6–9 months to first governed user.
+- **Read for Datari:** the **per-tool-call meter** is the dominant pricing primitive in this cluster.
+  But Composio's value is breadth of SaaS connectors + enterprise governance — **not** a domain data
+  moat. Datari should not try to out-breadth Composio; it should be the **Korea public-data + BYOAPI
+  long-tail** specialist whose adapter quality and locality Composio will never prioritize.
+
+### 1.3 Arcade — the authorization-first MCP runtime
+
+Arcade positions as **"the MCP runtime for production AI agents"**: multi-user, per-action
+authorization evaluated at runtime (intersection of agent-allowed AND user-allowed), managed OAuth
+with credentials isolated from the LLM, "agent-optimized" tools (intent → precise API call), MCP
+gateways that federate many servers into one URL, and OTel-compatible audit logs.
+Sources: [arcade.dev](https://www.arcade.dev/),
+[docs.arcade.dev/home/auth/how-arcade-helps](https://docs.arcade.dev/home/auth/how-arcade-helps),
+[arcade.dev/blog/mcp-gateway-pattern](https://www.arcade.dev/blog/mcp-gateway-pattern/).
+
+- **Read for Datari:** Arcade's thesis is that **per-user authorization** is the hard, defensible
+  layer. Datari's current model is **one API key → all registered tools** (`concepts/mcp.mdx`), which
+  is simpler but weaker for multi-user/agent-acting-on-behalf-of-user scenarios. If Datari ever moves
+  beyond read-only public data into write actions or per-end-user credentials, Arcade is the
+  reference design to study — and the gap to close.
+
+### 1.4 Pipedream Connect — the breadth + credit-meter exemplar
+
+Pipedream Connect offers SDKs/APIs to embed integrations and a **hosted MCP server exposing 10,000+
+pre-built tools across 2,500+ apps**, with fully-managed OAuth and isolated credential storage.
+Sources: [pipedream.com/docs/connect](https://pipedream.com/docs/connect),
+[pipedream.com/docs/connect/mcp](https://pipedream.com/docs/connect/mcp).
+
+- **Pricing primitives:** **credits** (1 credit ≈ 30s compute, charged on action executions, MCP
+  tool calls, deployed trigger emits, proxy requests) **plus per-external-user** billing; free in
+  development mode. Source: [pipedream.com/docs/pricing](https://pipedream.com/docs/pricing).
+- **Read for Datari:** the **"credits + external users"** dual meter is the most directly portable
+  pricing model for a BYOAPI/gateway product. Note: list/configure/management operations are *free*;
+  only execution costs credits. That free-discovery boundary is a good DX default to copy.
+
+### 1.5 Nango — code-first unified infrastructure
+
+Nango is an **open-source, code-first integration platform** (700–800+ APIs): managed OAuth/API-key
+auth with token refresh, a TypeScript runtime where you write per-provider functions, syncs,
+webhooks, **native MCP server support**, and "AI coding agent skills" so engineers build integrations
+with Claude Code/Cursor.
+Sources: [nango.dev/pricing](https://nango.dev/pricing),
+[nango.dev/blog/what-is-a-unified-api](https://nango.dev/blog/what-is-a-unified-api/),
+[nango.dev/docs/getting-started/use-cases/unified-apis](https://nango.dev/docs/getting-started/use-cases/unified-apis).
+
+- **Pricing:** Free $0; paid from **~$50/mo**; scale from **~$500/mo**; usage-based (connections,
+  proxy requests, function compute, sync storage, webhooks). Source: nango.dev/pricing.
+- **Read for Datari:** Nango's "you control the data model, we run the infra" is the philosophical
+  opposite of Merge's fixed schemas — and closer to Datari's BYOAPI ("bring your spec, we route it").
+  Nango proves a **code-first, usage-metered** model can be commercially viable without pre-built
+  normalized schemas.
+
+### 1.6 Merge.dev & Apideck — pre-built normalized schemas
+
+**Merge** sells one **Unified API** with **Common Models** across HRIS/Payroll/Accounting/Ticketing/
+CRM/ATS/File Storage (200+ connectors, 6 categories), via a hosted **Merge Link** auth flow and
+account tokens; SOC 2 Type II / ISO 27001 / HIPAA / GDPR.
+Sources: [merge.dev/unified-api](https://www.merge.dev/unified-api),
+[docs.merge.dev/merge-unified/concepts](https://docs.merge.dev/merge-unified/concepts).
+
+- **Pricing:** first 3 Linked Accounts free; **~$650/mo for up to 10**, **$65/account** beyond;
+  Professional/Enterprise contract-based. Source: [merge.dev/pricing](https://www.merge.dev/pricing).
+
+**Apideck** sells the same "pre-built models" idea across 200+ SaaS connectors and ships a **single
+MCP server** with **progressive tool discovery** (4 meta-tools, ~1,300 tokens, "63x less context"
+than loading all 340 tools) plus Vault-managed OAuth.
+Source: [apideck.com/mcp-server](https://www.apideck.com/mcp-server).
+
+- **Read for Datari:** two things to steal.
+  1. The **per-connection ("linked account") pricing** model is the unified-API norm — and a known
+     pain point (cost grows with customers, not usage), which is why Nango/Pipedream pitch usage-based
+     as the modern alternative. Datari should price on **usage**, not per-tenant connection, to look
+     modern.
+  2. Apideck's **progressive tool discovery** (meta-tools instead of dumping hundreds of tools into
+     context) is directly relevant: Datari already exposes **230 tools** on one endpoint. At that
+     count, **context bloat is a real, near-term DX problem.** A discovery/meta-tool layer is a
+     concrete backlog item (see §6).
+
+### 1.7 WorkOS — enterprise-readiness primitives
+
+WorkOS sells **enterprise building blocks**: SSO (any SAML/OIDC IdP), Directory Sync (SCIM), AuthKit,
+Admin Portal, FGA (fine-grained authorization, the former Warrant). Connections-based pricing;
+positioned as the un-Auth0.
+Sources: [workos.com](https://workos.com/),
+[workos.com/docs/reference/authkit/identity](https://workos.com/docs/reference/authkit/identity),
+[warrant.dev](https://warrant.dev/) (now WorkOS FGA).
+
+- **Read for Datari:** WorkOS is not a competitor — it's a **potential dependency**. If Datari pursues
+  multi-tenant enterprise (per-org SSO, SCIM-provisioned access to tools), buying WorkOS beats
+  building. The "build vs buy enterprise auth" math (Composio's $200K–$400K Year-1 framing) applies to
+  Datari too. Treat enterprise auth as buy-not-build.
+
+### 1.8 Stainless & Mintlify — developer experience
+
+**Stainless** generates **type-safe SDKs** (TypeScript, Python, Go, Kotlin) from OpenAPI and can
+decorate the spec with code samples (e.g., the `openapi.code_samples: 'mintlify'` integration).
+**Mintlify** is the docs platform this very repo is built on (`mintlify ^4.0.0`,
+`docs.json` schema, `mint broken-links`).
+Sources: [mintlify.com/docs/integrations/sdks/stainless](https://www.mintlify.com/docs/integrations/sdks/stainless),
+[mintlify.com](https://mintlify.com/).
+
+- **Read for Datari:** these define the **DX bar**. Datari already uses Mintlify (good). Since Datari
+  is OpenAPI-native end-to-end, **auto-generated SDKs/code-samples per tool** are low-friction wins
+  that make the gateway feel first-class. This is a credibility lever, not a moat.
+
+### 1.9 Firecrawl & Tavily — agent web-data tools
+
+**Tavily** is search-first (ranked, chunked, cited excerpts for RAG; 1k free credits/mo; PAYG
+$0.008/credit; ~$30/mo entry). **Firecrawl** is extraction-first (1 credit/page; $16/mo entry;
+$83/mo for 100k; browser automation, PDF, async batch).
+Sources: [techstackups.com/comparisons/firecrawl-vs-tavily](https://techstackups.com/comparisons/firecrawl-vs-tavily/),
+[firecrawl.dev/alternatives/firecrawl-vs-tavily](https://www.firecrawl.dev/alternatives/firecrawl-vs-tavily),
+[blog.apify.com/firecrawl-vs-tavily](https://blog.apify.com/firecrawl-vs-tavily/).
+
+- **Read for Datari:** adjacent, not overlapping — they answer "give my agent the open web," Datari
+  answers "give my agent structured Korean public data." But their **credit-metered, generous-free-
+  tier** pricing is the cleanest template for a self-serve developer funnel, and they're a useful
+  **complement** (an agent might use Tavily for discovery + Datari for authoritative structured data).
+
+### 1.10 Stripe — the archetype
+
+Stripe is the reference for the **developer-first API company**: obsessive docs, clean primitives,
+predictable pricing, and a platform play (Connect, Apps). It is not a direct competitor; it's the
+**quality bar** for API ergonomics and docs that every peer above is implicitly measured against.
+(General industry knowledge; no single citation.)
+
+- **Read for Datari:** the lesson is durability through **DX + trust**, not feature count. Datari's
+  realistic version of "the Stripe of X" is **"the trustworthy bridge to Korean public data for
+  agents"** — narrow, deep, well-documented.
+
+---
+
+## 2. Datari ICP & wedge
+
+### 2.1 ICP (who buys first)
+
+1. **Korea-focused AI app/agent builders** who need authoritative public data (weather, real-estate,
+   transit, welfare, environment) and do **not** want to fight 공공데이터포털 auth, grid-coordinate
+   conversion, XML quirks, and inconsistent error codes. This is the sharpest ICP — it's exactly the
+   adapter work Datari already did (`concepts/architecture.mdx`).
+2. **Vibe-coders / indie devs** wiring Claude/Cursor/ChatGPT to Korean data who want a single API key
+   and a hosted endpoint instead of running local MCP servers per source.
+3. **(Later, BYOAPI-dependent) Korean SaaS teams** that have an internal OpenAPI service and want it
+   agent-callable without building/operating an MCP server — once BYOAPI is GA.
+
+### 2.2 Wedge
+
+> **The Korean public-data adapter is the wedge. The OpenAPI→MCP gateway is the platform.**
+
+The defensible, hard-to-copy asset is **230 curated, error-mapped, coordinate-normalized public-data
+tools** — work that is unglamorous, locale-specific, and exactly what global players (Composio,
+Pipedream) will never prioritize. Land on that. Expand into generic BYOAPI hosting once the wedge has
+pulled in users who then say "now also register *my* API."
+
+---
+
+## 3. Why Datari vs the alternatives a buyer already has
+
+A skeptical buyer has three "do nothing / do it cheaper" options. Datari must beat each.
+
+### 3.1 vs. direct public-data integration (the "just call data.go.kr myself" option)
+
+- **Their reality:** per-API `ServiceKey` handling, lat/long→grid conversion, XML→JSON, and
+  idiosyncratic error codes — repeated for every one of N data sources, then re-done as MCP tools.
+- **Datari's edge:** that adapter is **already built and centralized** (`concepts/architecture.mdx`),
+  and exposed as ready MCP tools. The honest caveat: for a team integrating **one** source, DIY may
+  win; Datari's value compounds with **breadth** (many sources) and **agent delivery** (MCP, not just
+  REST).
+
+### 3.2 vs. h6s-style local wrappers
+
+- **Their reality:** `npx`-launched local MCP server, generic fetch + schema-discovery tools, per-
+  machine setup, narrower data domain (finance). Source: [h6s.ai/docs/mcp](https://h6s.ai/docs/mcp).
+- **Datari's edge:** **hosted** (no local process), **central management** (team/remote), **concrete
+  per-operation tools** (better for tool-selection by models), and a **broader public-data catalog**.
+  Honest caveat: local-first has real advantages (data never leaves the machine, no vendor in the
+  path); Datari must answer the data-residency/trust question, not hand-wave it.
+
+### 3.3 vs. ad-hoc MCP (rolling your own MCP server)
+
+- **Their reality:** the MCP routing layer is genuinely easy to build (Composio: ~2–4 weeks for the
+  proxy). The cost is the **long tail** — auth injection, error normalization, audit, secret storage,
+  per-source maintenance — multiplied by every source and forever.
+  Source: [Composio build-vs-buy](https://composio.dev/content/building-vs-buying-an-enterprise-mcp-gateway).
+- **Datari's edge:** "register, don't deploy" (BYOAPI) + a maintained public-data catalog means the
+  buyer **never owns the maintenance treadmill** for covered sources. Honest caveat: this argument is
+  strongest *once BYOAPI is GA and the catalog is broad and current*. Until then it's a roadmap claim,
+  not a shipped advantage.
+
+---
+
+## 4. Business model — 100 / 1k / 10k / 100k MAU
+
+<Note>
+  This is an **illustrative** model to pressure-test pricing intuition, **not** a forecast and **not**
+  evidence of traction. All numbers are assumptions, labeled as such. Real numbers require live usage
+  telemetry Datari does not yet expose publicly (the `/registry/servers` endpoint returns 404 without
+  auth, so external validation isn't possible here).
+</Note>
+
+### 4.1 Pricing-primitive decision
+
+The peer evidence is consistent: **usage-based metering wins the modern developer**, and the
+prevailing primitives are **tool calls (credits)** + optionally **external users**.
+
+- Composio: tool-call meter ([premium-tools](https://docs.composio.dev/toolkits/premium-tools)).
+- Pipedream: credits (≈30s compute) **+ external users** ([pricing](https://pipedream.com/docs/pricing)).
+- Nango: usage-based from $50/mo ([pricing](https://nango.dev/pricing)).
+- Tavily/Firecrawl: credit buckets + generous free tier.
+- Merge/Apideck: per-connection — explicitly the **legacy** model to avoid copying.
+
+**Recommended Datari primitive:** a **free discovery / metered execution** model — `tools/list`,
+schema inspection, and registration are free (mirroring Pipedream's free management ops); **`tools/
+call` is the metered unit** (a "data call"), with a generous monthly free allotment and per-seat
+context only at the team tier.
+
+### 4.2 Assumptions (all explicit, all adjustable)
+
+| Assumption | Value | Basis |
+| --- | --- | --- |
+| MAU → paying-account conversion | 3% (free-heavy, self-serve) | Conservative dev-tool funnel; Composio/Tavily run large free tiers |
+| Avg calls / active user / mo | 1,500 | Agents are bursty; assume a few hundred sessions × a few calls |
+| Free allotment / account / mo | 1,000 calls | Matches Tavily's recurring 1k free pattern |
+| Blended price / 1k billable calls | $0.25 | Anchored to Composio $0.249–$0.299/1k overage |
+| Team seat (context, audit, multi-user) | $50/mo, taken by 10% of payers | Anchored to Nango entry tier |
+| Gross margin on calls | ~70% | Upstream public data is largely free; cost is compute + egress + ops |
+
+### 4.3 Illustrative outcomes
+
+| MAU | Paying accounts (3%) | Billable calls/mo (after free) | Call revenue/mo | Seat revenue/mo | **Total MRR (illustrative)** |
+| --- | --- | --- | --- | --- | --- |
+| 100 | 3 | ~1.5k | ~$0 (within free) | ~$15 | **~$15–50** (effectively pre-revenue) |
+| 1,000 | 30 | ~15k | ~$4 | ~$150 | **~$150–250** |
+| 10,000 | 300 | ~150k | ~$38 | ~$1,500 | **~$1.5–2k** |
+| 100,000 | 3,000 | ~1.5M | ~$375 | ~$15,000 | **~$15–20k** |
+
+**What this model actually says (read this, not the table):**
+
+- At **100–1k MAU**, revenue is **noise**. This stage is about **proof of need and retention**, not
+  monetization. Don't optimize pricing here.
+- The **per-call meter alone is weak** at these volumes (public data is cheap, so price/call is low).
+  **Seat/team revenue dominates** in the model — which means the real business may be **"team gateway
+  with governance,"** not "per-call data tax." That mirrors Composio's enterprise-gateway pivot.
+- To make per-call meaningful, Datari needs either **(a)** much higher calls/user (deep agent usage),
+  or **(b)** **premium tiers of data** (latency SLAs, historical/bulk, write actions) — i.e., a reason
+  a call is worth more than $0.00025.
+- **Honest conclusion:** the public-data-only wedge is a **great acquisition/retention engine and a
+  mediocre standalone revenue engine.** Monetization likely rides on **BYOAPI + team governance**,
+  which makes shipping BYOAPI to GA the gating business risk (see §5).
+
+---
+
+## 5. Risks
+
+| # | Risk | Why it matters | Severity |
+| --- | --- | --- | --- |
+| R1 | **BYOAPI is "coming soon," not GA** (`concepts/byoapi.mdx`) | The monetization and "vs ad-hoc MCP" arguments depend on it | High |
+| R2 | **Public-data-only revenue is thin** (§4.3) | Per-call price is low; standalone unit economics weak | High |
+| R3 | **230 tools on one endpoint = context bloat** | Apideck/Composio both engineer around this; models degrade with huge tool lists | Medium-High |
+| R4 | **Single-tenant-ish auth** (one key → all tools, `concepts/mcp.mdx`) | Blocks multi-user/agent-on-behalf-of-user and enterprise sales (cf. Arcade) | Medium-High |
+| R5 | **Upstream dependency on 공공데이터포털** | If a source changes schema/limits, Datari's tool breaks; maintenance treadmill | Medium |
+| R6 | **Data residency / trust for hosted model** | h6s's local-first pitch directly attacks "why send data through a vendor?" | Medium |
+| R7 | **Global incumbents could add Korean presets** | Composio/Pipedream breadth could absorb the wedge if it proves valuable | Medium |
+| R8 | **Read-only, tools-only MCP** (`resources/*`,`prompts/*` unsupported) | Limits use cases vs full-MCP runtimes; may matter as MCP clients mature | Low-Medium |
+
+---
+
+## 6. Proof gates (what must be true to advance)
+
+Each gate is a falsifiable checkpoint. Do not invest past a gate until it's green.
+
+| Gate | Question it answers | Pass criterion (target — set real numbers from telemetry) |
+| --- | --- | --- |
+| G1 — Need | Do agent builders actually call public-data tools repeatedly? | A cohort of real users with **week-4 retention** on `tools/call`, not one-shot trials |
+| G2 — Adapter moat | Is the adapter materially better than DIY? | Measured time-to-first-successful-call **< 10 min** vs DIY hours; low tool-call error rate |
+| G3 — Tool selection at scale | Can a model pick the right tool among 230? | Tool-selection accuracy holds after adding a discovery/meta-tool layer (cf. Apideck) |
+| G4 — BYOAPI GA | Can a stranger register their OpenAPI and call it? | End-to-end self-serve registration → live tool, with auth injection, **no human in loop** |
+| G5 — Willingness to pay | Will anyone pay past the free tier? | ≥1 account voluntarily crosses into metered/seat billing and renews |
+| G6 — Trust | Will a team accept the hosted data path? | A documented data-handling/residency story that passes one real security review |
+
+---
+
+## 7. Prioritized backlog
+
+Scored on **Business impact** (1–5, ↑ better), **Dev difficulty** (1–5, ↑ harder), and the **proof
+gate** each item unlocks. Sorted by impact-to-difficulty leverage.
+
+| Pri | Item | Impact | Difficulty | Verification gate |
+| --- | --- | --- | --- | --- |
+| P0 | **Progressive tool discovery / meta-tools** (search/list/inspect/execute) so models aren't handed 230 tools at once | 5 | 2 | G3: tool-selection accuracy stable; context tokens per session drop sharply |
+| P0 | **Usage telemetry + free/metered boundary** (free `tools/list`+register, metered `tools/call`) | 5 | 2 | G1/G5: per-user retention and first paid conversion observable |
+| P1 | **BYOAPI to GA** (the "coming soon" → shipped) | 5 | 4 | G4: stranger self-serve registration → live callable tool, no human |
+| P1 | **Auto-generated SDKs + code samples** (Stainless-style, off existing OpenAPI) | 3 | 2 | DX: copy-paste call works in TS/Python from docs playground |
+| P1 | **Data-handling / residency doc + ZDR option** | 4 | 2 | G6: passes one external security review; answers h6s local-first objection |
+| P2 | **Per-user / per-end-user credential model** (move beyond one-key-all-tools; study Arcade) | 4 | 5 | G4+: an agent acts on behalf of a specific end user with isolated creds |
+| P2 | **Premium data tiers** (historical/bulk, latency SLA) to lift price/call | 4 | 3 | G5: a call in the premium tier sustains a meaningfully higher price |
+| P2 | **Team tier** (multi-seat, scoped endpoints, audit export; consider WorkOS for SSO/SCIM) | 4 | 3 | G5: a team buys seats; SSO/SCIM via WorkOS, not built in-house |
+| P3 | **Upstream-change monitoring** (detect 공공데이터 schema/limit drift before users do) | 3 | 3 | R5: drift caught proactively; tool-break rate trends down |
+| P3 | **Tavily/Firecrawl complement recipe** (docs pattern: discover with web search, ground with Datari) | 2 | 1 | DX: a worked example agent ships in docs |
+
+**Backlog reading:** the two **P0s are cheap and unlock the core proof gates** — do them first. They
+make the *existing* 230-tool catalog usable at agent scale and turn on the measurement needed to learn
+anything about willingness-to-pay. **BYOAPI GA (P1)** is the highest-impact, highest-difficulty item
+and the real business unlock; everything in §4's monetization story is gated on it.
+
+---
+
+## 8. One-paragraph synthesis
+
+Datari's honest position: a **strong, locale-specific wedge** (a real Korean public-data adapter
+exposed as 230 MCP tools) bolted to a **half-built generic platform** (BYOAPI, still "coming soon").
+The global peers prove the model — usage-metered MCP gateways (Composio, Pipedream, Arcade) and
+code-first unified infra (Nango) are commercially viable, while pre-built-schema/per-connection
+pricing (Merge, Apideck) is the pattern to avoid copying. The nearest comparable, **h6s.ai**, validates
+the Korea-data-via-MCP thesis but takes the local-npx path Datari should out-host, not imitate.
+Datari's per-call public-data revenue is structurally thin, so the durable business almost certainly
+lives in **BYOAPI + team governance**, not a data tax — which makes **(1)** fixing 230-tool context
+bloat with progressive discovery and **(2)** shipping BYOAPI to GA the two moves that matter, in that
+order.
