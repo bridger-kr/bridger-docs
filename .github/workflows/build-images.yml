@@ -1,7 +1,7 @@
 name: build-images
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
@@ -19,6 +19,9 @@ env:
   NCR_REGISTRY: 9dbc4756-kr1-registry.container.nhncloud.com
   NCR_IMAGE_PREFIX: datari-prod
   IMAGE_NAME: datari-docs
+  DEPLOY_ENV: ${{ github.ref == 'refs/heads/dev' && 'dev' || 'production' }}
+  IMAGE_TAG: ${{ github.ref == 'refs/heads/dev' && format('dev-{0}', github.sha) || format('sha-{0}', github.sha) }}
+  IMAGE_LATEST_TAG: ${{ github.ref == 'refs/heads/dev' && 'dev-latest' || 'latest' }}
 
 jobs:
   build-and-bump:
@@ -80,8 +83,8 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
-            ${{ env.NCR_REGISTRY }}/${{ env.NCR_IMAGE_PREFIX }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}
-            ${{ env.NCR_REGISTRY }}/${{ env.NCR_IMAGE_PREFIX }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.NCR_REGISTRY }}/${{ env.NCR_IMAGE_PREFIX }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            ${{ env.NCR_REGISTRY }}/${{ env.NCR_IMAGE_PREFIX }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_LATEST_TAG }}
           provenance: false
           build-args: |
             BUILD_REVISION=${{ github.sha }}
@@ -105,9 +108,32 @@ jobs:
         working-directory: gitops
         run: |
           set -euo pipefail
-          target="k8s/apps/docs/deployment.yaml"
-          new_image="${NCR_REGISTRY}/${NCR_IMAGE_PREFIX}/${IMAGE_NAME}@${DIGEST}"
-          sed -i -E "s|${NCR_REGISTRY}/${NCR_IMAGE_PREFIX}/${IMAGE_NAME}@sha256:[a-f0-9]+|${new_image}|g" "${target}"
+          if [ "${DEPLOY_ENV}" = "dev" ]; then
+            target="k8s/apps-dev/docs/kustomization.yaml"
+            python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          digest = os.environ["DIGEST"]
+          if not re.fullmatch(r"sha256:[0-9a-f]{64}", digest):
+              raise SystemExit(f"invalid digest for datari-docs: {digest}")
+
+          image = f"{os.environ['NCR_REGISTRY']}/{os.environ['NCR_IMAGE_PREFIX']}/{os.environ['IMAGE_NAME']}"
+          block = "images:\n" f"- digest: {digest}\n" f"  name: {image}\n" f"  newName: {image}\n"
+          target = Path("k8s/apps-dev/docs/kustomization.yaml")
+          text = target.read_text()
+          if re.search(r"(?ms)^images:\n(?:- .*\n(?:  .*\n)*)+", text):
+              text = re.sub(r"(?ms)^images:\n(?:- .*\n(?:  .*\n)*)+", block, text)
+          else:
+              text = text.rstrip() + "\n\n" + block
+          target.write_text(text)
+          PY
+          else
+            target="k8s/apps/docs/deployment.yaml"
+            new_image="${NCR_REGISTRY}/${NCR_IMAGE_PREFIX}/${IMAGE_NAME}@${DIGEST}"
+            sed -i -E "s|${NCR_REGISTRY}/${NCR_IMAGE_PREFIX}/${IMAGE_NAME}@sha256:[a-f0-9]+|${new_image}|g" "${target}"
+          fi
           echo "--- diff ---"
           git --no-pager diff "${target}"
           if git diff --quiet "${target}"; then
@@ -122,14 +148,15 @@ jobs:
         with:
           path: gitops
           token: ${{ secrets.GITOPS_TOKEN }}
-          branch: bump-digest/datari-docs
+          branch: bump-digest/datari-docs-${{ env.DEPLOY_ENV }}
           base: main
           commit-message: 'chore: update image digests from datari-docs'
-          title: 'chore: bump datari-docs to ${{ steps.push.outputs.digest }}'
+          title: 'chore: bump ${{ env.DEPLOY_ENV }} datari-docs to ${{ steps.push.outputs.digest }}'
           body: |
             Automated digest bump from `datari-docs@${{ github.sha }}`.
 
             - image: `datari-docs`
+            - environment: `${{ env.DEPLOY_ENV }}`
             - digest: `${{ steps.push.outputs.digest }}`
             - source commit: https://github.com/bridger-kr/bridger-docs/commit/${{ github.sha }}
           delete-branch: true
