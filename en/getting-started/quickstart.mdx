@@ -6,6 +6,19 @@ description: "Call your first MCP tool through DATA BRIDGE in under 5 minutes."
 DATA BRIDGE is used by connecting to the **hosted Gateway** (`mcp.datari.kr`) with an API key.
 You can start right away — no separate server to install or operate.
 
+## Why Bridger exists
+
+When you connect directly to public-data APIs, every provider does things a little differently.
+
+- `serviceKey` names and placement vary.
+- Some APIs return JSON, others only XML.
+- Coordinate, region-code, and pagination parameter names are inconsistent.
+- Error codes and retry rules are not standardized.
+- Audit logs and operational traces need separate handling.
+
+Bridger normalizes those differences in the Gateway so you can connect with one key,
+activate only the provider keys you need, find the tool, and call it.
+
 ## 1. Issue an API key
 
 Create an account at [admin.datari.kr](https://admin.datari.kr) and issue a key under
@@ -15,7 +28,11 @@ Create an account at [admin.datari.kr](https://admin.datari.kr) and issue a key 
 export DATA_BRIDGE_API_KEY="dk_live_..."
 ```
 
-## 2. List available tools
+## 2. Connect to the Gateway
+
+The Gateway host is `mcp.datari.kr`. Connect to that address from your MCP client or curl.
+
+## 3. List available tools
 
 Use JSON-RPC `tools/list` to retrieve every tool registered with DATA BRIDGE.
 
@@ -26,7 +43,14 @@ curl -X POST https://mcp.datari.kr/mcp \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
 
-## 3. Call your first tool
+If you prefer a flatter catalog view, `GET /registry/tools` shows the same tools in a searchable list.
+
+## 4. Activate the provider key you need
+
+For presets that require a public-data `serviceKey`, follow the [API key guide](/en/guides/api-keys)
+and register the provider key under **Settings → Provider Keys** before you call the tool.
+
+## 5. Call your first tool
 
 Run a single tool for real. The example below calls the KMA ultra-short-term forecast.
 
