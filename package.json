@@ -4,11 +4,12 @@
   "version": "0.1.0",
   "description": "DATA BRIDGE documentation site.",
   "scripts": {
-    "dev": "mint dev --port 3334",
-    "build": "mint export --output dist/export.zip",
+    "dev": "mintlify dev --port 3334",
+    "build": "mintlify export --output dist/export.zip",
     "build:content": "node scripts/build-presets.mjs && node scripts/build-api-reference.mjs",
-    "preview": "mint dev --port 3334",
-    "lint": "mint broken-links",
+    "preview": "mintlify dev --port 3334",
+    "test": "node --test scripts/*.test.mjs",
+    "lint": "mintlify broken-links",
     "presets": "node scripts/build-presets.mjs",
     "openapi": "node scripts/build-api-reference.mjs"
   },

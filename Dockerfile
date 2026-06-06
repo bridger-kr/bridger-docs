@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------------
 # Self-hosted Mintlify build:
 #   1. Run preset/api-reference generators against repo content
-#   2. Run `mint export` to produce a static-site zip (export.zip)
+#   2. Run `mintlify export` to produce a static-site zip (export.zip)
 #   3. Unzip into nginx html root and serve as a static site
 #
-# Mintlify's officially-supported self-host path is `mint export`, which
+# Mintlify's officially-supported self-host path is `mintlify export`, which
 # emits a fully static bundle (no Node runtime required at serve time).
-# We do NOT use `mint build` — that command does not exist in mintlify v4.
+# We do NOT use `mintlify build` — that command does not exist in mintlify v4.
 #
 # `npm install` (not `npm ci`) is intentional: this package is workspace-
 # isolated (root pnpm/npm workspaces exclude apps/docs to avoid pulling
@@ -22,9 +22,18 @@ RUN npm install --include=dev --no-audit --no-fund
 
 COPY . .
 
-RUN mkdir -p dist \
+ARG BUILD_REVISION=local
+ARG SENTRY_TRACES_SAMPLE_RATE=0.02
+RUN --mount=type=secret,id=sentry_dsn \
+  mkdir -p dist \
   && npm run build \
   && node scripts/extract-export.mjs dist/export.zip dist/site \
+  && SENTRY_DSN="$(cat /run/secrets/sentry_dsn 2>/dev/null || true)" \
+  SENTRY_ENVIRONMENT="production" \
+  SENTRY_RELEASE="${BUILD_REVISION}" \
+  SENTRY_SERVICE="datari-docs" \
+  SENTRY_TRACES_SAMPLE_RATE="${SENTRY_TRACES_SAMPLE_RATE}" \
+  node scripts/inject-sentry.mjs dist/site \
   && ls -la dist/site | head -20
 
 FROM mirror.gcr.io/library/nginx:1.29-alpine AS runtime
