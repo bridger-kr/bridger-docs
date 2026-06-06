@@ -6,6 +6,19 @@ description: "5분 안에 DATA BRIDGE를 통해 첫 MCP 도구를 호출합니�
 DATA BRIDGE는 **호스팅 Gateway**(`mcp.datari.kr`)에 API 키로 연결해 사용합니다.
 별도 서버를 설치하거나 운영하지 않아도 바로 시작할 수 있습니다.
 
+## 왜 Bridger를 쓰나요
+
+공공데이터 API를 직접 붙이면 제공기관마다 규칙이 조금씩 달라집니다.
+
+- `serviceKey` 이름과 전달 위치가 다릅니다.
+- 어떤 API는 JSON, 어떤 API는 XML만 줍니다.
+- 좌표, 지역코드, 페이지 파라미터 이름이 제각각입니다.
+- 에러 코드와 재시도 기준도 서로 다릅니다.
+- 감사 로그와 운영 추적 포맷을 직접 맞춰야 합니다.
+
+Bridger는 이런 차이를 Gateway에서 정리해서, 사용자는 공통 키로 연결하고
+필요한 제공기관 키만 활성화한 뒤 도구를 찾고 바로 호출하면 됩니다.
+
 ## 1. API 키 발급
 
 [admin.datari.kr](https://admin.datari.kr)에서 계정을 만들고 **Settings → API Keys**에서
@@ -15,7 +28,11 @@ DATA BRIDGE는 **호스팅 Gateway**(`mcp.datari.kr`)에 API 키로 연결해 �
 export DATA_BRIDGE_API_KEY="dk_live_..."
 ```
 
-## 2. 사용 가능한 도구 확인
+## 2. Gateway에 연결
+
+Gateway 호스트는 `mcp.datari.kr`입니다. MCP 클라이언트나 curl로 이 주소에 붙습니다.
+
+## 3. 사용 가능한 도구 확인
 
 JSON-RPC `tools/list`로 DATA BRIDGE에 등록된 모든 도구 목록을 조회합니다.
 
@@ -26,7 +43,15 @@ curl -X POST https://mcp.datari.kr/mcp \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
 
-## 3. 첫 도구 호출
+도구 카탈로그가 더 편하면 `GET /registry/tools`도 볼 수 있습니다. 등록된 도구가 평탄하게
+정리되어 있어서, 어떤 프리셋이 있는지 빠르게 훑을 수 있습니다.
+
+## 4. 필요한 제공기관 키 활성화
+
+공공데이터포털 `serviceKey`가 필요한 프리셋은 [API 키 가이드](/guides/api-keys)를 따라
+**Settings → Provider Keys**에 인증키를 등록한 뒤 사용합니다.
+
+## 5. 첫 도구 호출
 
 도구 한 개를 실제로 실행해 봅니다. 아래는 기상청 초단기예보 호출 예시입니다.
 
