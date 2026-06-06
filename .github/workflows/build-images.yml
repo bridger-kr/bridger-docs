@@ -34,24 +34,31 @@ jobs:
           doppler --version
 
       - id: doppler
-        name: Fetch NCR credentials via Doppler CLI
+        name: Fetch NCR credentials and build config via Doppler CLI
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_KEY }}
         run: |
           set -euo pipefail
           user=$(doppler secrets get NHN_USER_ACCESS_KEY --plain)
           pass=$(doppler secrets get NHN_SECRET_ACCESS_KEY --plain)
+          sentry_dsn=$(doppler secrets get SENTRY_DSN --plain 2>/dev/null || true)
           if [ -z "$user" ] || [ -z "$pass" ]; then
             echo "::error::NHN_USER_ACCESS_KEY or NHN_SECRET_ACCESS_KEY missing in Doppler"
             exit 1
           fi
           echo "::add-mask::$user"
           echo "::add-mask::$pass"
+          if [ -n "$sentry_dsn" ]; then
+            echo "::add-mask::$sentry_dsn"
+          else
+            echo "::warning::SENTRY_DSN is missing; the production docs image will build without Sentry browser reporting."
+          fi
           {
             echo "NCR_USERNAME=$user"
             echo "NCR_PASSWORD=$pass"
+            echo "SENTRY_BUILD_DSN=$sentry_dsn"
           } >> "$GITHUB_ENV"
-          echo "Doppler fetch ok (user_len=${#user} pass_len=${#pass})"
+          echo "Doppler fetch ok (user_len=${#user} pass_len=${#pass} sentry_dsn_len=${#sentry_dsn})"
 
       - uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd
 
@@ -71,6 +78,11 @@ jobs:
             ${{ env.NCR_REGISTRY }}/${{ env.NCR_IMAGE_PREFIX }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}
             ${{ env.NCR_REGISTRY }}/${{ env.NCR_IMAGE_PREFIX }}/${{ env.IMAGE_NAME }}:latest
           provenance: false
+          build-args: |
+            BUILD_REVISION=${{ github.sha }}
+            SENTRY_TRACES_SAMPLE_RATE=0.02
+          secret-envs: |
+            sentry_dsn=SENTRY_BUILD_DSN
           # cache disabled: self-hosted runner has local Docker layer cache;
           # type=gha requires GitHub Actions cache service which is unreliable
           # from the NHN Cloud KR1 runner network.
