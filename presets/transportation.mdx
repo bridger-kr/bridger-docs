@@ -1,9 +1,9 @@
 ---
 title: "교통"
-description: "버스, 지하철, 항공, 철도, 주차, 도로 교통 데이터. 총 21개 프리셋 · 21개 도구."
+description: "버스, 지하철, 항공, 철도, 주차, 도로 교통 데이터. 총 23개 프리셋 · 26개 도구."
 ---
 
-이 카테고리에는 **21개의 프리셋**이 등록되어 있으며, 합산 **21개의 MCP 도구**가 노출됩니다.
+이 카테고리에는 **23개의 프리셋**이 등록되어 있으며, 합산 **26개의 MCP 도구**가 노출됩니다.
 
 <Tip>
   필요한 도구 이름은 `tools/list` 응답에서 확인한 뒤 `tools/call`로 바로 호출할 수 있습니다.
@@ -13,27 +13,29 @@ description: "버스, 지하철, 항공, 철도, 주차, 도로 교통 데이터
 
 | 이름 | 제공기관 | 도구 수 | data.go.kr |
 | --- | --- | --- | --- |
-| 전국 자전거대여소 정보 | 행정안전부 | 1 | [15017319](https://www.data.go.kr/data/15017319/openapi.do) |
-| 버스 도착정보 조회 | 국토교통부·지자체 | 1 | [15070493](https://www.data.go.kr/data/15070493/openapi.do) |
-| 버스 위치정보 조회 | 국토교통부·지자체 | 1 | [15070527](https://www.data.go.kr/data/15070527/openapi.do) |
-| 버스 노선정보 조회 | 국토교통부·지자체 | 1 | [15070510](https://www.data.go.kr/data/15070510/openapi.do) |
-| 화물차량 위치 조회 | 국토교통부 | 1 | [15071044](https://www.data.go.kr/data/15071044/openapi.do) |
-| 전기차 충전소 조회 | 국토교통부·지자체 | 1 | [15070680](https://www.data.go.kr/data/15070680/openapi.do) |
-| 고속도로 CCTV 정보 조회 | 국토교통부·지자체 | 1 | [15070629](https://www.data.go.kr/data/15070629/openapi.do) |
-| 고속도로 교통량 조회 | 국토교통부·지자체 | 1 | [15070612](https://www.data.go.kr/data/15070612/openapi.do) |
-| 항공기 도착정보 조회 | 국토교통부·지자체 | 1 | [15070697](https://www.data.go.kr/data/15070697/openapi.do) |
-| 항공기 출발정보 조회 | 국토교통부·지자체 | 1 | [15070714](https://www.data.go.kr/data/15070714/openapi.do) |
-| 항공 운항 정보 | 인천국제공항공사/한국공항공사 | 1 | — |
-| 공영주차장 정보 조회 | 국토교통부·지자체 | 1 | [15070663](https://www.data.go.kr/data/15070663/openapi.do) |
-| 항만 물동량 조회 | 국토교통부·지자체 | 1 | [15070731](https://www.data.go.kr/data/15070731/openapi.do) |
-| 연안여객선 운항 조회 | 해양수산부 | 1 | [15071045](https://www.data.go.kr/data/15071045/openapi.do) |
-| 지하철 실시간 정보 조회 | 국토교통부·지자체 | 1 | [15070544](https://www.data.go.kr/data/15070544/openapi.do) |
-| 지하철 시간표 조회 | 국토교통부·지자체 | 1 | [15070561](https://www.data.go.kr/data/15070561/openapi.do) |
-| 전국 택시 업체 정보 | 행정안전부 | 1 | — |
-| 전국 택시승강장 정보 | 행정안전부 | 1 | [15139230](https://www.data.go.kr/data/15139230/openapi.do) |
-| 통행료 조회 | 국토교통부·지자체 | 1 | [15070646](https://www.data.go.kr/data/15070646/openapi.do) |
-| 열차 운행시간표 조회 | 국토교통부·지자체 | 1 | [15070578](https://www.data.go.kr/data/15070578/openapi.do) |
-| 열차 좌석현황 조회 | 국토교통부·지자체 | 1 | [15070595](https://www.data.go.kr/data/15070595/openapi.do) |
+| 행정안전부 한국지역정보개발원_(전국 통합데이터) 전국 공영자전거 실시간 정보 | 행정안전부 한국지역정보개발원 | 1 | [15126639](https://www.data.go.kr/data/15126639/openapi.do) |
+| 경기도_버스도착정보 조회 | 경기도 | 1 | [15080346](https://www.data.go.kr/data/15080346/openapi.do) |
+| 경기도_버스위치정보 조회 | 경기도 | 1 | [15080648](https://www.data.go.kr/data/15080648/openapi.do) |
+| 국토교통부_(TAGO)_버스노선정보 | 국토교통부 | 4 | [15098529](https://www.data.go.kr/data/15098529/openapi.do) |
+| 경기도 수원시_전기차 충전소 조회 서비스 | 경기도 수원시 | 1 | [15144026](https://www.data.go.kr/data/15144026/openapi.do) |
+| 국토교통부_CCTV 화상자료 | 국토교통부 | 1 | [15040466](https://www.data.go.kr/data/15040466/openapi.do) |
+| 한국도로공사_실시간 영업소간 교통량 조회 서비스 | 한국도로공사 | 1 | [15076870](https://www.data.go.kr/data/15076870/openapi.do) |
+| 한국공항공사_실시간 항공운항 현황 정보 상세 조회 서비스 | 한국공항공사 | 1 | [15113771](https://www.data.go.kr/data/15113771/openapi.do) |
+| 한국공항공사_실시간 항공운항 현황 정보 상세 조회 서비스 | 한국공항공사 | 1 | [15113771](https://www.data.go.kr/data/15113771/openapi.do) |
+| 국토교통부_(TAGO)_국내항공운항정보 | 국토교통부 | 1 | [15098526](https://www.data.go.kr/data/15098526/openapi.do) |
+| 전주 버스 도착정보 | 전주시청 | 1 | — |
+| 전주 가까운 버스정류장 조회 | 전주시청 | 1 | — |
+| 전주 버스노선 기반정보 | 전주시청 | 1 | — |
+| 부산광역시_공영주차장 정보 조회 | 부산광역시 | 1 | [15004683](https://www.data.go.kr/data/15004683/openapi.do) |
+| 인천항만공사_인천항 물동량 처리 실적 조회 서비스 | 인천항만공사 | 1 | [15157698](https://www.data.go.kr/data/15157698/openapi.do) |
+| 서울 버스 도착정보 | 서울특별시 | 1 | [15000314](https://www.data.go.kr/data/15000314/openapi.do) |
+| 서울 버스 위치정보 | 서울특별시 | 1 | [15000332](https://www.data.go.kr/data/15000332/openapi.do) |
+| 한국해양교통안전공단_운항 스케줄 정보 | 한국해양교통안전공단 | 1 | [15142302](https://www.data.go.kr/data/15142302/openapi.do) |
+| 서울특별시_지하철 실시간 도착정보 | 서울특별시 | 1 | [15058052](https://www.data.go.kr/data/15058052/openapi.do) |
+| 서울교통공사_열차시간표 | 서울교통공사 | 1 | [15143847](https://www.data.go.kr/data/15143847/openapi.do) |
+| 경기도 일반택시업체 현황 | 경기도 | 1 | [15057165](https://www.data.go.kr/data/15057165/openapi.do) |
+| 전국택시승강장표준데이터 | 지방자치단체 | 1 | [15139230](https://www.data.go.kr/data/15139230/openapi.do) |
+| 한국철도공사_열차운행정보 | 한국철도공사 | 1 | [15125762](https://www.data.go.kr/data/15125762/openapi.do) |
 
 ## 사용 예시
 
