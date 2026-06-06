@@ -89,7 +89,7 @@ jobs:
 
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
-          repository: happycastle114/datari-gitops
+          repository: bridger-kr/bridger-gitops
           token: ${{ secrets.GITOPS_TOKEN }}
           path: gitops
           ref: main
@@ -126,7 +126,7 @@ jobs:
 
             - image: `datari-docs`
             - digest: `${{ steps.push.outputs.digest }}`
-            - source commit: https://github.com/happycastle114/datari-docs/commit/${{ github.sha }}
+            - source commit: https://github.com/bridger-kr/bridger-docs/commit/${{ github.sha }}
           delete-branch: true
 
       - name: Merge digest-bump PR
@@ -135,8 +135,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITOPS_TOKEN }}
           script: |
-            const owner = 'happycastle114'
-            const repo = 'datari-gitops'
+            const owner = 'bridger-kr'
+            const repo = 'bridger-gitops'
             const pull_number = Number('${{ steps.cpr.outputs.pull-request-number }}')
 
             // Try direct squash merge first. If GitHub rejects (for example,
