@@ -1,9 +1,9 @@
 ---
 title: "BYOAPI — register your own API"
-description: "A multi-tenant, ID-based pipeline that registers any API with an OpenAPI spec as a DATA BRIDGE tool."
+description: "A multi-tenant, ID-based pipeline that registers any API with an OpenAPI spec as a Bridger tool."
 ---
 
-DATA BRIDGE's **BYOAPI (Bring Your Own API)** lets you register any API as an MCP tool on the DATA BRIDGE
+Bridger's **BYOAPI (Bring Your Own API)** lets you register any API as an MCP tool on the Bridger
 Gateway **without building or deploying a separate container** — as long as you have an OpenAPI spec.
 
 <Note>
@@ -17,13 +17,13 @@ Gateway **without building or deploying a separate container** — as long as yo
   <Card title="Traditional approach" icon="container-storage">
     Build, deploy, and operate one container per API. Both cost and management explode.
   </Card>
-  <Card title="DATA BRIDGE BYOAPI" icon="bolt">
+  <Card title="Bridger BYOAPI" icon="bolt">
     Register only the tool definition in the DB. A single Gateway routes by ID → done in seconds.
   </Card>
 </CardGroup>
 
 ```text
-A single DATA BRIDGE Gateway (mcp.datari.kr)
+A single Bridger Gateway (mcp.datari.kr)
   ├─ Official preset   tool_id: @datari/weather-ultra-shortcast   → tool: getultrashortcast
   ├─ Official preset   tool_id: @datari/realestate-apt-trade      → tool: getapttrade
   ├─ BYOAPI            tool_id: @user123/my-petstore              → tool: listpets, getpetbyid
@@ -33,7 +33,7 @@ A single DATA BRIDGE Gateway (mcp.datari.kr)
 
 ## Tool names and identifier scheme
 
-DATA BRIDGE has two registration paths with different identifier schemes.
+Bridger has two registration paths with different identifier schemes.
 
 **1. Official presets** — loaded directly by the Gateway from OpenAPI YAML in `vendor/spec`.
 

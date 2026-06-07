@@ -1,6 +1,6 @@
 ---
 title: "What is the Model Context Protocol (MCP)?"
-description: "A look at Anthropic's MCP standard and how DATA BRIDGE fits into it."
+description: "A look at Anthropic's MCP standard and how Bridger fits into it."
 ---
 
 The **Model Context Protocol (MCP)** is an open protocol released by Anthropic for AI models to access
@@ -26,9 +26,9 @@ HTTP + SSE transports.
 
 ## Standard methods
 
-The MCP methods the DATA BRIDGE Gateway currently handles are as follows.
+The MCP methods the Bridger Gateway currently handles are as follows.
 
-| Method | Purpose | DATA BRIDGE |
+| Method | Purpose | Bridger |
 | --- | --- | --- |
 | `initialize` | Handshake — exchange protocol version and capabilities | Supported |
 | `notifications/initialized` | Initialization-complete notification | Supported |
@@ -38,13 +38,13 @@ The MCP methods the DATA BRIDGE Gateway currently handles are as follows.
 | `prompts/list`, `prompts/get` | Predefined prompt templates | Not supported (tools-focused) |
 
 <Note>
-  DATA BRIDGE is a **tools-focused** gateway. `resources/*` and `prompts/*` are standard MCP methods
+  Bridger is a **tools-focused** gateway. `resources/*` and `prompts/*` are standard MCP methods
   but are not handled by the Gateway today; any other method responds with `Method not found`.
 </Note>
 
-## DATA BRIDGE and MCP
+## Bridger and MCP
 
-DATA BRIDGE is an **MCP Server hosting platform**. Without writing, deploying, or operating your own
+Bridger is an **MCP Server hosting platform**. Without writing, deploying, or operating your own
 MCP server, any OpenAPI spec is instantly converted into MCP tools.
 
 ```text
@@ -52,7 +52,7 @@ OpenAPI spec (preset YAML or BYOAPI registration)
         │
         ▼
   ┌─────────────────────────────┐
-  │  DATA BRIDGE Gateway              │
+  │  Bridger Gateway              │
   │  (mcp.datari.kr/mcp)        │
   ├─────────────────────────────┤
   │  • tools/list                │

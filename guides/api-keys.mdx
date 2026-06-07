@@ -1,20 +1,20 @@
 ---
 title: "API 키 발급"
-description: "DATA BRIDGE API 키와 data.go.kr 인증키를 설정하는 흐름."
+description: "Bridger API 키와 data.go.kr 인증키를 설정하는 흐름."
 ---
 
-DATA BRIDGE를 사용하려면 두 가지 키가 필요합니다.
+Bridger를 사용하려면 두 가지 키가 필요합니다.
 
 <CardGroup cols={2}>
-  <Card title="DATA BRIDGE API Key" icon="key" href="https://admin.datari.kr/settings">
-    DATA BRIDGE Gateway 호출용. 어드민 대시보드에서 발급합니다.
+  <Card title="Bridger API Key" icon="key" href="https://admin.datari.kr/settings">
+    Bridger Gateway 호출용. 어드민 대시보드에서 발급합니다.
   </Card>
   <Card title="data.go.kr 인증키" icon="building-columns">
     공공데이터를 사용하려면 data.go.kr에서 API 활용신청이 필요합니다 (즉시 승인되는 경우가 많음).
   </Card>
 </CardGroup>
 
-## DATA BRIDGE API Key 발급
+## Bridger API Key 발급
 
 <Steps>
   <Step title="어드민 대시보드 접속">
@@ -37,7 +37,7 @@ DATA BRIDGE를 사용하려면 두 가지 키가 필요합니다.
 
 ## data.go.kr 인증키 신청
 
-DATA BRIDGE가 호출하는 공공데이터 API의 상당수는 [공공데이터포털(data.go.kr)](https://www.data.go.kr)
+Bridger가 호출하는 공공데이터 API의 상당수는 [공공데이터포털(data.go.kr)](https://www.data.go.kr)
 인증키가 필요합니다. 한 번 발급받은 인증키는 같은 제공기관의 여러 API에 재사용할 수 있는
 경우가 많습니다.
 
@@ -60,13 +60,13 @@ DATA BRIDGE가 호출하는 공공데이터 API의 상당수는 [공공데이터
     **일반 인증키 (Decoding)** 를 복사하세요.
 
     <Warning>
-      반드시 **Decoding** 키를 사용하세요. Encoding 키(URL 인코딩된 형태)는 DATA BRIDGE에서 사용하지
+      반드시 **Decoding** 키를 사용하세요. Encoding 키(URL 인코딩된 형태)는 Bridger에서 사용하지
       않습니다.
     </Warning>
   </Step>
 
-  <Step title="DATA BRIDGE에 키 입력">
-    DATA BRIDGE 어드민 대시보드의 **Settings → Provider Keys**에 복사한 인증키를 입력하면
+  <Step title="Bridger에 키 입력">
+    Bridger 어드민 대시보드의 **Settings → Provider Keys**에 복사한 인증키를 입력하면
     바로 사용할 수 있습니다. 하나의 인증키로 같은 제공기관의 여러 API를 사용할 수 있는 경우가
     많습니다.
   </Step>
@@ -80,7 +80,7 @@ DATA BRIDGE가 호출하는 공공데이터 API의 상당수는 [공공데이터
   </Accordion>
   <Accordion title="인증키가 여러 개인데 어떤 걸 써야 하나요?">
     **일반 인증키 (Decoding)** 를 사용하세요. Encoding 키는 URL 인코딩된 형태로,
-    DATA BRIDGE에서는 Decoding 키만 사용합니다.
+    Bridger에서는 Decoding 키만 사용합니다.
   </Accordion>
   <Accordion title="여기 없는 API도 사용할 수 있나요?">
     OpenAPI 스펙이 있는 어떤 API든 [BYOAPI](/concepts/byoapi)로 직접 등록할 수 있습니다. (추후 제공 예정)

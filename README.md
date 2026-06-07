@@ -1,6 +1,6 @@
-# DATA BRIDGE docs
+# Bridger docs
 
-Mintlify documentation for DATA BRIDGE, published at `docs.datari.kr`.
+Mintlify documentation for Bridger, published at `docs.datari.kr`.
 
 > Private internal documentation repository. Served via Mintlify hosting.
 
@@ -22,4 +22,4 @@ npm run dev
 
 ## License
 
-Private. © DATA BRIDGE.
+Private. © Bridger.

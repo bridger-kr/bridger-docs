@@ -1,9 +1,9 @@
 ---
 title: "Auth · Secrets · Audit logs"
-description: "How API keys, secret management, the PII filter, and audit logs are handled in DATA BRIDGE."
+description: "How API keys, secret management, the PII filter, and audit logs are handled in Bridger."
 ---
 
-Because the DATA BRIDGE Gateway exposes public data and self-registered APIs under a single domain, the
+Because the Bridger Gateway exposes public data and self-registered APIs under a single domain, the
 security boundary is its most important responsibility. The following four layers apply to every request.
 
 <CardGroup cols={2}>
@@ -46,13 +46,13 @@ and Client Credentials — and the detailed spec is covered in
 
 ## 2. Secret management
 
-DATA BRIDGE handles three kinds of secrets.
+Bridger handles three kinds of secrets.
 
 | Type | Example | Storage |
 | --- | --- | --- |
 | Public-data ServiceKey | Key issued by `data.go.kr` | Vault (Gateway side) |
 | BYOAPI upstream token | OAuth/HTTP header token for the user's API | Vault, per-tenant isolation |
-| DATA BRIDGE API Key | Caller authentication key (`dk_live_…`) | DB (hashed) + the token itself is shown once at issuance |
+| Bridger API Key | Caller authentication key (`dk_live_…`) | DB (hashed) + the token itself is shown once at issuance |
 
 **Principles**
 

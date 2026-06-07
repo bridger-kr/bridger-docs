@@ -1,9 +1,9 @@
 ---
 title: "Quickstart"
-description: "Call your first MCP tool through DATA BRIDGE in under 5 minutes."
+description: "Call your first MCP tool through Bridger in under 5 minutes."
 ---
 
-DATA BRIDGE is used by connecting to the **hosted Gateway** (`mcp.datari.kr`) with an API key.
+Bridger is used by connecting to the **hosted Gateway** (`mcp.datari.kr`) with an API key.
 You can start right away — no separate server to install or operate.
 
 ## Why Bridger exists
@@ -34,7 +34,7 @@ The Gateway host is `mcp.datari.kr`. Connect to that address from your MCP clien
 
 ## 3. List available tools
 
-Use JSON-RPC `tools/list` to retrieve every tool registered with DATA BRIDGE.
+Use JSON-RPC `tools/list` to retrieve every tool registered with Bridger.
 
 ```bash
 curl -X POST https://mcp.datari.kr/mcp \
@@ -76,10 +76,10 @@ curl -X POST https://mcp.datari.kr/mcp \
 
 <CardGroup cols={2}>
   <Card title="Connect to Claude" icon="comment" href="/en/guides/claude">
-    Call DATA BRIDGE tools in natural language from Claude Desktop.
+    Call Bridger tools in natural language from Claude Desktop.
   </Card>
   <Card title="Connect to ChatGPT" icon="message" href="/en/guides/chatgpt">
-    Use DATA BRIDGE via ChatGPT.
+    Use Bridger via ChatGPT.
   </Card>
   <Card title="Use REST / SDK" icon="code" href="/en/guides/api">
     Call directly with the Node.js or Python SDK.

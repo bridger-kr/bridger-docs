@@ -1,20 +1,20 @@
 ---
 title: "Issue API keys"
-description: "How to set up your DATA BRIDGE API key and your data.go.kr service key."
+description: "How to set up your Bridger API key and your data.go.kr service key."
 ---
 
-You need two keys to use DATA BRIDGE.
+You need two keys to use Bridger.
 
 <CardGroup cols={2}>
-  <Card title="DATA BRIDGE API Key" icon="key" href="https://admin.datari.kr/settings">
-    For calling the DATA BRIDGE Gateway. Issued from the admin dashboard.
+  <Card title="Bridger API Key" icon="key" href="https://admin.datari.kr/settings">
+    For calling the Bridger Gateway. Issued from the admin dashboard.
   </Card>
   <Card title="data.go.kr service key" icon="building-columns">
     To use public data, you need to apply for API access on data.go.kr (often approved instantly).
   </Card>
 </CardGroup>
 
-## Issue a DATA BRIDGE API Key
+## Issue a Bridger API Key
 
 <Steps>
   <Step title="Open the admin dashboard">
@@ -37,7 +37,7 @@ You need two keys to use DATA BRIDGE.
 
 ## Apply for a data.go.kr service key
 
-Many of the public-data APIs that DATA BRIDGE calls require a
+Many of the public-data APIs that Bridger calls require a
 [Public Data Portal (data.go.kr)](https://www.data.go.kr) service key. A single service key can often
 be reused across multiple APIs from the same provider.
 
@@ -60,12 +60,12 @@ be reused across multiple APIs from the same provider.
     [My Page → Usage management](https://www.data.go.kr/iim/api/selectAPIAcInfo.do).
 
     <Warning>
-      Always use the **Decoding** key. The Encoding key (URL-encoded form) is not used by DATA BRIDGE.
+      Always use the **Decoding** key. The Encoding key (URL-encoded form) is not used by Bridger.
     </Warning>
   </Step>
 
-  <Step title="Enter the key in DATA BRIDGE">
-    Enter the copied service key under **Settings → Provider Keys** in the DATA BRIDGE admin dashboard
+  <Step title="Enter the key in Bridger">
+    Enter the copied service key under **Settings → Provider Keys** in the Bridger admin dashboard
     and you can start using it. A single service key can often be used across multiple APIs from the
     same provider.
   </Step>
@@ -78,7 +78,7 @@ be reused across multiple APIs from the same provider.
     Most are auto-approved instantly, but some APIs require provider review. They're usually approved within 1–3 days.
   </Accordion>
   <Accordion title="I have multiple keys — which one do I use?">
-    Use the **general key (Decoding)**. The Encoding key is URL-encoded, and DATA BRIDGE only uses the Decoding key.
+    Use the **general key (Decoding)**. The Encoding key is URL-encoded, and Bridger only uses the Decoding key.
   </Accordion>
   <Accordion title="Can I use an API that isn't listed here?">
     Any API with an OpenAPI spec can be registered directly via [BYOAPI](/en/concepts/byoapi). (coming soon)

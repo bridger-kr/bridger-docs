@@ -1,10 +1,10 @@
 ---
 title: "BYOAPI — 자체 API 등록"
-description: "OpenAPI 스펙이 있는 어떤 API든 DATA BRIDGE에 도구로 등록하는 멀티-테넌트 ID 기반 파이프라인."
+description: "OpenAPI 스펙이 있는 어떤 API든 Bridger에 도구로 등록하는 멀티-테넌트 ID 기반 파이프라인."
 ---
 
-DATA BRIDGE의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 있다면 어떤 API든
-**별도 컨테이너 빌드/배포 없이** DATA BRIDGE Gateway의 MCP 도구로 등록하는 기능입니다.
+Bridger의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 있다면 어떤 API든
+**별도 컨테이너 빌드/배포 없이** Bridger Gateway의 MCP 도구로 등록하는 기능입니다.
 
 <Note>
   BYOAPI는 **추후 제공 예정**입니다. 아래 내용은 동작 방식을 미리 안내하는 것으로, 현재는
@@ -17,13 +17,13 @@ DATA BRIDGE의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 �
   <Card title="기존 방식" icon="container-storage">
     API 한 개당 컨테이너 한 개를 빌드·배포·운영. 비용·관리 모두 폭증.
   </Card>
-  <Card title="DATA BRIDGE BYOAPI" icon="bolt">
+  <Card title="Bridger BYOAPI" icon="bolt">
     Tool 정의만 DB에 등록. 단일 Gateway가 ID로 라우팅 → 수 초 내 완료.
   </Card>
 </CardGroup>
 
 ```text
-하나의 DATA BRIDGE Gateway (mcp.datari.kr)
+하나의 Bridger Gateway (mcp.datari.kr)
   ├─ 공식 프리셋   tool_id: @datari/weather-ultra-shortcast   → tool: getultrashortcast
   ├─ 공식 프리셋   tool_id: @datari/realestate-apt-trade      → tool: getapttrade
   ├─ BYOAPI       tool_id: @user123/my-petstore              → tool: listpets, getpetbyid
@@ -33,7 +33,7 @@ DATA BRIDGE의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 �
 
 ## 도구 이름과 식별자 체계
 
-DATA BRIDGE에는 두 가지 등록 경로가 있고, 식별자 체계가 다릅니다.
+Bridger에는 두 가지 등록 경로가 있고, 식별자 체계가 다릅니다.
 
 **1. 공식 프리셋** — `vendor/spec`의 OpenAPI YAML에서 Gateway가 직접 로드합니다.
 
