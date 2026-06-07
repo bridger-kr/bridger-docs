@@ -1,9 +1,9 @@
 ---
 title: "경제 · 금융"
-description: "환율, 금리, 지표, 소비, 수출입, 시장 통계. 총 19개 프리셋 · 19개 도구."
+description: "환율, 금리, 지표, 소비, 수출입, 시장 통계. 총 17개 프리셋 · 26개 도구."
 ---
 
-이 카테고리에는 **19개의 프리셋**이 등록되어 있으며, 합산 **19개의 MCP 도구**가 노출됩니다.
+이 카테고리에는 **17개의 프리셋**이 등록되어 있으며, 합산 **26개의 MCP 도구**가 노출됩니다.
 
 <Tip>
   필요한 도구 이름은 `tools/list` 응답에서 확인한 뒤 `tools/call`로 바로 호출할 수 있습니다.
@@ -13,25 +13,23 @@ description: "환율, 금리, 지표, 소비, 수출입, 시장 통계. 총 19�
 
 | 이름 | 제공기관 | 도구 수 | data.go.kr |
 | --- | --- | --- | --- |
-| 기준금리 조회 | 금융위원회·한국은행 | 1 | [15071156](https://www.data.go.kr/data/15071156/openapi.do) |
-| 채권 수익률 조회 | 금융위원회·한국은행 | 1 | [15071020](https://www.data.go.kr/data/15071020/openapi.do) |
-| 카드소비 통계 | 한국은행/금융위원회 | 1 | — |
-| 카드소비 통계 조회 | 금융위원회·한국은행 | 1 | [15071071](https://www.data.go.kr/data/15071071/openapi.do) |
-| 원자재 가격 조회 | 금융위원회·한국은행 | 1 | [15071037](https://www.data.go.kr/data/15071037/openapi.do) |
-| 소비자물가지수 조회 | 금융위원회·한국은행 | 1 | [15071139](https://www.data.go.kr/data/15071139/openapi.do) |
-| 고용 동향 조회 | 통계청 | 1 | [15071042](https://www.data.go.kr/data/15071042/openapi.do) |
-| 환율 조회 | 금융위원회·한국은행 | 1 | [15071003](https://www.data.go.kr/data/15071003/openapi.do) |
-| 수출입 통계 조회 | 금융위원회·한국은행 | 1 | [15071105](https://www.data.go.kr/data/15071105/openapi.do) |
-| 핀테크 기업정보 조회 | 금융위원회·한국은행 | 1 | [15071054](https://www.data.go.kr/data/15071054/openapi.do) |
-| 시장지수 조회 | 금융위원회·한국은행 | 1 | [15070986](https://www.data.go.kr/data/15070986/openapi.do) |
-| 국민연금 가입 현황 | 국민연금공단 | 1 | — |
-| 공공요금 정보 | 행정안전부/지자체 | 1 | — |
-| 중소기업 지원사업 조회 | 중소벤처기업부 | 1 | [15071041](https://www.data.go.kr/data/15071041/openapi.do) |
-| 스타트업 투자통계 조회 | 금융위원회·한국은행 | 1 | [15071088](https://www.data.go.kr/data/15071088/openapi.do) |
-| 주식 시세 조회 | 금융위원회·한국은행 | 1 | [15070969](https://www.data.go.kr/data/15070969/openapi.do) |
-| 국세 수입현황 조회 | 금융위원회·한국은행 | 1 | [15071173](https://www.data.go.kr/data/15071173/openapi.do) |
-| 실업률 통계 조회 | 금융위원회·한국은행 | 1 | [15071122](https://www.data.go.kr/data/15071122/openapi.do) |
-| 상하수도 요금 정보 | 행정안전부 | 1 | — |
+| 금융위원회_소매채권수익률정보 | 금융위원회 | 1 | [15094783](https://www.data.go.kr/data/15094783/openapi.do) |
+| 금융위원회_금융통계신용카드사정보 통계 | 금융위원회 | 3 | [15061308](https://www.data.go.kr/data/15061308/openapi.do) |
+| 금융위원회_금융통계신용카드사정보 일반현황 | 금융위원회 | 1 | [15061308](https://www.data.go.kr/data/15061308/openapi.do) |
+| 한국환경공단_재활용가능자원 가격조사 정보 조회 서비스 | 한국환경공단 | 1 | [15156640](https://www.data.go.kr/data/15156640/openapi.do) |
+| 부산광역시_통합홈페이지시스템_월별 경제분야 지역별 소비자 물가지수 | 부산광역시 | 1 | [15145607](https://www.data.go.kr/data/15145607/openapi.do) |
+| 충청북도_고용동향 취업자 | 충청북도 | 1 | [15078373](https://www.data.go.kr/data/15078373/openapi.do) |
+| 관세청_관세환율정보(GW) | 관세청 | 1 | [15101230](https://www.data.go.kr/data/15101230/openapi.do) |
+| 관세청_품목별 국가별 수출입실적(GW) | 관세청 | 1 | [15100475](https://www.data.go.kr/data/15100475/openapi.do) |
+| 한국예탁결제원_기업정보서비스_GW | 한국예탁결제원 | 1 | [15157348](https://www.data.go.kr/data/15157348/openapi.do) |
+| 한국수출입은행_환율정보 | 한국수출입은행 | 1 | [15028129](https://www.data.go.kr/data/15028129/openapi.do) |
+| 금융위원회_지수시세정보 | 금융위원회 | 3 | [15094807](https://www.data.go.kr/data/15094807/openapi.do) |
+| 국민연금공단_국민연금 가입현황 | 국민연금공단 | 3 | [15005710](https://www.data.go.kr/data/15005710/openapi.do) |
+| 경기도 물가정보 현황 | 경기도 | 1 | [15057512](https://www.data.go.kr/data/15057512/openapi.do) |
+| 중소벤처기업부_중소기업 지원사업 공고 조회 서비스 | 중소벤처기업부 | 1 | [15157820](https://www.data.go.kr/data/15157820/openapi.do) |
+| 금융위원회_주식시세정보 | 금융위원회 | 4 | [15094808](https://www.data.go.kr/data/15094808/openapi.do) |
+| 충청북도_고용동향 실업률 | 충청북도 | 1 | [15078366](https://www.data.go.kr/data/15078366/openapi.do) |
+| 세종특별자치시_세종특별자치시 상하수도요금표 조회 서비스 | 세종특별자치시 | 1 | [15098404](https://www.data.go.kr/data/15098404/openapi.do) |
 
 ## 사용 예시
 

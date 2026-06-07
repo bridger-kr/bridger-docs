@@ -1,9 +1,9 @@
 ---
 title: "기상"
-description: "예보, 경보, 레이더, 자외선, 태풍 데이터. 총 16개 프리셋 · 16개 도구."
+description: "예보, 경보, 레이더, 자외선, 태풍 데이터. 총 17개 프리셋 · 21개 도구."
 ---
 
-이 카테고리에는 **16개의 프리셋**이 등록되어 있으며, 합산 **16개의 MCP 도구**가 노출됩니다.
+이 카테고리에는 **17개의 프리셋**이 등록되어 있으며, 합산 **21개의 MCP 도구**가 노출됩니다.
 
 <Tip>
   필요한 도구 이름은 `tools/list` 응답에서 확인한 뒤 `tools/call`로 바로 호출할 수 있습니다.
@@ -13,22 +13,23 @@ description: "예보, 경보, 레이더, 자외선, 태풍 데이터. 총 16개 
 
 | 이름 | 제공기관 | 도구 수 | data.go.kr |
 | --- | --- | --- | --- |
-| 대기질 측정소 조회 | 환경부 | 1 | [15071043](https://www.data.go.kr/data/15071043/openapi.do) |
-| 한파영향예보 조회 | 기상청 | 1 | [15070238](https://www.data.go.kr/data/15070238/openapi.do) |
-| 가뭄지수 조회 | 기상청 | 1 | [15070204](https://www.data.go.kr/data/15070204/openapi.do) |
-| 폭염영향예보 조회 | 기상청 | 1 | [15070221](https://www.data.go.kr/data/15070221/openapi.do) |
-| 낙뢰관측 조회 | 기상청 | 1 | [15070153](https://www.data.go.kr/data/15070153/openapi.do) |
-| 해상예보 조회 | 기상청 | 1 | [15070170](https://www.data.go.kr/data/15070170/openapi.do) |
-| 중기육상예보 조회 | 기상청 | 1 | [15070085](https://www.data.go.kr/data/15070085/openapi.do) |
-| 중기기온예보 조회 | 기상청 | 1 | [15070102](https://www.data.go.kr/data/15070102/openapi.do) |
-| 레이더 강수량 조회 | 기상청 | 1 | [15070136](https://www.data.go.kr/data/15070136/openapi.do) |
-| 태풍정보 조회 | 기상청 | 1 | [15070119](https://www.data.go.kr/data/15070119/openapi.do) |
-| 초단기예보 조회 | 기상청 | 1 | [15070051](https://www.data.go.kr/data/15070051/openapi.do) |
-| 자외선지수 조회 | 기상청 | 1 | [15070255](https://www.data.go.kr/data/15070255/openapi.do) |
-| 동네예보 조회 | 기상청 | 1 | [15070068](https://www.data.go.kr/data/15070068/openapi.do) |
-| 파고예보 조회 | 기상청 | 1 | [15070187](https://www.data.go.kr/data/15070187/openapi.do) |
-| 단기예보 조회 | 기상청 | 1 | [15070017](https://www.data.go.kr/data/15070017/openapi.do) |
-| 기상특보 조회 | 기상청 | 1 | [15070034](https://www.data.go.kr/data/15070034/openapi.do) |
+| 대기질 측정소 조회 | 한국환경공단 | 3 | [15073877](https://www.data.go.kr/data/15073877/openapi.do) |
+| 기상청_지상(종관, ASOS) 시간자료 조회서비스 | 기상청 | 1 | [15057210](https://www.data.go.kr/data/15057210/openapi.do) |
+| 기상청_영향예보_조회서비스 | 기상청 | 2 | [15095149](https://www.data.go.kr/data/15095149/openapi.do) |
+| SPI 가뭄지수 조회 | 한국수자원공사 | 1 | [15056637](https://www.data.go.kr/data/15056637/openapi.do) |
+| 기상청_영향예보_조회서비스 | 기상청 | 2 | [15095149](https://www.data.go.kr/data/15095149/openapi.do) |
+| 낙뢰관측자료 조회 | 기상청 | 1 | [15058079](https://www.data.go.kr/data/15058079/openapi.do) |
+| 중기해상예보 조회 | 기상청 | 1 | [15059468](https://www.data.go.kr/data/15059468/openapi.do) |
+| 중기육상예보 조회 | 기상청 | 1 | [15059468](https://www.data.go.kr/data/15059468/openapi.do) |
+| 중기기온예보 조회 | 기상청 | 1 | [15059468](https://www.data.go.kr/data/15059468/openapi.do) |
+| 레이더 강수량 조회 | 기상청 | 1 | [15057166](https://www.data.go.kr/data/15057166/openapi.do) |
+| 태풍정보 조회 | 기상청 | 1 | [15043565](https://www.data.go.kr/data/15043565/openapi.do) |
+| 초단기예보 조회 | 기상청 | 1 | [15084084](https://www.data.go.kr/data/15084084/openapi.do) |
+| 기상청_생활기상지수 조회서비스(3.0) | 기상청 | 1 | [15085288](https://www.data.go.kr/data/15085288/openapi.do) |
+| 동네예보 조회 | 기상청 | 1 | [15084084](https://www.data.go.kr/data/15084084/openapi.do) |
+| 파고예보 조회 | 기상청 | 1 | [15059468](https://www.data.go.kr/data/15059468/openapi.do) |
+| 단기예보 조회 | 기상청 | 1 | [15084084](https://www.data.go.kr/data/15084084/openapi.do) |
+| 기상특보 조회 | 기상청 | 1 | [15000415](https://www.data.go.kr/data/15000415/openapi.do) |
 
 ## 사용 예시
 

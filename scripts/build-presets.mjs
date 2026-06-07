@@ -25,6 +25,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, "..");
 const PRESETS_DIR = join(REPO_ROOT, "vendor", "spec", "presets");
 const OUT_DIR = join(REPO_ROOT, "presets");
+const PUBLIC_DATA_REGISTRY = "data.go.kr";
+const DEFAULT_LOCALE = "ko";
+const LOCALE_FALLBACKS = [DEFAULT_LOCALE, "en"];
 
 const CATEGORY_META = {
   civil:          { title: "행정 · 민원",   icon: "building-columns", desc: "행정 · 민원 · 인구 · 치안 · 재난 · 공공시설 데이터.", titleEn: "Government & Civil", descEn: "Administration, civil services, population, public safety, disaster, and public-facility data." },
@@ -46,6 +49,7 @@ const CATEGORY_META = {
 // Per-locale UI strings + path config for the generated preset pages.
 const LOCALES = {
   ko: {
+    locale: "ko",
     outSubdir: "presets",
     linkPrefix: "/presets",
     metaTitle: (m) => m.title,
@@ -70,6 +74,7 @@ const LOCALES = {
     quickHeading: "## 빠른 사용",
   },
   en: {
+    locale: "en",
     outSubdir: "en/presets",
     linkPrefix: "/en/presets",
     metaTitle: (m) => m.titleEn,
@@ -95,7 +100,41 @@ const LOCALES = {
   },
 };
 
-/** @typedef {{ title: string, description: string, provider?: string, displayName?: string, isPublicData: boolean, opCount: number, dataGoKrId?: string, file: string }} PresetInfo */
+/** @typedef {string | Record<string, string>} LocalizedString */
+/** @typedef {{ title: string, description: string, provider?: LocalizedString, displayName?: LocalizedString, isPublicData: boolean, opCount: number, dataGoKrId?: string, file: string }} PresetInfo */
+
+function isRecord(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function firstString(...values) {
+  for (const value of values) {
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+  return undefined;
+}
+
+/**
+ * @param {unknown} value
+ * @param {string} locale
+ */
+function localizedString(value, locale) {
+  if (typeof value === "string") return value;
+  if (!isRecord(value)) return undefined;
+  return firstString(
+    value[locale],
+    ...LOCALE_FALLBACKS.map((fallbackLocale) => value[fallbackLocale]),
+    ...Object.values(value),
+  );
+}
+
+function extractDataGoKrId(url) {
+  if (typeof url !== "string") return undefined;
+  const match = url.match(/data\.go\.kr\/data\/([0-9]+)\/openapi\.do/);
+  return match?.[1];
+}
 
 /**
  * @param {string} categoryDir
@@ -123,9 +162,29 @@ function readCategory(categoryDir) {
     }
     if (!doc || typeof doc !== "object") continue;
     const info = doc.info ?? {};
-    const xpd = doc["x-publicdata"] ?? {};
+    const xpd = isRecord(doc["x-publicdata"]) ? doc["x-publicdata"] : {};
+    const catalog = isRecord(doc.catalog) ? doc.catalog : {};
+    const sources = isRecord(doc.sources) ? doc.sources : {};
+    const registry = isRecord(sources.registry) ? sources.registry : {};
+    const officialPage = isRecord(sources.officialPage) ? sources.officialPage : {};
+    const catalogTitle = isRecord(catalog.title) || typeof catalog.title === "string"
+      ? catalog.title
+      : undefined;
+    const catalogProvider = isRecord(catalog.provider) || typeof catalog.provider === "string"
+      ? catalog.provider
+      : undefined;
+    const dataGoKrId = firstString(
+      typeof xpd.dataGoKrId === "string" ? xpd.dataGoKrId : undefined,
+      registry.provider === PUBLIC_DATA_REGISTRY && typeof registry.id === "string"
+        ? registry.id
+        : undefined,
+      extractDataGoKrId(officialPage.url),
+      extractDataGoKrId(info.contact?.url),
+    );
     const isPublicData =
-      xpd && typeof xpd === "object" && Object.keys(xpd).length > 0 ? true : false;
+      Object.keys(xpd).length > 0 ||
+      registry.provider === PUBLIC_DATA_REGISTRY ||
+      Boolean(dataGoKrId);
     const opCount = doc.paths
       ? Object.values(doc.paths).reduce((acc, methods) => {
           if (!methods || typeof methods !== "object") return acc;
@@ -144,11 +203,10 @@ function readCategory(categoryDir) {
           ? info.description.split("\n")[0].trim()
           : "",
       provider:
-        typeof xpd.provider === "string" ? xpd.provider : undefined,
+        typeof xpd.provider === "string" ? xpd.provider : catalogProvider,
       displayName:
-        typeof xpd.displayName === "string" ? xpd.displayName : undefined,
-      dataGoKrId:
-        typeof xpd.dataGoKrId === "string" ? xpd.dataGoKrId : undefined,
+        typeof xpd.displayName === "string" ? xpd.displayName : catalogTitle,
+      dataGoKrId,
       isPublicData,
       opCount,
       file: fname,
@@ -176,8 +234,8 @@ function renderCategoryMdx(category, presets, L) {
 
   const rows = presets
     .map((p) => {
-      const name = escapeMdxCell(p.displayName || p.title);
-      const provider = escapeMdxCell(p.provider || "—");
+      const name = escapeMdxCell(localizedString(p.displayName, L.locale) || p.title);
+      const provider = escapeMdxCell(localizedString(p.provider, L.locale) || "—");
       const ops = p.opCount;
       const link = p.dataGoKrId
         ? `[${escapeMdxCell(p.dataGoKrId)}](https://www.data.go.kr/data/${p.dataGoKrId}/openapi.do)`
