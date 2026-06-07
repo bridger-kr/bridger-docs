@@ -9,11 +9,11 @@
  * Idempotent: rewrites every file from scratch on each run.
  *
  * NOTE: This is a DEV-TIME generator. Output MDX is committed to the repo
- * and consumed directly by `mint export` at container build time.
+ * and published directly by Mintlify hosting.
  *   - Run locally: `npm run build:content` (after the vendor/spec submodule
  *     is updated to a new SHA, or when editing the templates here).
- *   - The Docker build (`Dockerfile`) does NOT execute this script; the
- *     already-committed MDX under presets/ is what gets exported.
+ *   - Mintlify hosting publishes the already-committed MDX under presets/;
+ *     this script is not part of the publish step.
  */
 
 import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
