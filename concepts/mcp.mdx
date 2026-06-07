@@ -1,6 +1,6 @@
 ---
 title: "Model Context Protocol(MCP)이란?"
-description: "Anthropic의 MCP 표준과 DATA BRIDGE가 어떻게 맞물리는지 살펴봅니다."
+description: "Anthropic의 MCP 표준과 Bridger가 어떻게 맞물리는지 살펴봅니다."
 ---
 
 **Model Context Protocol (MCP)** 은 Anthropic이 공개한, AI 모델이 외부 도구·데이터·시스템에
@@ -26,9 +26,9 @@ SSE 트랜스포트를 사용합니다.
 
 ## 표준 메서드
 
-DATA BRIDGE Gateway가 현재 처리하는 MCP 메서드는 다음과 같습니다.
+Bridger Gateway가 현재 처리하는 MCP 메서드는 다음과 같습니다.
 
-| 메서드 | 용도 | DATA BRIDGE |
+| 메서드 | 용도 | Bridger |
 | --- | --- | --- |
 | `initialize` | 핸드셰이크 — 프로토콜 버전, capabilities 교환 | 지원 |
 | `notifications/initialized` | 초기화 완료 알림 | 지원 |
@@ -38,13 +38,13 @@ DATA BRIDGE Gateway가 현재 처리하는 MCP 메서드는 다음과 같습니�
 | `prompts/list`, `prompts/get` | 사전 정의 프롬프트 템플릿 | 미지원 (도구 중심) |
 
 <Note>
-  DATA BRIDGE는 **도구(tools) 중심** 게이트웨이입니다. `resources/*`·`prompts/*`는 MCP 표준
+  Bridger는 **도구(tools) 중심** 게이트웨이입니다. `resources/*`·`prompts/*`는 MCP 표준
   메서드이지만 현재 Gateway에서는 처리하지 않으며, 그 외 메서드는 `Method not found`로 응답합니다.
 </Note>
 
-## DATA BRIDGE와 MCP
+## Bridger와 MCP
 
-DATA BRIDGE는 **MCP Server 호스팅 플랫폼**입니다. 자체 MCP 서버를 작성·배포·운영하지 않아도,
+Bridger는 **MCP Server 호스팅 플랫폼**입니다. 자체 MCP 서버를 작성·배포·운영하지 않아도,
 OpenAPI 스펙만 있으면 즉시 MCP 도구로 변환됩니다.
 
 ```text
@@ -52,7 +52,7 @@ OpenAPI 스펙 (preset YAML 또는 BYOAPI 등록)
         │
         ▼
   ┌─────────────────────────────┐
-  │  DATA BRIDGE Gateway              │
+  │  Bridger Gateway              │
   │  (mcp.datari.kr/mcp)        │
   ├─────────────────────────────┤
   │  • tools/list                │

@@ -2,7 +2,7 @@
   "name": "@datari/docs",
   "private": true,
   "version": "0.1.0",
-  "description": "DATA BRIDGE documentation site.",
+  "description": "Bridger documentation site.",
   "scripts": {
     "dev": "mintlify dev --port 3334",
     "build:content": "node scripts/build-presets.mjs && node scripts/build-api-reference.mjs",

@@ -1,9 +1,9 @@
 ---
 title: "전체 아키텍처"
-description: "DATA BRIDGE Gateway가 OpenAPI와 MCP 클라이언트를 연결하는 방식을 설명합니다."
+description: "Bridger Gateway가 OpenAPI와 MCP 클라이언트를 연결하는 방식을 설명합니다."
 ---
 
-DATA BRIDGE는 OpenAPI 기반 데이터 소스를 MCP 도구로 변환하고, 하나의 Gateway에서 인증·라우팅·감사 흐름을 처리합니다.
+Bridger는 OpenAPI 기반 데이터 소스를 MCP 도구로 변환하고, 하나의 Gateway에서 인증·라우팅·감사 흐름을 처리합니다.
 사용자는 별도 서버를 운영하지 않고 Gateway 엔드포인트를 호출합니다.
 
 ## 구성요소
@@ -31,7 +31,7 @@ DATA BRIDGE는 OpenAPI 기반 데이터 소스를 MCP 도구로 변환하고, �
         │  MCP JSON-RPC / SSE / REST
         ▼
    ┌──────────────────────────────────────────────┐
-   │            DATA BRIDGE Gateway               │
+   │            Bridger Gateway               │
    ├──────────────────────────────────────────────┤
    │  1. 인증            (API Key / OAuth 2.0)     │
    │  2. 테넌트 격리                                │

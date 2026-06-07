@@ -1,9 +1,9 @@
 ---
 title: "Overall architecture"
-description: "How the DATA BRIDGE Gateway connects OpenAPI sources to MCP clients."
+description: "How the Bridger Gateway connects OpenAPI sources to MCP clients."
 ---
 
-DATA BRIDGE converts OpenAPI-based data sources into MCP tools and handles authentication, routing, and
+Bridger converts OpenAPI-based data sources into MCP tools and handles authentication, routing, and
 auditing in a single Gateway. Users call the Gateway endpoint without operating any servers of their own.
 
 ## Components
@@ -31,7 +31,7 @@ auditing in a single Gateway. Users call the Gateway endpoint without operating 
         │  MCP JSON-RPC / SSE / REST
         ▼
    ┌──────────────────────────────────────────────┐
-   │            DATA BRIDGE Gateway               │
+   │            Bridger Gateway               │
    ├──────────────────────────────────────────────┤
    │  1. Authentication  (API Key / OAuth 2.0)     │
    │  2. Tenant isolation                           │
