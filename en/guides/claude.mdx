@@ -1,77 +1,89 @@
 ---
 title: "Connect to Claude"
-description: "How to use Korean public data directly in Claude Desktop via Bridger MCP — about 2 minutes."
+description: "How to use Korean public data directly in Claude by adding Bridger MCP as a custom connector — about 2 minutes."
 ---
 
-Once Claude Desktop connects to the Bridger Gateway over SSE, you can use 230+ public-data tools
-in natural language with no extra installation.
+Once Claude connects to the Bridger gateway (`https://mcp.bridger.kr/mcp`, Streamable HTTP),
+you can use 230+ Korean public-data tools in natural language with no extra installation.
+Connection uses your Bridger account over OAuth — no config files to edit.
 
 <Steps>
-  <Step title="Install Claude Desktop">
-    If you don't have Claude Desktop yet, download it from the [official Anthropic site](https://claude.ai/download).
-    Both macOS and Windows are supported.
-  </Step>
+  <Step title="Add the connector">
+    In [claude.ai](https://claude.ai), go to **Customize → Connectors**, click
+    **Add custom connector**, and enter this remote MCP server URL:
 
-  <Step title="Open the MCP config file">
-    In the Claude Desktop menu, click **Claude → Settings → Developer → Edit Config**.
-
-    Config file location:
-
-    <CodeGroup>
-      ```text macOS
-      ~/Library/Application Support/Claude/claude_desktop_config.json
-      ```
-      ```text Windows
-      %APPDATA%\Claude\claude_desktop_config.json
-      ```
-    </CodeGroup>
-  </Step>
-
-  <Step title="Add the Bridger MCP server">
-    Add the following to the config file.
-
-    ```json claude_desktop_config.json
-    {
-      "mcpServers": {
-        "data-bridge": {
-          "url": "https://mcp.datari.kr/mcp/sse",
-          "headers": {
-            "Authorization": "Bearer YOUR_API_KEY"
-          }
-        }
-      }
-    }
+    ```text
+    https://mcp.bridger.kr/mcp
     ```
 
+    On Team/Enterprise plans, an Owner must first register the connector under
+    **Organization settings → Connectors → Add → Custom → Web**.
+
     <Tip>
-      You can issue an API key from the [admin dashboard](https://admin.datari.kr) after creating an account.
+      Once Bridger is published in the Claude connector directory, you can also find it
+      by searching "Bridger" in the **Connectors → +** catalog.
     </Tip>
   </Step>
 
-  <Step title="Restart Claude and start using it">
-    After saving the config, fully quit and relaunch Claude Desktop. You can now ask about Korean
-    public data in natural language.
+  <Step title="Sign in with your Bridger account">
+    Click **Connect** on the Bridger connector to open the Bridger sign-in (OAuth) page.
+    If you don't have an account yet, create one at
+    [portal.bridger.kr](https://portal.bridger.kr). After signing in, you can enable
+    Bridger from the connectors menu in any chat.
+  </Step>
+
+  <Step title="Start using it">
+    You can now ask about Korean public data in natural language.
 
     ```
     What's the weather in Gangnam-gu, Seoul today?
     Show me apartment transaction prices in Banpo-dong.
-    Look up the Samsung Electronics stock price.
     ```
   </Step>
 </Steps>
+
+## Using Claude Code
+
+```bash
+claude mcp add --transport http bridger https://mcp.bridger.kr/mcp
+```
+
+On first use, a browser opens for the Bridger OAuth sign-in.
+
+## Connecting with an API key (advanced)
+
+You can also issue a `dk_live_` key from the
+[portal.bridger.kr](https://portal.bridger.kr) dashboard and pass it as a request header —
+set `Authorization: Bearer <key>` under **Request headers** on the custom connector, or
+use the config file below. OAuth is recommended for most users.
+
+```json claude_desktop_config.json
+{
+  "mcpServers": {
+    "bridger": {
+      "url": "https://mcp.bridger.kr/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_API_KEY"
+      }
+    }
+  }
+}
+```
 
 ## Troubleshooting
 
 <AccordionGroup>
   <Accordion title="I don't see any tools">
-    Fully quit and relaunch Claude Desktop. Verify the JSON in the config file is valid (missing
-    commas or quotes).
+    Check the Bridger connector status under **Customize → Connectors** and retry
+    **Connect** (OAuth sign-in). Also confirm Bridger is enabled in the connectors
+    menu of your chat.
   </Accordion>
   <Accordion title="I get an authentication error">
-    Confirm the API key was entered correctly, and re-issue it from the
-    [admin dashboard](https://admin.datari.kr) if needed.
+    Make sure the sign-in popup isn't blocked, and check your account at
+    [portal.bridger.kr](https://portal.bridger.kr). If you use an API key, try
+    re-issuing it.
   </Accordion>
   <Accordion title="Still not working?">
-    Contact us at [support@datari.kr](mailto:support@datari.kr) or via Channel Talk.
+    Contact us at [hello@bridger.kr](mailto:hello@bridger.kr).
   </Accordion>
 </AccordionGroup>

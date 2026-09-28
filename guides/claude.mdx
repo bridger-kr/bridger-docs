@@ -1,77 +1,86 @@
 ---
 title: "Claude에 연결하기"
-description: "Claude Desktop에서 Bridger MCP를 통해 한국 공공데이터를 바로 사용하는 방법 — 약 2분 소요."
+description: "claude.ai에서 사용자 지정 커넥터로 Bridger MCP를 연결해 한국 공공데이터를 바로 사용하는 방법 — 약 2분 소요."
 ---
 
-Claude Desktop이 Bridger Gateway에 SSE로 연결되면, 230+ 공공데이터 도구를 별도 설치 없이
-자연어로 사용할 수 있습니다.
+Claude가 브릿저 게이트웨이(`https://mcp.bridger.kr/mcp`, Streamable HTTP)에 연결되면
+230+ 공공데이터 도구를 별도 설치 없이 자연어로 사용할 수 있습니다. 연결은 브릿저 계정
+OAuth 로그인으로 진행되며, 설정 파일을 직접 수정할 필요가 없습니다.
 
 <Steps>
-  <Step title="Claude Desktop 설치">
-    아직 Claude Desktop이 없다면 [Anthropic 공식 사이트](https://claude.ai/download)에서 다운로드하세요.
-    macOS · Windows 모두 지원됩니다.
-  </Step>
+  <Step title="커넥터 추가">
+    [claude.ai](https://claude.ai)에서 **Customize → Connectors**로 이동해
+    **Add custom connector**를 클릭하고, 원격 MCP 서버 주소에 아래 URL을 입력합니다.
 
-  <Step title="MCP 설정 파일 열기">
-    Claude Desktop 메뉴에서 **Claude → Settings → Developer → Edit Config**를 클릭합니다.
-
-    설정 파일 위치:
-
-    <CodeGroup>
-      ```text macOS
-      ~/Library/Application Support/Claude/claude_desktop_config.json
-      ```
-      ```text Windows
-      %APPDATA%\Claude\claude_desktop_config.json
-      ```
-    </CodeGroup>
-  </Step>
-
-  <Step title="Bridger MCP 서버 추가">
-    설정 파일에 다음 내용을 추가합니다.
-
-    ```json claude_desktop_config.json
-    {
-      "mcpServers": {
-        "data-bridge": {
-          "url": "https://mcp.datari.kr/mcp/sse",
-          "headers": {
-            "Authorization": "Bearer YOUR_API_KEY"
-          }
-        }
-      }
-    }
+    ```text
+    https://mcp.bridger.kr/mcp
     ```
 
+    Team/Enterprise 플랜은 Owner가 **Organization settings → Connectors → Add → Custom → Web**으로
+    먼저 커넥터를 등록해야 합니다.
+
     <Tip>
-      API 키는 [어드민 대시보드](https://admin.datari.kr)에서 계정 생성 후 발급받을 수 있습니다.
+      브릿저가 Claude 커넥터 디렉터리에 게시되면 **Connectors → +** 목록에서 "Bridger"를
+      검색해 바로 추가할 수도 있습니다.
     </Tip>
   </Step>
 
-  <Step title="Claude 재시작 후 사용">
-    설정을 저장한 뒤 Claude Desktop을 완전히 종료하고 다시 실행하세요. 이제 한국 공공데이터를
-    자연어로 바로 물어볼 수 있습니다.
+  <Step title="브릿저 계정으로 로그인">
+    커넥터 목록에서 브릿저의 **Connect**를 누르면 브릿저 로그인(OAuth) 화면이 열립니다.
+    계정이 없다면 [portal.bridger.kr](https://portal.bridger.kr)에서 먼저 가입해 주세요.
+    로그인이 끝나면 새 대화의 커넥터 메뉴에서 브릿저를 켤 수 있습니다.
+  </Step>
+
+  <Step title="사용하기">
+    이제 한국 공공데이터를 자연어로 바로 물어볼 수 있습니다.
 
     ```
     서울 강남구 오늘 날씨 어때?
     반포동 아파트 실거래가 알려줘
-    삼성전자 주가 조회해줘
     ```
   </Step>
 </Steps>
 
-## 문제 해결
+## Claude Code에서 사용
+
+```bash
+claude mcp add --transport http bridger https://mcp.bridger.kr/mcp
+```
+
+첫 사용 시 브라우저가 열리며 브릿저 OAuth 로그인을 완료하면 됩니다.
+
+## API 키로 연결 (고급)
+
+대시보드 [portal.bridger.kr](https://portal.bridger.kr)에서 `dk_live_` 키를 발급받아
+요청 헤더로 전달할 수도 있습니다. 사용자 지정 커넥터의 **Request headers**에
+`Authorization: Bearer <key>`를 넣거나, 아래처럼 설정 파일을 직접 사용하면 됩니다.
+일반 사용자는 OAuth 연결을 권장합니다.
+
+```json claude_desktop_config.json
+{
+  "mcpServers": {
+    "bridger": {
+      "url": "https://mcp.bridger.kr/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_API_KEY"
+      }
+    }
+  }
+}
+```
+
+## Troubleshooting
 
 <AccordionGroup>
   <Accordion title="도구가 보이지 않아요">
-    Claude Desktop을 완전히 종료한 뒤 다시 실행해 보세요. 설정 파일의 JSON 형식이
-    올바른지(쉼표 · 따옴표 누락) 확인하세요.
+    **Customize → Connectors**에서 브릿저 상태를 확인하고 **Connect**(OAuth 로그인)를
+    다시 시도해 주세요. 새 대화의 커넥터 메뉴에서 브릿저가 켜져 있는지도 확인합니다.
   </Accordion>
-  <Accordion title="인증 오류가 발생해요">
-    API 키가 올바르게 입력되었는지 확인하고, 필요하면 [어드민 대시보드](https://admin.datari.kr)에서
-    키를 재발급하세요.
+  <Accordion title="인증 오류가 나요">
+    로그인 팝업이 차단됐는지 확인하고, [portal.bridger.kr](https://portal.bridger.kr)에서
+    계정 상태를 확인해 주세요. API 키를 쓰는 경우에는 키를 다시 발급받아 보세요.
   </Accordion>
-  <Accordion title="그래도 해결이 안 되면">
-    [이메일](mailto:support@datari.kr) 또는 채널톡으로 문의해 주세요.
+  <Accordion title="그래도 안 돼요">
+    [hello@bridger.kr](mailto:hello@bridger.kr)로 문의해 주세요.
   </Accordion>
 </AccordionGroup>
