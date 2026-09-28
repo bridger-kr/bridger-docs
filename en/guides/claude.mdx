@@ -1,61 +1,50 @@
 ---
 title: "Connect to Claude"
-description: "How to use Korean public data directly in Claude Desktop via Bridger MCP — about 2 minutes."
+description: "How to use Korean public data in claude.ai, Desktop, and mobile via the Bridger custom connector — about 2 minutes."
 ---
 
-Once Claude Desktop connects to the Bridger Gateway over SSE, you can use 230+ public-data tools
-in natural language with no extra installation.
+Add Bridger to Claude as a **custom connector** and you can use Korean public-data tools in
+natural language with nothing to install. Add it once on the web ([claude.ai](https://claude.ai))
+and it's available on the same account's Desktop and mobile apps.
+
+<Note>
+  No need to edit a config file (`claude_desktop_config.json`) by hand — **Settings → Connectors**
+  is the official way to add a remote MCP server. For the Claude Code CLI, see the
+  [dedicated guide](/en/guides/claude-code).
+</Note>
 
 <Steps>
-  <Step title="Install Claude Desktop">
-    If you don't have Claude Desktop yet, download it from the [official Anthropic site](https://claude.ai/download).
-    Both macOS and Windows are supported.
+  <Step title="Prepare a Bridger account">
+    Create an account at [portal.bridger.kr](https://portal.bridger.kr).
+    Google and GitHub sign-in are supported.
   </Step>
 
-  <Step title="Open the MCP config file">
-    In the Claude Desktop menu, click **Claude → Settings → Developer → Edit Config**.
-
-    Config file location:
-
-    <CodeGroup>
-      ```text macOS
-      ~/Library/Application Support/Claude/claude_desktop_config.json
-      ```
-      ```text Windows
-      %APPDATA%\Claude\claude_desktop_config.json
-      ```
-    </CodeGroup>
+  <Step title="Open the Connectors screen">
+    In [claude.ai](https://claude.ai), go to **Settings → Connectors**
+    (same menu path in the Desktop app).
   </Step>
 
-  <Step title="Add the Bridger MCP server">
-    Add the following to the config file.
+  <Step title="Add the custom connector">
+    Choose **Add custom connector** and enter:
 
-    ```json claude_desktop_config.json
-    {
-      "mcpServers": {
-        "data-bridge": {
-          "url": "https://mcp.datari.kr/mcp/sse",
-          "headers": {
-            "Authorization": "Bearer YOUR_API_KEY"
-          }
-        }
-      }
-    }
-    ```
-
-    <Tip>
-      You can issue an API key from the [admin dashboard](https://admin.datari.kr) after creating an account.
-    </Tip>
+    | Field | Value |
+    | --- | --- |
+    | Name | `Bridger` |
+    | Remote MCP server URL | `https://mcp.bridger.kr/mcp` |
   </Step>
 
-  <Step title="Restart Claude and start using it">
-    After saving the config, fully quit and relaunch Claude Desktop. You can now ask about Korean
-    public data in natural language.
+  <Step title="Sign in and consent">
+    Adding the connector starts Bridger sign-in and OAuth consent in your browser.
+    Sign in with Google or GitHub and click **Allow** to finish.
+  </Step>
+
+  <Step title="Start using it">
+    With the connector linked, ask about Korean public data in natural language.
 
     ```
     What's the weather in Gangnam-gu, Seoul today?
     Show me apartment transaction prices in Banpo-dong.
-    Look up the Samsung Electronics stock price.
+    Tell me the fine-dust level in Jung-gu, Seoul.
     ```
   </Step>
 </Steps>
@@ -63,15 +52,24 @@ in natural language with no extra installation.
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="I don't see any tools">
-    Fully quit and relaunch Claude Desktop. Verify the JSON in the config file is valid (missing
-    commas or quotes).
+  <Accordion title="I don't see Connectors or Add custom connector">
+    Custom connectors are gated by plan and region. If the menu isn't visible, check your
+    plan — or use [Claude Code](/en/guides/claude-code) or the
+    [direct API integration](/en/guides/api) instead.
   </Accordion>
-  <Accordion title="I get an authentication error">
-    Confirm the API key was entered correctly, and re-issue it from the
-    [admin dashboard](https://admin.datari.kr) if needed.
+  <Accordion title="The sign-in or consent screen doesn't appear">
+    Allow popups and redirects in your browser, and verify the URL is exactly
+    `https://mcp.bridger.kr/mcp`.
+  </Accordion>
+  <Accordion title="Some tools won't run">
+    Certain public-data APIs require a provider key. Register the relevant agency key under
+    **Provider Keys** at [portal.bridger.kr](https://portal.bridger.kr) to enable them.
+  </Accordion>
+  <Accordion title="I want to disconnect or re-authenticate">
+    Open the Bridger connector under **Settings → Connectors**, disconnect it, then add it
+    again to re-authenticate.
   </Accordion>
   <Accordion title="Still not working?">
-    Contact us at [support@datari.kr](mailto:support@datari.kr) or via Channel Talk.
+    Contact us at [hello@bridger.kr](mailto:hello@bridger.kr) or via Channel Talk.
   </Accordion>
 </AccordionGroup>

@@ -1,0 +1,67 @@
+---
+title: "Connect to Claude Code"
+description: "How to add Bridger as an MCP server in the Claude Code CLI with a single command — about 1 minute."
+---
+
+In Claude Code, register Bridger as an MCP server with one `claude mcp add` command,
+then authenticate via browser OAuth.
+
+<Steps>
+  <Step title="Add the MCP server">
+    Run in your terminal:
+
+    ```bash
+    claude mcp add --transport http bridger https://mcp.bridger.kr/mcp
+    ```
+  </Step>
+
+  <Step title="Authenticate with OAuth">
+    Launch `claude`, type `/mcp`, and select `bridger`. Choose **Authenticate** — your
+    browser opens the Bridger sign-in (Google · GitHub) and consent screen.
+    Click **Allow** to finish.
+  </Step>
+
+  <Step title="Start using it">
+    Once authenticated, ask for Korean public data right inside your Claude Code session.
+
+    ```
+    Will it rain in Gangnam-gu, Seoul tomorrow?
+    ```
+  </Step>
+</Steps>
+
+## Connect with an API key (optional)
+
+Instead of OAuth, you can use an API key issued from the portal. Issue a key at
+[portal.bridger.kr](https://portal.bridger.kr) → **Settings → API Keys**, then pass it as a
+header when adding the server.
+
+```bash
+claude mcp add --transport http bridger https://mcp.bridger.kr/mcp \
+  --header "x-api-key: dk_live_..."
+```
+
+<Warning>
+  The API key is stored in plaintext in your shell history and config file. Prefer OAuth on
+  shared machines.
+</Warning>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="My authentication expired or was revoked">
+    Select `bridger` in `/mcp` and run **Authenticate** again to re-authenticate.
+  </Accordion>
+  <Accordion title="I want to remove the server">
+    ```bash
+    claude mcp remove bridger
+    ```
+  </Accordion>
+  <Accordion title="Some tools won't run">
+    Certain public-data APIs require a provider key. Register the relevant agency key under
+    **Provider Keys** at [portal.bridger.kr](https://portal.bridger.kr).
+  </Accordion>
+  <Accordion title="Still not working?">
+    Contact us at [hello@bridger.kr](mailto:hello@bridger.kr) or via Channel Talk.
+  </Accordion>
+</AccordionGroup>

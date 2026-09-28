@@ -1,0 +1,76 @@
+---
+title: "Connect to Gemini"
+description: "How to use Bridger MCP from Gemini CLI and Gemini Enterprise."
+---
+
+You can connect Bridger as an MCP server in **Gemini CLI** (the developer terminal
+tool) and **Gemini Enterprise** (organization-wide).
+
+## Gemini CLI
+
+Register the MCP server in `~/.gemini/settings.json`:
+
+```json ~/.gemini/settings.json
+{
+  "mcpServers": {
+    "bridger": {
+      "httpUrl": "https://mcp.bridger.kr/mcp"
+    }
+  }
+}
+```
+
+Or register it with a single command:
+
+```bash
+gemini mcp add --transport http bridger https://mcp.bridger.kr/mcp
+```
+
+On first use, your browser opens the Bridger sign-in (Google · GitHub) and consent
+screen. Inside the CLI, type `/mcp` to see server status and the auth menu.
+
+<Tip>
+  **One-line CLI extension install is coming soon.** Once published, you'll be able to run
+  `gemini extensions install https://github.com/bridger-kr/bridger-gemini-extension`.
+  Until then, use the `settings.json` method above.
+</Tip>
+
+## Gemini Enterprise
+
+In Gemini Enterprise, an admin registers a custom MCP connector. Enter these values
+in the connector setup screen:
+
+| Field | Value |
+| --- | --- |
+| MCP server URL | `https://mcp.bridger.kr/mcp` |
+| Transport | Streamable HTTP |
+| Authorization URL | `https://api.bridger.kr/oauth/authorize` |
+| Token URL | `https://api.bridger.kr/oauth/token` |
+| Client ID / Client secret | Request from Bridger ([hello@bridger.kr](mailto:hello@bridger.kr)) |
+| Scopes | `tools:read tools:execute` |
+| Redirect URI | `https://vertexaisearch.cloud.google.com/oauth-redirect` |
+
+<Note>
+  The client ID and secret require a pre-registered confidential client. Share your
+  redirect URI with us and we'll issue the client.
+</Note>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The server doesn't show up in Gemini CLI">
+    Check the JSON syntax and `mcpServers` key placement in `~/.gemini/settings.json`,
+    then run `gemini mcp list` to confirm it's registered.
+  </Accordion>
+  <Accordion title="The auth browser doesn't open">
+    In the CLI, select `bridger` under `/mcp` and retry authentication. On headless
+    environments, create the settings file on a machine with a browser first.
+  </Accordion>
+  <Accordion title="Some tools won't run">
+    Certain public-data APIs require a provider key. Register the relevant agency key
+    under **Provider Keys** at [portal.bridger.kr](https://portal.bridger.kr).
+  </Accordion>
+  <Accordion title="Still not working?">
+    Contact us at [hello@bridger.kr](mailto:hello@bridger.kr) or via Channel Talk.
+  </Accordion>
+</AccordionGroup>
