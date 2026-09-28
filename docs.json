@@ -75,6 +75,7 @@
                 "pages": [
                   "guides/claude",
                   "guides/chatgpt",
+                  "guides/gemini",
                   "guides/api",
                   "guides/api-keys"
                 ]
@@ -154,6 +155,7 @@
                 "pages": [
                   "en/guides/claude",
                   "en/guides/chatgpt",
+                  "en/guides/gemini",
                   "en/guides/api",
                   "en/guides/api-keys"
                 ]
