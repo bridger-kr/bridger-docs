@@ -68,7 +68,7 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
   "result": {
     "tools": [
       {
-        "name": "getultrashortcast",
+        "name": "kma_get_ultra_shortcast",
         "description": "기상청 초단기예보 조회 — 공공데이터포털 OpenAPI",
         "inputSchema": {
           "type": "object",
@@ -97,7 +97,7 @@ curl -X POST https://mcp.datari.kr/mcp \
     "id": 2,
     "method": "tools/call",
     "params": {
-      "name": "getultrashortcast",
+      "name": "kma_get_ultra_shortcast",
       "arguments": {
         "searchKeyword": "서울",
         "numOfRows": 10

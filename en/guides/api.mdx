@@ -68,7 +68,7 @@ Even without Claude or ChatGPT, the Bridger Gateway can be called directly via R
 
     // Run a tool
     const result = await client.callTool({
-      name: "getweatherforecast",
+      name: "kma_get_village_forecast",
       arguments: {
         nx: 60,
         ny: 127,
@@ -104,7 +104,7 @@ Even without Claude or ChatGPT, the Bridger Gateway can be called directly via R
                 print(tools)
 
                 result = await session.call_tool(
-                    "getweatherforecast",
+                    "kma_get_village_forecast",
                     arguments={"nx": 60, "ny": 127},
                 )
                 print(result)
