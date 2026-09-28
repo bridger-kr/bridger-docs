@@ -24,7 +24,24 @@ x-api-key: dk_live_...
 
 ## tools/list
 
-Bridger에 등록된 모든 도구의 메타데이터를 반환합니다.
+도구 메타데이터를 반환합니다. 기본 호출은 **기본 프로필** — `datari.search_tools` + 사용량 상위 도구 + 포털에서 직접 켠 도구로 구성된 최대 40개의 목록 — 을 반환합니다. 전체 카탈로그(230+ 도구)가 필요하면 엔드포인트 URL에 `?activation=all`을 붙이세요.
+
+```text 전체 카탈로그 (개발자용)
+POST https://mcp.bridger.kr/mcp?activation=all
+```
+
+<Note>
+  기본 프로필은 클라이언트의 도구 선택 품질을 높이기 위한 짧은 목록입니다.
+  목록에 없는 도구도 `tools/call`로 호출할 수 있으며, `datari.search_tools`로
+  자연어 검색해 찾을 수 있습니다. 클라이언트별 상한도 적용됩니다 —
+  Gemini Enterprise(`?connector=gemini` 또는 `/mcp/gemini`)는 최대 100개 actions까지 노출됩니다.
+</Note>
+
+### 도구 변경 알림 (`notifications/tools/list_changed`)
+
+포털에서 도구를 켜거나 끄면 SSE 스트림(`GET /mcp` 또는 `/mcp/sse`)으로
+`notifications/tools/list_changed` JSON-RPC 알림이 전송됩니다. 알림을 받으면
+`tools/list`를 다시 호출해 최신 목록을 가져오세요.
 
 ### Request
 

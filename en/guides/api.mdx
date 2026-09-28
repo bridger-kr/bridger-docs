@@ -62,7 +62,8 @@ Even without Claude or ChatGPT, the Bridger Gateway can be called directly via R
 
     await client.connect(transport);
 
-    // List tools
+    // List tools — returns the default profile (up to 40 tools).
+    // Append ?activation=all to the endpoint URL for the full catalog.
     const tools = await client.listTools();
     console.log(tools);
 
