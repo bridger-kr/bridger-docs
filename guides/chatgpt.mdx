@@ -1,64 +1,91 @@
 ---
 title: "ChatGPT에 연결하기"
-description: "ChatGPT의 GPTs(Actions)로 Bridger를 호출하는 방법 — 약 2분 소요."
+description: "ChatGPT의 사용자 지정 앱(커넥터)으로 Bridger MCP를 연결하는 방법 — 약 3분 소요."
 ---
 
-Bridger는 **원격 MCP 서버(Connector)** 로 ChatGPT에 연결됩니다. ChatGPT가 `https://mcp.datari.kr/mcp`에
-직접 붙어, 230+ 한국 공공데이터 도구를 자연어로 사용할 수 있습니다. 인증은 OAuth로 처리됩니다.
+ChatGPT가 브릿저 게이트웨이(`https://mcp.bridger.kr/mcp`, Streamable HTTP)에 연결되면
+한국 공공데이터 도구를 자연어로 바로 사용할 수 있습니다. 인증은 브릿저 계정
+OAuth 로그인으로 진행됩니다.
 
 <Note>
-  원격 MCP 커넥터는 ChatGPT의 **개발자 모드(Developer Mode)** 또는 커넥터를 지원하는
-  워크스페이스(Enterprise/Team 등)에서 사용할 수 있습니다.
+  사용자 지정 MCP 앱을 만들려면 **개발자 모드(Developer Mode)** 가 필요하며, 플랜에 따라
+  조건이 다릅니다.
+
+  - **Business**: 워크스페이스 관리자/소유자만 만들 수 있습니다. **Workspace settings →
+    Apps → Create**에서 개발자 모드를 켜고 바로 앱을 만듭니다(관리자 각자가 직접 켜야 함).
+  - **Enterprise/Edu**: 관리자가 **Permissions & Roles → Connected Data**에서 개발자 권한을
+    부여하면(RBAC), 구성원이 **Settings → Apps → Advanced Settings → Developer mode**를 켭니다.
+  - **Plus/Pro**: **Settings → Apps → Advanced settings → Developer mode**를 직접 켜서
+    읽기 전용 커넥터를 연결할 수 있습니다.
+  - Free/Go 플랜은 지원되지 않습니다.
 </Note>
 
 <Steps>
-  <Step title="커넥터 추가">
-    ChatGPT **Settings → Connectors → Add(또는 Developer Mode → MCP servers)** 에서
-    원격 MCP 서버 URL로 다음을 입력합니다.
-
-    ```text Remote MCP Server URL
-    https://mcp.datari.kr/mcp
-    ```
-
-    전송 방식은 **Streamable HTTP**입니다.
+  <Step title="개발자 모드 켜기">
+    위 플랜 조건에 맞게 개발자 모드를 활성화합니다. 토글이 보이지 않으면 플랜 또는
+    워크스페이스 권한을 먼저 확인하세요.
   </Step>
 
-  <Step title="OAuth 동의">
-    커넥터를 추가하면 ChatGPT가 OAuth 인증을 시작합니다(Dynamic Client Registration + PKCE).
-    Bridger 로그인 후 **동의(Allow)** 를 누르면 연결이 완료됩니다.
+  <Step title="앱(커넥터) 만들기">
+    **Settings → Apps → Create**(관리자는 Workspace settings → Apps → Create)에서
+    MCP 서버 주소로 다음을 입력하고 인증 방식은 **OAuth**를 선택합니다.
+
+    ```text Remote MCP Server URL
+    https://mcp.bridger.kr/mcp
+    ```
+
+    전송 방식은 **Streamable HTTP**입니다. `/mcp/openai` 같은 다른 경로가 아니라
+    반드시 `/mcp`를 입력하세요.
+  </Step>
+
+  <Step title="도구 스캔 + OAuth 로그인">
+    **Scan Tools**를 누르면 ChatGPT가 서버를 검사하고 브릿저 로그인(OAuth) 화면을 엽니다.
+    클라이언트 등록은 자동(DCR)이므로 client ID를 따로 입력할 필요가 없습니다.
+    브릿저 계정으로 로그인하고 **승인(Allow)** 하면 스캔이 완료됩니다.
 
     <Tip>
-      아직 계정이 없다면 [어드민 대시보드](https://admin.datari.kr)에서 먼저 계정을
-      만드세요. 구글/카카오 소셜 로그인을 지원합니다.
+      아직 계정이 없다면 [portal.bridger.kr](https://portal.bridger.kr)에서 먼저 가입해 주세요.
+      구글/깃허브 소셜 로그인을 지원합니다.
     </Tip>
   </Step>
 
-  <Step title="바로 사용하기">
-    연결이 완료되면 ChatGPT에게 한국 데이터를 자연어로 물어볼 수 있습니다.
+  <Step title="만들기 완료 후 사용">
+    스캔이 끝나면 **Create**를 누르세요. 새 앱은 Settings → Apps의 Enabled Apps에
+    **Dev** 라벨로 표시됩니다. 새 대화에서 앱을 선택한 뒤 한국 데이터를 자연어로 물어보세요.
 
     ```
-    서울 중구 미세먼지 상태 알려줘
-    강남구 학동로 근처 약국 찾아줘
-    오늘 달러 환율 얼마야?
+    서울 강남구 내일 날씨 어때?
+    지금 서울 미세먼지 상태 알려줘
+    반포동 아파트 실거래가 알려줘
     ```
+
+    <Note>
+      아파트 실거래가처럼 공공데이터포털 키가 필요한 도구는, 계정에 키가 없으면
+      데이터 대신 **서비스키 등록 안내**를 돌려줍니다. [portal.bridger.kr](https://portal.bridger.kr)에서
+      data.go.kr 서비스키를 등록하면 바로 조회됩니다.
+    </Note>
   </Step>
 </Steps>
 
 ## 문제 해결
 
 <AccordionGroup>
-  <Accordion title="커넥터 추가 메뉴가 보이지 않아요">
-    원격 MCP 커넥터는 ChatGPT 개발자 모드 또는 커넥터를 지원하는 플랜에서만 노출됩니다.
-    설정에서 개발자 모드를 활성화했는지 확인하세요.
+  <Accordion title="개발자 모드 토글 / Create 버튼이 보이지 않아요">
+    플랜이 개발자 모드를 지원하는지 확인하세요. Business는 관리자/소유자만,
+    Enterprise/Edu는 관리자가 RBAC로 권한을 부여해야 합니다.
   </Accordion>
-  <Accordion title="OAuth 동의 화면이 나타나지 않아요">
-    `https://mcp.datari.kr/mcp` URL이 정확한지, 브라우저 팝업/리디렉션이 차단되지 않았는지
-    확인하세요.
+  <Accordion title="Scan Tools가 실패해요">
+    `https://mcp.bridger.kr/mcp` URL이 정확한지 확인하세요. 끝에 `/openai` 등
+    경로를 붙이면 안 됩니다. 브라우저 팝업/리디렉션이 차단됐는지도 확인하세요.
+  </Accordion>
+  <Accordion title="로그인 후 다시 로그인하라고 해요">
+    OAuth 토큰 갱신 설정 문제일 수 있습니다. 잠시 후 재시도하고, 계속되면
+    커넥터를 지우고 다시 만들어 보세요.
   </Accordion>
   <Accordion title="데이터가 조회되지 않아요">
     일부 공공데이터 API는 야간에 점검될 수 있습니다. 잠시 후 다시 시도해 주세요.
   </Accordion>
   <Accordion title="그래도 해결이 안 되면">
-    [이메일](mailto:support@datari.kr) 또는 채널톡으로 문의해 주세요.
+    [hello@bridger.kr](mailto:hello@bridger.kr)로 문의해 주세요.
   </Accordion>
 </AccordionGroup>
