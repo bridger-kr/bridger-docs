@@ -23,14 +23,14 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
 
 <CodeGroup>
   ```bash cURL
-  curl -X POST https://mcp.datari.kr/mcp \
+  curl -X POST https://mcp.bridger.kr/mcp \
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
   ```
 
   ```javascript Node.js
-  const res = await fetch("https://mcp.datari.kr/mcp", {
+  const res = await fetch("https://mcp.bridger.kr/mcp", {
     method: "POST",
     headers: {
       "x-api-key": process.env.DATA_BRIDGE_API_KEY,
@@ -48,7 +48,7 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
   ```python Python
   import os, requests
   r = requests.post(
-      "https://mcp.datari.kr/mcp",
+      "https://mcp.bridger.kr/mcp",
       headers={
           "x-api-key": os.environ["DATA_BRIDGE_API_KEY"],
           "Content-Type": "application/json",
@@ -89,7 +89,7 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
 도구 하나를 골라 `tools/call`로 실행합니다. 예시는 서울 강남구 초단기예보입니다.
 
 ```bash
-curl -X POST https://mcp.datari.kr/mcp \
+curl -X POST https://mcp.bridger.kr/mcp \
   -H "x-api-key: $DATA_BRIDGE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -108,10 +108,10 @@ curl -X POST https://mcp.datari.kr/mcp \
 
 ## 3. SSE로 실시간 이벤트 받기
 
-장시간 실행 도구나 스트리밍 응답은 SSE 엔드포인트(`/mcp/sse`)로 받습니다.
+장시간 실행 도구나 스트리밍 응답은 SSE 엔드포인트(`/mcp`)로 받습니다.
 
 ```bash
-curl -N https://mcp.datari.kr/mcp/sse \
+curl -N https://mcp.bridger.kr/mcp \
   -H "x-api-key: $DATA_BRIDGE_API_KEY"
 ```
 

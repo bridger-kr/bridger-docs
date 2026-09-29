@@ -3,7 +3,7 @@ title: "Quickstart"
 description: "Call your first MCP tool through Bridger in under 5 minutes."
 ---
 
-Bridger is used by connecting to the **hosted Gateway** (`mcp.datari.kr`) with an API key.
+Bridger is used by connecting to the **hosted Gateway** (`mcp.bridger.kr`) with an API key.
 You can start right away — no separate server to install or operate.
 
 ## Why Bridger exists
@@ -21,7 +21,7 @@ activate only the provider keys you need, find the tool, and call it.
 
 ## 1. Issue an API key
 
-Create an account at [admin.datari.kr](https://admin.datari.kr) and issue a key under
+Create an account at [portal.bridger.kr](https://portal.bridger.kr) and issue a key under
 **Settings → API Keys**. See the [API key guide](/en/guides/api-keys) for details.
 
 ```bash
@@ -30,14 +30,14 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
 
 ## 2. Connect to the Gateway
 
-The Gateway host is `mcp.datari.kr`. Connect to that address from your MCP client or curl.
+The Gateway host is `mcp.bridger.kr`. Connect to that address from your MCP client or curl.
 
 ## 3. List available tools
 
 Use JSON-RPC `tools/list` to retrieve every tool registered with Bridger.
 
 ```bash
-curl -X POST https://mcp.datari.kr/mcp \
+curl -X POST https://mcp.bridger.kr/mcp \
   -H "x-api-key: $DATA_BRIDGE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
@@ -55,7 +55,7 @@ and register the provider key under **Settings → Provider Keys** before you ca
 Run a single tool for real. The example below calls the KMA ultra-short-term forecast.
 
 ```bash
-curl -X POST https://mcp.datari.kr/mcp \
+curl -X POST https://mcp.bridger.kr/mcp \
   -H "x-api-key: $DATA_BRIDGE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{

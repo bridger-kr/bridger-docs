@@ -1,145 +1,106 @@
 ---
-title: "Connect to Gemini Enterprise"
-description: "Admin setup for connecting Bridger as a custom MCP server in Gemini Enterprise — pre-provisioned OAuth client + PKCE."
+title: "Connect to Gemini"
+description: "How to use Bridger MCP from Gemini CLI and Gemini Enterprise."
 ---
 
-Connect Bridger as a **custom MCP server** in Gemini Enterprise (Google Workspace) to use
-230+ Korean public-data tools as Gemini agent actions.
-
-The transport is **Streamable HTTP** and authentication is **OAuth 2.0 Authorization Code +
-PKCE (S256)**. Gemini Enterprise does not support Dynamic Client Registration (DCR), so an
-administrator enters a pre-provisioned static confidential client's ID/secret directly in the
-console.
+You can connect Bridger as an MCP server in **Gemini CLI** (the developer terminal
+tool) and **Gemini Enterprise** (organization-wide).
 
 <Note>
-  This setup is done jointly by a **Bridger operator (platform admin) and a Google Workspace
-  admin**. For end-user connector setup, see [Connect to ChatGPT](/en/guides/chatgpt).
+  **The consumer Gemini app** (gemini.google.com and the mobile apps) is not a
+  connection target. Its custom MCP support ("Custom apps for Spark") is limited
+  to US-based, English-language personal accounts, so the menu does not appear on
+  Korean accounts — use Gemini CLI or Gemini Enterprise below instead.
 </Note>
 
-## 1. Provision a static OAuth client (Bridger admin)
+## Gemini CLI
 
-Issue a non-expiring confidential client through the admin-gated endpoint
-`POST /api/v1/admin/oauth-clients`. Requires the gateway admin API key (`GATEWAY_API_KEY`).
+Register the MCP server in `~/.gemini/settings.json`:
 
-```bash
-curl -X POST https://mcp.datari.kr/api/v1/admin/oauth-clients \
-  -H "x-api-key: $GATEWAY_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "client_name": "Gemini Enterprise",
-    "redirect_uris": ["https://vertexaisearch.cloud.google.com/oauth-redirect"],
-    "grant_types": ["authorization_code", "refresh_token"],
-    "token_endpoint_auth_method": "client_secret_basic",
-    "scope": "tools:read tools:execute offline_access"
-  }'
-```
-
-<Warning>
-  `redirect_uris` must register Google's fixed redirect,
-  `https://vertexaisearch.cloud.google.com/oauth-redirect`, **exactly**. Unregistered
-  redirects are rejected at authorization.
-</Warning>
-
-Take `client_id` and `client_secret` from the 201 response:
-
-```json
+```json ~/.gemini/settings.json
 {
-  "client_id": "mcp_1a2b3c...",
-  "client_secret": "mcs_9f8e7d...",
-  "client_secret_expires_at": 0,
-  "redirect_uris": ["https://vertexaisearch.cloud.google.com/oauth-redirect"],
-  "scope": "tools:read tools:execute offline_access"
+  "mcpServers": {
+    "bridger": {
+      "httpUrl": "https://mcp.bridger.kr/mcp"
+    }
+  }
 }
 ```
 
-`client_secret_expires_at: 0` means it never expires. The secret is shown only once —
-store it in a secret manager.
+Or register it with a single command:
 
-<Accordion title="Alternative: Dynamic Client Registration (DCR)">
-  A client can also be created via the public DCR endpoint.
+```bash
+gemini mcp add --transport http bridger https://mcp.bridger.kr/mcp
+```
 
-  ```bash
-  curl -X POST https://mcp.datari.kr/oauth/register \
-    -H "Content-Type: application/json" \
-    -d '{
-      "client_name": "Gemini Enterprise",
-      "redirect_uris": ["https://vertexaisearch.cloud.google.com/oauth-redirect"],
-      "grant_types": ["authorization_code", "refresh_token"],
-      "scope": "tools:read tools:execute offline_access"
-    }'
-  ```
-
-  <Warning>
-    DCR clients **expire after 30 days** (see `client_secret_expires_at`). Gemini Enterprise
-    does not re-register automatically — for production use, always use a static client
-    issued via the admin endpoint.
-  </Warning>
-</Accordion>
-
-## 2. Configure the Gemini Enterprise data store (Workspace admin)
-
-In the Google admin console, under Gemini Enterprise **data stores/connectors → custom MCP
-server**, enter:
-
-| Google field | Value |
-| --- | --- |
-| MCP Server URL | `https://mcp.datari.kr/mcp/gemini` |
-| Authorization URL | `https://mcp.datari.kr/oauth/authorize` |
-| Token URL | `https://mcp.datari.kr/oauth/token` |
-| Client ID | The `mcp_...` issued in step 1 |
-| Client Secret | The `mcs_...` issued in step 1 |
-| Scopes (space-separated) | `tools:read tools:execute offline_access` |
-| PKCE | Enable — Bridger requires **S256** |
-| Redirect URI | `https://vertexaisearch.cloud.google.com/oauth-redirect` (fixed by Google; registered in step 1) |
+On first use, your browser opens the Bridger sign-in (Google · GitHub) and consent
+screen. Inside the CLI, type `/mcp` to see server status and the auth menu.
 
 <Tip>
-  The dedicated `/mcp/gemini` endpoint truncates the tool list to **100** — the maximum
-  actions a Gemini Enterprise data store can enable. The generic `/mcp` path also works,
-  but prefer `/mcp/gemini` in environments with more than 100 tools.
+  **One-line CLI extension install is coming soon.** Once published, you'll be able to run
+  `gemini extensions install https://github.com/bridger-kr/bridger-gemini-extension`.
+  Until then, use the `settings.json` method above.
 </Tip>
 
-## 3. Verify
+## Gemini Enterprise
 
-1. Saving the data store starts OAuth. Log in to Bridger, confirm the client name, scopes,
-   and redirect on the consent screen, and click **Allow**.
-2. Check the connector's **Actions** list and enable up to 100 actions.
-3. Run a Korean public-data query in Gemini to confirm an action executes.
+In Gemini Enterprise, an admin registers a custom MCP connector. Enter these values
+in the connector setup screen:
 
-## Scope reference
+| Field | Value |
+| --- | --- |
+| MCP server URL | `https://mcp.bridger.kr/mcp` |
+| Transport | Streamable HTTP |
+| Authorization URL | `https://api.bridger.kr/oauth/authorize` |
+| Token URL | `https://api.bridger.kr/oauth/token` |
+| Client ID / Client secret | Request from Bridger ([hello@bridger.kr](mailto:hello@bridger.kr)) |
+| Scopes (space-separated) | `tools:read tools:execute offline_access` |
+| PKCE | Enabled — Bridger accepts **S256** only |
+| Redirect URI | `https://vertexaisearch.cloud.google.com/oauth-redirect` (fixed by Google) |
+
+<Note>
+  Gemini Enterprise doesn't support dynamic client registration (DCR), so it needs a
+  pre-registered, non-expiring confidential client. Request one for the redirect URI above and
+  Bridger will issue the client ID and secret. The secret is shared once — store it securely.
+</Note>
 
 | Scope | Meaning |
 | --- | --- |
 | `tools:read` | List tools (`tools/list`) |
-| `tools:execute` | Invoke tools (`tools/call`) |
-| `offline_access` | Issue refresh tokens — keeps the connection alive |
+| `tools:execute` | Run tools (`tools/call`) |
+| `offline_access` | Issue refresh tokens to keep the connection alive |
 
-<Note>
-  The `resource` parameter (RFC 8707) is optional. When omitted, tokens bind to the
-  gateway's canonical resource (`https://mcp.datari.kr/mcp`) automatically. Clients that
-  do send it must match that canonical value exactly.
-</Note>
+<Tip>
+  Gemini Enterprise allows at most 100 enabled actions per connector. Bridger trims the tool list
+  for Gemini Enterprise connections to stay within that cap. After saving, enable the actions
+  you need in the connector's **Actions** list.
+</Tip>
 
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="Authorization fails with invalid_target / invalid_redirect_uri">
-    Confirm the client's registered redirect is exactly
-    `https://vertexaisearch.cloud.google.com/oauth-redirect`. If `resource` is sent it must
-    equal `https://mcp.datari.kr/mcp`; omit it to bind the canonical resource automatically.
+  <Accordion title="The server doesn't show up in Gemini CLI">
+    Check the JSON syntax and `mcpServers` key placement in `~/.gemini/settings.json`,
+    then run `gemini mcp list` to confirm it's registered.
   </Accordion>
-  <Accordion title="PKCE errors">
-    Bridger accepts PKCE `S256` only. Enable PKCE in the connector settings — plain or
-    absent challenges are rejected.
+  <Accordion title="The auth browser doesn't open">
+    In the CLI, select `bridger` under `/mcp` and retry authentication. On headless
+    environments, create the settings file on a machine with a browser first.
   </Accordion>
-  <Accordion title="The client_id suddenly isn't recognized">
-    DCR-issued clients expire after 30 days. Confirm the client was provisioned through
-    `POST /api/v1/admin/oauth-clients` as a static client.
+  <Accordion title="Enterprise authorization fails with invalid_redirect_uri / invalid_target">
+    Make sure the issued client's redirect exactly matches
+    `https://vertexaisearch.cloud.google.com/oauth-redirect`. The `resource` parameter is
+    optional; if sent, it must exactly equal `https://mcp.bridger.kr/mcp`.
   </Accordion>
-  <Accordion title="Some tools are missing from the list">
-    The `/mcp/gemini` path truncates at 100 tools. Operators can set
-    `MCP_GEMINI_CURATED_TOOLS` to curate exactly which tools are advertised.
+  <Accordion title="Enterprise shows a PKCE error">
+    Enable PKCE in the connector settings with method `S256`. Plain PKCE or no PKCE is not
+    supported.
   </Accordion>
-  <Accordion title="Still stuck">
-    Contact [support](mailto:support@datari.kr) or Channel Talk.
+  <Accordion title="Some tools won't run">
+    Some public-data APIs need your own service key. Add it under **My service key** in the
+    [Dashboard](https://portal.bridger.kr) to enable them.
+  </Accordion>
+  <Accordion title="Still not working?">
+    Contact us at [hello@bridger.kr](mailto:hello@bridger.kr) or via Channel Talk.
   </Accordion>
 </AccordionGroup>
