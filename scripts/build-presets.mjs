@@ -272,7 +272,7 @@ ${L.usageHeading}
 
   \`\`\`${L.toolsListLabel}
   curl -X POST https://mcp.bridger.kr/mcp \\
-    -H "x-api-key: $DATA_BRIDGE_API_KEY" \\
+    -H "x-api-key: $BRIDGER_API_KEY" \\
     -H "Content-Type: application/json" \\
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
   \`\`\`
@@ -327,7 +327,7 @@ ${L.quickHeading}
 
 \`\`\`bash
 curl -X POST https://mcp.bridger.kr/mcp \\
-  -H "x-api-key: $DATA_BRIDGE_API_KEY" \\
+  -H "x-api-key: $BRIDGER_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 \`\`\`

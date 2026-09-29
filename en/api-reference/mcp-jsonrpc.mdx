@@ -134,14 +134,14 @@ Runs a single tool.
 <CodeGroup>
   ```bash tools/list
   curl -X POST https://mcp.bridger.kr/mcp \
-    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "x-api-key: $BRIDGER_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
   ```
 
   ```bash tools/call
   curl -X POST https://mcp.bridger.kr/mcp \
-    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "x-api-key: $BRIDGER_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{
       "jsonrpc": "2.0",

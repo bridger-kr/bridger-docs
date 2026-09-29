@@ -1,6 +1,6 @@
 ---
 title: "Global Developer Acquisition — Next Work"
-description: "Internal execution addendum to global-developer-peer-research.mdx. Strategy is settled there; this file is only the executable next work for acquiring foreign developers — what Datari must ship in API/web/docs/spec, why Datari over direct Korean government APIs, MAU stage gates, and a ranked 10-ticket backlog with owning repo and acceptance criteria. Not navigation-linked."
+description: "Internal execution addendum to global-developer-peer-research.mdx. Strategy is settled there; this file is only the executable next work for acquiring foreign developers — what Bridger must ship in API/web/docs/spec, why Bridger over direct Korean government APIs, MAU stage gates, and a ranked 10-ticket backlog with owning repo and acceptance criteria. Not navigation-linked."
 ---
 
 <Note>
@@ -25,7 +25,7 @@ Web access succeeded at authoring time. Reference points re-checked live on 2026
 | `stripe.com/docs`, `stripe.com/pricing` | `curl` HTTP | `301`→docs, `200` |
 | `h6s.ai/docs/api` | `curl` HTTP | `404` (no public REST reference page at that path) |
 
-Datari grounding re-confirmed against this repo: BYOAPI is still **"추후 제공 예정"**
+Bridger grounding re-confirmed against this repo: BYOAPI is still **"추후 제공 예정"**
 (`concepts/byoapi.mdx`, line 10), docs ship **ko + en** (`docs.json` has both language trees),
 the gateway exposes Registry + MCP JSON-RPC + SSE (`api-reference/*`). Nothing below assumes BYOAPI
 is GA unless the ticket is *about* shipping BYOAPI.
@@ -41,7 +41,7 @@ is GA unless the ticket is *about* shipping BYOAPI.
    funnel: our free tier must be *more generous and more legible* than "20 requests/mo," and our
    first paid step must not look like a ₩1M/mo enterprise wall to an indie developer abroad.
 2. **h6s has no public REST reference page** (`/docs/api` → 404). Their developer surface is
-   MCP-first + CLI. Datari already publishes a full **API Reference tab in both languages** — that
+   MCP-first + CLI. Bridger already publishes a full **API Reference tab in both languages** — that
    is a concrete, *already-shipped* DX edge over the nearest comparable. The next-work job is to make
    the English half of it self-serve to completion (keys → first call) without a human.
 3. **The foreign-developer wedge is narrower than "Korean public data."** A developer in SF/Berlin
@@ -51,15 +51,15 @@ is GA unless the ticket is *about* shipping BYOAPI.
 
 ---
 
-## A. Why Datari, not direct Korean government APIs (the foreign-dev version)
+## A. Why Bridger, not direct Korean government APIs (the foreign-dev version)
 
 This is the objection a non-Korean developer raises in the first 60 seconds. The base memo answers it
 abstractly (§3.1); here is the **shippable, demonstrable** version we must put in front of them.
 
-| Their friction with data.go.kr directly | What it costs a foreign dev specifically | What Datari ships to remove it |
+| Their friction with data.go.kr directly | What it costs a foreign dev specifically | What Bridger ships to remove it |
 | --- | --- | --- |
 | Portal + most API docs are **Korean-only** | Can't even read the field meanings; Google-translates XML | **English tool descriptions + English docs** already exist; finish the en quickstart end-to-end (T1) |
-| `ServiceKey` issuance requires a **Korean signup flow** | Often blocked at registration; phone/identity friction | One Datari API key fronts all sources — **no data.go.kr account needed** (already true; make it the headline) |
+| `ServiceKey` issuance requires a **Korean signup flow** | Often blocked at registration; phone/identity friction | One Bridger API key fronts all sources — **no data.go.kr account needed** (already true; make it the headline) |
 | **Lat/long → grid (nx/ny)** conversion, per-API | Silent wrong results; hours lost | Adapter does it (`concepts/architecture.mdx`); show a **before/after** in docs (T4) |
 | **XML + idiosyncratic error codes**, inconsistent per source | Must write a parser per source | Normalized JSON + mapped errors; **document the error contract** (T6) |
 | **No MCP** — it's REST you must wrap yourself | Build + host an MCP server per source, forever | Hosted MCP, one endpoint, one key (already true; the "vs ad-hoc MCP" demo, T8) |
@@ -121,24 +121,24 @@ acquisition*, not revenue targets.
 
 Scope: **only foreign-developer acquisition.** Ranked by leverage = (acquisition impact) ÷ (effort),
 front-loading cheap unlocks. Each ticket names the **owning repo**, the **stage gate** it serves, and
-**acceptance criteria** that are externally verifiable. Repos: `datari-web` (landing/marketing),
-`datari-api` (gateway), `datari-docs` (this repo), `datari-spec` (OpenAPI presets / spec tooling).
+**acceptance criteria** that are externally verifiable. Repos: `bridger-web` (landing/marketing),
+`bridger-api` (gateway), `bridger-docs` (this repo), `bridger-spec` (OpenAPI presets / spec tooling).
 
 | # | Ticket | Repo | Stage | Effort |
 | --- | --- | --- | --- | --- |
-| T1 | English quickstart that completes (key → first call) | `datari-docs` | 1 | S |
-| T2 | Self-serve API-key issuance for non-KR signups | `datari-api` + `datari-web` | 1 | M |
-| T3 | Activation + usage telemetry, free/metered boundary | `datari-api` | 1→2 | M |
-| T4 | "vs data.go.kr" before/after proof page (EN) | `datari-docs` | 1 | S |
-| T5 | Use-case landing pages (FX, KRX, weather, address) | `datari-web` | 1 | M |
-| T6 | Documented error contract + English error messages | `datari-api` + `datari-docs` | 1 | M |
-| T7 | Progressive tool discovery / meta-tools | `datari-api` | 2 | M |
-| T8 | Two-source composed-agent demo (copy-paste) | `datari-docs` | 1→2 | S |
-| T9 | BYOAPI to GA (self-serve, no human in loop) | `datari-api` + `datari-spec` | 3 | XL |
-| T10 | Data-handling / residency doc + ZDR option | `datari-docs` + `datari-api` | 3 | M |
+| T1 | English quickstart that completes (key → first call) | `bridger-docs` | 1 | S |
+| T2 | Self-serve API-key issuance for non-KR signups | `bridger-api` + `bridger-web` | 1 | M |
+| T3 | Activation + usage telemetry, free/metered boundary | `bridger-api` | 1→2 | M |
+| T4 | "vs data.go.kr" before/after proof page (EN) | `bridger-docs` | 1 | S |
+| T5 | Use-case landing pages (FX, KRX, weather, address) | `bridger-web` | 1 | M |
+| T6 | Documented error contract + English error messages | `bridger-api` + `bridger-docs` | 1 | M |
+| T7 | Progressive tool discovery / meta-tools | `bridger-api` | 2 | M |
+| T8 | Two-source composed-agent demo (copy-paste) | `bridger-docs` | 1→2 | S |
+| T9 | BYOAPI to GA (self-serve, no human in loop) | `bridger-api` + `bridger-spec` | 3 | XL |
+| T10 | Data-handling / residency doc + ZDR option | `bridger-docs` + `bridger-api` | 3 | M |
 
 ### T1 — English quickstart that actually completes
-- **Repo:** `datari-docs` (`en/getting-started/quickstart.mdx`, `en/getting-started/first-tool.mdx`)
+- **Repo:** `bridger-docs` (`en/getting-started/quickstart.mdx`, `en/getting-started/first-tool.mdx`)
 - **Why:** the en docs tree exists but the foreign funnel dies if quickstart doesn't end at a green
   `tools/call`. h6s has no English-first story; this is a cheap, real edge.
 - **Acceptance:**
@@ -148,16 +148,16 @@ front-loading cheap unlocks. Each ticket names the **owning repo**, the **stage 
   3. `mint broken-links` passes; no untranslated Korean leaks into the en tree.
 
 ### T2 — Self-serve API-key issuance for non-KR signups
-- **Repo:** `datari-api` (issuance endpoint) + `datari-web` (signup UI)
+- **Repo:** `bridger-api` (issuance endpoint) + `bridger-web` (signup UI)
 - **Why:** the single biggest **why-not-data.go.kr** advantage is "no Korean government signup." That
-  collapses if *Datari's own* signup needs a Korean phone/identity step.
+  collapses if *Bridger's own* signup needs a Korean phone/identity step.
 - **Acceptance:**
   1. A signup with a non-KR email + no Korean phone yields a working key.
   2. Key works against `mcp.bridger.kr/mcp` immediately (`tools/list` returns 200).
   3. Free-tier limits are shown at issuance time in English.
 
 ### T3 — Activation + usage telemetry, free/metered boundary
-- **Repo:** `datari-api`
+- **Repo:** `bridger-api`
 - **Why:** Stage-1 and Stage-2 gates are **unmeasurable** without this. The base memo flags that
   `/registry/servers` is auth-gated and no public telemetry exists — we can't learn activation,
   retention, or willingness-to-pay blind.
@@ -168,24 +168,24 @@ front-loading cheap unlocks. Each ticket names the **owning repo**, the **stage 
   4. `tools/list`, schema inspection, and registration remain **free** (Pipedream-style boundary).
 
 ### T4 — "vs data.go.kr" before/after proof page (EN)
-- **Repo:** `datari-docs` (new `en/concepts/` or `en/guides/` page)
+- **Repo:** `bridger-docs` (new `en/concepts/` or `en/guides/` page)
 - **Why:** answers the 60-second objection (§A) with evidence, not assertion. Highest-trust, lowest-effort.
 - **Acceptance:**
-  1. Side-by-side: raw data.go.kr call (XML, `ServiceKey`, grid math) vs one Datari `tools/call`.
+  1. Side-by-side: raw data.go.kr call (XML, `ServiceKey`, grid math) vs one Bridger `tools/call`.
   2. Shows the **coordinate conversion** and **XML→JSON** the adapter removes, on a real preset
      (e.g. weather ultra-shortcast).
   3. Honest caveat box: "for one source, DIY may suffice; value compounds with breadth."
 
 ### T5 — Use-case landing pages (FX, KRX, weather, address)
-- **Repo:** `datari-web`
+- **Repo:** `bridger-web`
 - **Why:** foreign devs search the **signal**, not "Korean public data." Lead with the job-to-be-done.
 - **Acceptance:**
-  1. ≥4 use-case pages, each mapping a foreign-dev job → specific Datari preset(s) → copy-paste call.
+  1. ≥4 use-case pages, each mapping a foreign-dev job → specific Bridger preset(s) → copy-paste call.
   2. Each links into the EN docs T1 quickstart.
   3. No claim depends on BYOAPI (still pre-GA per `concepts/byoapi.mdx`).
 
 ### T6 — Documented error contract + English error messages
-- **Repo:** `datari-api` (error mapping) + `datari-docs` (reference page)
+- **Repo:** `bridger-api` (error mapping) + `bridger-docs` (reference page)
 - **Why:** the adapter already maps upstream error codes; a foreign dev hits an opaque/Korean error
   and churns. Make failures self-explanatory.
 - **Acceptance:**
@@ -194,7 +194,7 @@ front-loading cheap unlocks. Each ticket names the **owning repo**, the **stage 
   3. The most common first-call failure (missing/invalid key) has an explicit English path to fix.
 
 ### T7 — Progressive tool discovery / meta-tools
-- **Repo:** `datari-api`
+- **Repo:** `bridger-api`
 - **Why:** 230 tools on one endpoint = context bloat (base memo R3). Apideck/Composio both engineer
   around this. Required before agent usage scales (Stage 2).
 - **Acceptance:**
@@ -203,16 +203,16 @@ front-loading cheap unlocks. Each ticket names the **owning repo**, the **stage 
   3. Tool-selection accuracy on a fixed eval set does **not** regress after the change.
 
 ### T8 — Two-source composed-agent demo (copy-paste)
-- **Repo:** `datari-docs` (`en/guides/`)
+- **Repo:** `bridger-docs` (`en/guides/`)
 - **Why:** the *breadth* argument (§A honest-counter) only lands when two sources compose in one
   agent. This is the artifact that makes "vs ad-hoc MCP" concrete.
 - **Acceptance:**
   1. A worked example agent calls **two different presets** (e.g. weather + transit) in one flow.
-  2. Runs from a single Datari key in a real MCP client; steps are copy-paste reproducible.
+  2. Runs from a single Bridger key in a real MCP client; steps are copy-paste reproducible.
   3. Explicitly contrasts the effort vs. hand-rolling two MCP servers.
 
 ### T9 — BYOAPI to GA (self-serve, no human in loop)
-- **Repo:** `datari-api` (registration pipeline) + `datari-spec` (validation/scoring tooling)
+- **Repo:** `bridger-api` (registration pipeline) + `bridger-spec` (validation/scoring tooling)
 - **Why:** the durable business (base memo §4.3, §7-P1) is gated here. Highest impact, highest effort.
 - **Acceptance:**
   1. A stranger submits an OpenAPI spec (URL/upload/inline) → validation/scoring → live callable
@@ -221,7 +221,7 @@ front-loading cheap unlocks. Each ticket names the **owning repo**, the **stage 
   3. The "추후 제공 예정" note is removed from `concepts/byoapi.mdx` only when 1–2 are true in prod.
 
 ### T10 — Data-handling / residency doc + ZDR option
-- **Repo:** `datari-docs` (`en/concepts/auth-and-security`) + `datari-api` (ZDR behavior)
+- **Repo:** `bridger-docs` (`en/concepts/auth-and-security`) + `bridger-api` (ZDR behavior)
 - **Why:** h6s's local-first pitch directly attacks "why route my data through a hosted vendor?"
   Enterprise/foreign trust (Stage 3) needs a documented answer, not hand-waving.
 - **Acceptance:**

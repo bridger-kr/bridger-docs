@@ -10,10 +10,10 @@ description: "MCP JSON-RPC로 Bridger에 등록된 도구를 처음 호출해 �
 ## 준비
 
 - [API 키 발급](/guides/api-keys) 완료
-- `DATA_BRIDGE_API_KEY` 환경변수에 키 저장
+- `BRIDGER_API_KEY` 환경변수에 키 저장
 
 ```bash
-export DATA_BRIDGE_API_KEY="dk_live_..."
+export BRIDGER_API_KEY="dk_live_..."
 ```
 
 ## 1. 등록된 도구 목록 조회
@@ -24,7 +24,7 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
 <CodeGroup>
   ```bash cURL
   curl -X POST https://mcp.bridger.kr/mcp \
-    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "x-api-key: $BRIDGER_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
   ```
@@ -33,7 +33,7 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
   const res = await fetch("https://mcp.bridger.kr/mcp", {
     method: "POST",
     headers: {
-      "x-api-key": process.env.DATA_BRIDGE_API_KEY,
+      "x-api-key": process.env.BRIDGER_API_KEY,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -50,7 +50,7 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
   r = requests.post(
       "https://mcp.bridger.kr/mcp",
       headers={
-          "x-api-key": os.environ["DATA_BRIDGE_API_KEY"],
+          "x-api-key": os.environ["BRIDGER_API_KEY"],
           "Content-Type": "application/json",
       },
       json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"},
@@ -90,7 +90,7 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
 
 ```bash
 curl -X POST https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "x-api-key: $BRIDGER_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -112,7 +112,7 @@ curl -X POST https://mcp.bridger.kr/mcp \
 
 ```bash
 curl -N https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $DATA_BRIDGE_API_KEY"
+  -H "x-api-key: $BRIDGER_API_KEY"
 ```
 
 `gateway/toolResult` 이벤트가 도구 실행마다 브로드캐스트됩니다.

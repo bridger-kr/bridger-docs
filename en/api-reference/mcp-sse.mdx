@@ -79,7 +79,7 @@ data: {"jobId":"...","status":"registered","job":{ ... }}
 
 ```bash
 curl -N https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "x-api-key: $BRIDGER_API_KEY" \
   -H "Accept: text/event-stream"
 ```
 
@@ -91,7 +91,7 @@ The `-N` (--no-buffer) flag gives you real-time output.
 import EventSource from "eventsource";
 
 const es = new EventSource("https://mcp.bridger.kr/mcp", {
-  headers: { "x-api-key": process.env.DATA_BRIDGE_API_KEY },
+  headers: { "x-api-key": process.env.BRIDGER_API_KEY },
 });
 
 es.addEventListener("ready", (e) => {

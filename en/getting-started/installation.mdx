@@ -11,20 +11,20 @@ On the client side, you only need to configure an API key and the Gateway URL.
 Create an account at [portal.bridger.kr](https://portal.bridger.kr) and issue a key under **Settings → API Keys**.
 
 ```bash
-export DATA_BRIDGE_API_KEY="dk_live_..."
+export BRIDGER_API_KEY="dk_live_..."
 ```
 
 ## Gateway URL
 
 ```bash
-export DATA_BRIDGE_GATEWAY_URL="https://mcp.bridger.kr/mcp"
+export BRIDGER_GATEWAY_URL="https://mcp.bridger.kr/mcp"
 ```
 
 ## Verify the connection
 
 ```bash
-curl -X POST "$DATA_BRIDGE_GATEWAY_URL" \
-  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+curl -X POST "$BRIDGER_GATEWAY_URL" \
+  -H "x-api-key: $BRIDGER_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```

@@ -25,7 +25,7 @@ Bridger는 이런 차이를 Gateway에서 정리해서, 사용자는 공통 키�
 키를 발급받습니다. 자세한 내용은 [API 키 가이드](/guides/api-keys)를 참고하세요.
 
 ```bash
-export DATA_BRIDGE_API_KEY="dk_live_..."
+export BRIDGER_API_KEY="dk_live_..."
 ```
 
 ## 2. Gateway에 연결
@@ -38,7 +38,7 @@ JSON-RPC `tools/list`로 Bridger에 등록된 모든 도구 목록을 조회합�
 
 ```bash
 curl -X POST https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "x-api-key: $BRIDGER_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
@@ -57,7 +57,7 @@ curl -X POST https://mcp.bridger.kr/mcp \
 
 ```bash
 curl -X POST https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "x-api-key: $BRIDGER_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",

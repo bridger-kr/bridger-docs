@@ -25,7 +25,7 @@ Create an account at [portal.bridger.kr](https://portal.bridger.kr) and issue a 
 **Settings → API Keys**. See the [API key guide](/en/guides/api-keys) for details.
 
 ```bash
-export DATA_BRIDGE_API_KEY="dk_live_..."
+export BRIDGER_API_KEY="dk_live_..."
 ```
 
 ## 2. Connect to the Gateway
@@ -38,7 +38,7 @@ Use JSON-RPC `tools/list` to retrieve every tool registered with Bridger.
 
 ```bash
 curl -X POST https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "x-api-key: $BRIDGER_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
@@ -56,7 +56,7 @@ Run a single tool for real. The example below calls the KMA ultra-short-term for
 
 ```bash
 curl -X POST https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "x-api-key: $BRIDGER_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",

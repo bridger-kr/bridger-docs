@@ -10,10 +10,10 @@ pattern.
 ## Prerequisites
 
 - [API key issued](/en/guides/api-keys)
-- Key stored in the `DATA_BRIDGE_API_KEY` environment variable
+- Key stored in the `BRIDGER_API_KEY` environment variable
 
 ```bash
-export DATA_BRIDGE_API_KEY="dk_live_..."
+export BRIDGER_API_KEY="dk_live_..."
 ```
 
 ## 1. List registered tools
@@ -24,7 +24,7 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
 <CodeGroup>
   ```bash cURL
   curl -X POST https://mcp.bridger.kr/mcp \
-    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "x-api-key: $BRIDGER_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
   ```
@@ -33,7 +33,7 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
   const res = await fetch("https://mcp.bridger.kr/mcp", {
     method: "POST",
     headers: {
-      "x-api-key": process.env.DATA_BRIDGE_API_KEY,
+      "x-api-key": process.env.BRIDGER_API_KEY,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -50,7 +50,7 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
   r = requests.post(
       "https://mcp.bridger.kr/mcp",
       headers={
-          "x-api-key": os.environ["DATA_BRIDGE_API_KEY"],
+          "x-api-key": os.environ["BRIDGER_API_KEY"],
           "Content-Type": "application/json",
       },
       json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"},
@@ -90,7 +90,7 @@ Pick one tool and run it with `tools/call`. The example is an ultra-short-term f
 
 ```bash
 curl -X POST https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+  -H "x-api-key: $BRIDGER_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -112,7 +112,7 @@ For long-running tools or streaming responses, subscribe to the SSE endpoint (`/
 
 ```bash
 curl -N https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $DATA_BRIDGE_API_KEY"
+  -H "x-api-key: $BRIDGER_API_KEY"
 ```
 
 A `gateway/toolResult` event is delivered to your client for each tool execution.
