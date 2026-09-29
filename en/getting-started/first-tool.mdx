@@ -23,14 +23,14 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
 
 <CodeGroup>
   ```bash cURL
-  curl -X POST https://mcp.datari.kr/mcp \
+  curl -X POST https://mcp.bridger.kr/mcp \
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
   ```
 
   ```javascript Node.js
-  const res = await fetch("https://mcp.datari.kr/mcp", {
+  const res = await fetch("https://mcp.bridger.kr/mcp", {
     method: "POST",
     headers: {
       "x-api-key": process.env.DATA_BRIDGE_API_KEY,
@@ -48,7 +48,7 @@ export DATA_BRIDGE_API_KEY="dk_live_..."
   ```python Python
   import os, requests
   r = requests.post(
-      "https://mcp.datari.kr/mcp",
+      "https://mcp.bridger.kr/mcp",
       headers={
           "x-api-key": os.environ["DATA_BRIDGE_API_KEY"],
           "Content-Type": "application/json",
@@ -89,7 +89,7 @@ The response includes tools with the following structure.
 Pick one tool and run it with `tools/call`. The example is an ultra-short-term forecast for Seoul.
 
 ```bash
-curl -X POST https://mcp.datari.kr/mcp \
+curl -X POST https://mcp.bridger.kr/mcp \
   -H "x-api-key: $DATA_BRIDGE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -108,10 +108,10 @@ curl -X POST https://mcp.datari.kr/mcp \
 
 ## 3. Receive real-time events over SSE
 
-For long-running tools or streaming responses, subscribe to the SSE endpoint (`/mcp/sse`).
+For long-running tools or streaming responses, subscribe to the SSE endpoint (`/mcp`).
 
 ```bash
-curl -N https://mcp.datari.kr/mcp/sse \
+curl -N https://mcp.bridger.kr/mcp \
   -H "x-api-key: $DATA_BRIDGE_API_KEY"
 ```
 

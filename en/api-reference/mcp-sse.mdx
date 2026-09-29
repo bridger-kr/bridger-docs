@@ -1,15 +1,15 @@
 ---
-title: "GET /mcp/sse"
+title: "GET /mcp"
 description: "Bridger Gateway real-time event stream — Server-Sent Events for tool-execution notifications."
 ---
 
-`/mcp/sse` is an SSE endpoint that delivers tool-execution results from the Gateway in real time.
+`/mcp` is an SSE endpoint that delivers tool-execution results from the Gateway in real time.
 It's used for dashboard live views, multi-client collaboration, and external observability integrations.
 
 ## Request
 
 ```http
-GET /mcp/sse HTTP/1.1
+GET /mcp HTTP/1.1
 Accept: text/event-stream
 x-api-key: dk_live_...
 ```
@@ -55,6 +55,17 @@ data: {
 }
 ```
 
+### `event: message` — `notifications/tools/list_changed`
+
+When public-data APIs are enabled or disabled in the Dashboard, a tool-list change
+notification is pushed to **every SSE client of the same tenant**. Call
+`tools/list` again on receipt.
+
+```text
+event: message
+data: {"jsonrpc":"2.0","method":"notifications/tools/list_changed"}
+```
+
 ### `event: byoapi`
 
 The progress of a BYOAPI registration job is delivered to the client that requested the registration.
@@ -67,7 +78,7 @@ data: {"jobId":"...","status":"registered","job":{ ... }}
 ## cURL
 
 ```bash
-curl -N https://mcp.datari.kr/mcp/sse \
+curl -N https://mcp.bridger.kr/mcp \
   -H "x-api-key: $DATA_BRIDGE_API_KEY" \
   -H "Accept: text/event-stream"
 ```
@@ -79,7 +90,7 @@ The `-N` (--no-buffer) flag gives you real-time output.
 ```javascript
 import EventSource from "eventsource";
 
-const es = new EventSource("https://mcp.datari.kr/mcp/sse", {
+const es = new EventSource("https://mcp.bridger.kr/mcp", {
   headers: { "x-api-key": process.env.DATA_BRIDGE_API_KEY },
 });
 

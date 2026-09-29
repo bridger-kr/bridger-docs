@@ -23,7 +23,7 @@ Bridger의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 있다
 </CardGroup>
 
 ```text
-하나의 Bridger Gateway (mcp.datari.kr)
+하나의 Bridger Gateway (mcp.bridger.kr)
   ├─ 공식 프리셋   tool_id: @datari/weather-ultra-shortcast   → tool: kma_get_ultra_shortcast
   ├─ 공식 프리셋   tool_id: @datari/realestate-apt-trade      → tool: molit_get_apt_trade
   ├─ BYOAPI       tool_id: @user123/my-petstore              → tool: listpets, getpetbyid
@@ -69,7 +69,7 @@ Bridger에는 두 가지 등록 경로가 있고, 식별자 체계가 다릅니�
     Tool Registry DB에 등록 — **컨테이너 배포 없음**.
   </Step>
   <Step title="Ready">
-    즉시 `mcp.datari.kr/mcp`의 `tools/list`에 노출, `tools/call` 시 런타임 프록시로 upstream 호출.
+    즉시 `mcp.bridger.kr/mcp`의 `tools/list`에 노출, `tools/call` 시 런타임 프록시로 upstream 호출.
   </Step>
 </Steps>
 
@@ -137,7 +137,7 @@ CREATE TABLE tool_registrations (
 세부 등록 화면과 필드 설명은 어드민 대시보드의 BYOAPI 등록 플로우에서 확인할 수 있습니다.
 
 <Note>
-  내 API를 공용 프리셋으로 모두에게 제공하고 싶다면 [support@datari.kr](mailto:support@datari.kr)
+  내 API를 공용 프리셋으로 모두에게 제공하고 싶다면 [hello@bridger.kr](mailto:hello@bridger.kr)
   또는 채널톡으로 문의해 주세요.
 </Note>
 

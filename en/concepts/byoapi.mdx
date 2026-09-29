@@ -23,7 +23,7 @@ Gateway **without building or deploying a separate container** — as long as yo
 </CardGroup>
 
 ```text
-A single Bridger Gateway (mcp.datari.kr)
+A single Bridger Gateway (mcp.bridger.kr)
   ├─ Official preset   tool_id: @datari/weather-ultra-shortcast   → tool: kma_get_ultra_shortcast
   ├─ Official preset   tool_id: @datari/realestate-apt-trade      → tool: molit_get_apt_trade
   ├─ BYOAPI            tool_id: @user123/my-petstore              → tool: listpets, getpetbyid
@@ -69,7 +69,7 @@ Bridger has two registration paths with different identifier schemes.
     Register in the Tool Registry DB — **no container deployment**.
   </Step>
   <Step title="Ready">
-    Immediately exposed in `tools/list` on `mcp.datari.kr/mcp`; on `tools/call`, the runtime proxy calls upstream.
+    Immediately exposed in `tools/list` on `mcp.bridger.kr/mcp`; on `tools/call`, the runtime proxy calls upstream.
   </Step>
 </Steps>
 
@@ -138,7 +138,7 @@ You can find the detailed registration screen and field descriptions in the BYOA
 
 <Note>
   If you'd like your API offered to everyone as a public preset, contact us at
-  [support@datari.kr](mailto:support@datari.kr) or via Channel Talk.
+  [hello@bridger.kr](mailto:hello@bridger.kr) or via Channel Talk.
 </Note>
 
 ## Next steps

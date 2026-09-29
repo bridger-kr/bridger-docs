@@ -24,7 +24,29 @@ x-api-key: dk_live_...
 
 ## tools/list
 
-Returns metadata for every tool registered with Bridger.
+Returns tool metadata. A plain call returns the **default profile** — a shortlist
+of at most 40 tools made of `search_tools`, the most-used tools, and tools
+you enabled in the Dashboard. For the full catalog (230+ tools), append
+`?activation=all` to the endpoint URL.
+
+```text Full catalog (for developers)
+POST https://mcp.bridger.kr/mcp?activation=all
+```
+
+<Note>
+  The default profile keeps tool selection fast and accurate for MCP clients.
+  Tools not in the list are still callable via `tools/call`, and
+  `search_tools` finds them with natural-language search. Per-connector
+  caps also apply — Gemini Enterprise (`?connector=gemini` or `/mcp/gemini`)
+  exposes at most 100 actions.
+</Note>
+
+### Tool list change notification (`notifications/tools/list_changed`)
+
+When you enable or disable tools in the Dashboard, a
+`notifications/tools/list_changed` JSON-RPC notification is pushed over the SSE
+stream (`GET /mcp`). Call `tools/list` again on receipt to refresh
+your tool list.
 
 ### Request
 
@@ -111,14 +133,14 @@ Runs a single tool.
 
 <CodeGroup>
   ```bash tools/list
-  curl -X POST https://mcp.datari.kr/mcp \
+  curl -X POST https://mcp.bridger.kr/mcp \
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
   ```
 
   ```bash tools/call
-  curl -X POST https://mcp.datari.kr/mcp \
+  curl -X POST https://mcp.bridger.kr/mcp \
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{
