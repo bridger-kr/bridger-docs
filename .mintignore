@@ -2,3 +2,7 @@ vendor/spec/
 vendor/spec/**
 /vendor/spec/
 /vendor/spec/**
+internal/
+internal/**
+/internal/
+/internal/**
