@@ -43,7 +43,7 @@ description: "아파트·오피스텔 실거래, 전월세, 지적·건축 인�
 
   ```bash 전체 도구 목록 (MCP)
   curl -X POST https://mcp.bridger.kr/mcp \
-    -H "x-api-key: $DATA_BRIDGE_API_KEY" \
+    -H "x-api-key: $BRIDGER_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
   ```

@@ -1,19 +1,19 @@
 ---
 title: "Global Developer Peer Research"
-description: "Internal positioning memo: where Datari (Bridger) sits among global API-to-agent infrastructure peers, the ICP/wedge, a MAU-based business model, and a prioritized backlog. Not navigation-linked."
+description: "Internal positioning memo: where Bridger (Bridger) sits among global API-to-agent infrastructure peers, the ICP/wedge, a MAU-based business model, and a prioritized backlog. Not navigation-linked."
 ---
 
 <Note>
   **Internal memo — not customer-facing.** This page is intentionally excluded from `docs.json`
   navigation. It exists to align positioning, pricing intuition, and roadmap. Claims about peers are
-  cited inline; claims about Datari are grounded in this repo's own docs and the live gateway
+  cited inline; claims about Bridger are grounded in this repo's own docs and the live gateway
   (`https://mcp.bridger.kr/health` → `{"status":"ok"}`, checked at authoring time). Where a source
   could not be confirmed, the text says so explicitly.
 </Note>
 
-## 0. What Datari actually is (grounding)
+## 0. What Bridger actually is (grounding)
 
-Per this repo's own docs, Datari (brand: **Bridger**) is a **hosted, tool-centric MCP gateway**
+Per this repo's own docs, Bridger (brand: **Bridger**) is a **hosted, tool-centric MCP gateway**
 that turns OpenAPI specs into MCP tools and serves them from one endpoint
 (`mcp.bridger.kr/mcp`). Concretely:
 
@@ -30,7 +30,7 @@ that turns OpenAPI specs into MCP tools and serves them from one endpoint
   (`concepts/byoapi.mdx`). Honesty note: BYOAPI is not yet GA, so any positioning that leans on it is
   forward-looking, not shippable traction.
 
-So Datari is two things stacked: **(a)** a curated catalog of Korean public-data tools with a real
+So Bridger is two things stacked: **(a)** a curated catalog of Korean public-data tools with a real
 adapter moat, and **(b)** a generic "OpenAPI → MCP" gateway that is partially built. The peer
 analysis below is most useful when read against *that* split.
 
@@ -38,7 +38,7 @@ analysis below is most useful when read against *that* split.
 
 ## 1. Peer landscape
 
-The market splits into six clusters. Datari touches three of them (MCP gateway, unified API, dev-experience).
+The market splits into six clusters. Bridger touches three of them (MCP gateway, unified API, dev-experience).
 
 | Cluster | What they sell | Representative peers |
 | --- | --- | --- |
@@ -57,13 +57,13 @@ tools** (`h6s_catalog`, `h6s_list_providers`, `h6s_list_schemas`, `h6s_get_schem
 홈택스/hometax, corporate cards) with a macro-style `h6s_fetch_data` that handles collect → poll →
 return. Source: [h6s.ai/docs/mcp](https://h6s.ai/docs/mcp) (reachable, HTTP 200 at authoring time).
 
-- **Same neighborhood as Datari:** Korea-centric, credential-heavy data domains, MCP delivery.
+- **Same neighborhood as Bridger:** Korea-centric, credential-heavy data domains, MCP delivery.
 - **Different shape:** h6s runs **locally via npx** and exposes a **handful of generic "fetch"
-  tools** with discovery tools layered on top; Datari runs a **hosted gateway** with **one named tool
+  tools** with discovery tools layered on top; Bridger runs a **hosted gateway** with **one named tool
   per operation** (`kma_get_ultra_shortcast`, `molit_get_apt_trade`, …). h6s optimizes for "one universal fetch +
-  schema discovery"; Datari optimizes for "many concrete, pre-shaped tools."
-- **Read for Datari:** the npx-local pattern is a credible alternative the same buyer will consider.
-  Datari's counter is hosting + central management + the public-data adapter, not "we have an MCP."
+  schema discovery"; Bridger optimizes for "many concrete, pre-shaped tools."
+- **Read for Bridger:** the npx-local pattern is a credible alternative the same buyer will consider.
+  Bridger's counter is hosting + central management + the public-data adapter, not "we have an MCP."
 
 ### 1.2 Composio — the enterprise MCP gateway benchmark
 
@@ -81,9 +81,9 @@ Sources: [composio.dev/mcp-gateway](https://composio.dev/mcp-gateway),
 - **The argument they make:** the proxy is ~5% of the work; the other 95% is the governance wrapper
   (identity federation, per-user OAuth maintenance, audit, compliance). They frame Year-1 internal
   build at **$200K–$400K** and 6–9 months to first governed user.
-- **Read for Datari:** the **per-tool-call meter** is the dominant pricing primitive in this cluster.
+- **Read for Bridger:** the **per-tool-call meter** is the dominant pricing primitive in this cluster.
   But Composio's value is breadth of SaaS connectors + enterprise governance — **not** a domain data
-  moat. Datari should not try to out-breadth Composio; it should be the **Korea public-data + BYOAPI
+  moat. Bridger should not try to out-breadth Composio; it should be the **Korea public-data + BYOAPI
   long-tail** specialist whose adapter quality and locality Composio will never prioritize.
 
 ### 1.3 Arcade — the authorization-first MCP runtime
@@ -96,9 +96,9 @@ Sources: [arcade.dev](https://www.arcade.dev/),
 [docs.arcade.dev/home/auth/how-arcade-helps](https://docs.arcade.dev/home/auth/how-arcade-helps),
 [arcade.dev/blog/mcp-gateway-pattern](https://www.arcade.dev/blog/mcp-gateway-pattern/).
 
-- **Read for Datari:** Arcade's thesis is that **per-user authorization** is the hard, defensible
-  layer. Datari's current model is **one API key → all registered tools** (`concepts/mcp.mdx`), which
-  is simpler but weaker for multi-user/agent-acting-on-behalf-of-user scenarios. If Datari ever moves
+- **Read for Bridger:** Arcade's thesis is that **per-user authorization** is the hard, defensible
+  layer. Bridger's current model is **one API key → all registered tools** (`concepts/mcp.mdx`), which
+  is simpler but weaker for multi-user/agent-acting-on-behalf-of-user scenarios. If Bridger ever moves
   beyond read-only public data into write actions or per-end-user credentials, Arcade is the
   reference design to study — and the gap to close.
 
@@ -112,7 +112,7 @@ Sources: [pipedream.com/docs/connect](https://pipedream.com/docs/connect),
 - **Pricing primitives:** **credits** (1 credit ≈ 30s compute, charged on action executions, MCP
   tool calls, deployed trigger emits, proxy requests) **plus per-external-user** billing; free in
   development mode. Source: [pipedream.com/docs/pricing](https://pipedream.com/docs/pricing).
-- **Read for Datari:** the **"credits + external users"** dual meter is the most directly portable
+- **Read for Bridger:** the **"credits + external users"** dual meter is the most directly portable
   pricing model for a BYOAPI/gateway product. Note: list/configure/management operations are *free*;
   only execution costs credits. That free-discovery boundary is a good DX default to copy.
 
@@ -128,8 +128,8 @@ Sources: [nango.dev/pricing](https://nango.dev/pricing),
 
 - **Pricing:** Free $0; paid from **~$50/mo**; scale from **~$500/mo**; usage-based (connections,
   proxy requests, function compute, sync storage, webhooks). Source: nango.dev/pricing.
-- **Read for Datari:** Nango's "you control the data model, we run the infra" is the philosophical
-  opposite of Merge's fixed schemas — and closer to Datari's BYOAPI ("bring your spec, we route it").
+- **Read for Bridger:** Nango's "you control the data model, we run the infra" is the philosophical
+  opposite of Merge's fixed schemas — and closer to Bridger's BYOAPI ("bring your spec, we route it").
   Nango proves a **code-first, usage-metered** model can be commercially viable without pre-built
   normalized schemas.
 
@@ -149,13 +149,13 @@ MCP server** with **progressive tool discovery** (4 meta-tools, ~1,300 tokens, "
 than loading all 340 tools) plus Vault-managed OAuth.
 Source: [apideck.com/mcp-server](https://www.apideck.com/mcp-server).
 
-- **Read for Datari:** two things to steal.
+- **Read for Bridger:** two things to steal.
   1. The **per-connection ("linked account") pricing** model is the unified-API norm — and a known
      pain point (cost grows with customers, not usage), which is why Nango/Pipedream pitch usage-based
-     as the modern alternative. Datari should price on **usage**, not per-tenant connection, to look
+     as the modern alternative. Bridger should price on **usage**, not per-tenant connection, to look
      modern.
   2. Apideck's **progressive tool discovery** (meta-tools instead of dumping hundreds of tools into
-     context) is directly relevant: Datari already exposes **230 tools** on one endpoint. At that
+     context) is directly relevant: Bridger already exposes **230 tools** on one endpoint. At that
      count, **context bloat is a real, near-term DX problem.** A discovery/meta-tool layer is a
      concrete backlog item (see §6).
 
@@ -168,10 +168,10 @@ Sources: [workos.com](https://workos.com/),
 [workos.com/docs/reference/authkit/identity](https://workos.com/docs/reference/authkit/identity),
 [warrant.dev](https://warrant.dev/) (now WorkOS FGA).
 
-- **Read for Datari:** WorkOS is not a competitor — it's a **potential dependency**. If Datari pursues
+- **Read for Bridger:** WorkOS is not a competitor — it's a **potential dependency**. If Bridger pursues
   multi-tenant enterprise (per-org SSO, SCIM-provisioned access to tools), buying WorkOS beats
   building. The "build vs buy enterprise auth" math (Composio's $200K–$400K Year-1 framing) applies to
-  Datari too. Treat enterprise auth as buy-not-build.
+  Bridger too. Treat enterprise auth as buy-not-build.
 
 ### 1.8 Stainless & Mintlify — developer experience
 
@@ -182,7 +182,7 @@ decorate the spec with code samples (e.g., the `openapi.code_samples: 'mintlify'
 Sources: [mintlify.com/docs/integrations/sdks/stainless](https://www.mintlify.com/docs/integrations/sdks/stainless),
 [mintlify.com](https://mintlify.com/).
 
-- **Read for Datari:** these define the **DX bar**. Datari already uses Mintlify (good). Since Datari
+- **Read for Bridger:** these define the **DX bar**. Bridger already uses Mintlify (good). Since Bridger
   is OpenAPI-native end-to-end, **auto-generated SDKs/code-samples per tool** are low-friction wins
   that make the gateway feel first-class. This is a credibility lever, not a moat.
 
@@ -195,10 +195,10 @@ Sources: [techstackups.com/comparisons/firecrawl-vs-tavily](https://techstackups
 [firecrawl.dev/alternatives/firecrawl-vs-tavily](https://www.firecrawl.dev/alternatives/firecrawl-vs-tavily),
 [blog.apify.com/firecrawl-vs-tavily](https://blog.apify.com/firecrawl-vs-tavily/).
 
-- **Read for Datari:** adjacent, not overlapping — they answer "give my agent the open web," Datari
+- **Read for Bridger:** adjacent, not overlapping — they answer "give my agent the open web," Bridger
   answers "give my agent structured Korean public data." But their **credit-metered, generous-free-
   tier** pricing is the cleanest template for a self-serve developer funnel, and they're a useful
-  **complement** (an agent might use Tavily for discovery + Datari for authoritative structured data).
+  **complement** (an agent might use Tavily for discovery + Bridger for authoritative structured data).
 
 ### 1.10 Stripe — the archetype
 
@@ -207,20 +207,20 @@ predictable pricing, and a platform play (Connect, Apps). It is not a direct com
 **quality bar** for API ergonomics and docs that every peer above is implicitly measured against.
 (General industry knowledge; no single citation.)
 
-- **Read for Datari:** the lesson is durability through **DX + trust**, not feature count. Datari's
+- **Read for Bridger:** the lesson is durability through **DX + trust**, not feature count. Bridger's
   realistic version of "the Stripe of X" is **"the trustworthy bridge to Korean public data for
   agents"** — narrow, deep, well-documented.
 
 ---
 
-## 2. Datari ICP & wedge
+## 2. Bridger ICP & wedge
 
 ### 2.1 ICP (who buys first)
 
 1. **Korea-focused AI app/agent builders** who need authoritative public data (weather, real-estate,
    transit, welfare, environment) and do **not** want to fight 공공데이터포털 auth, grid-coordinate
    conversion, XML quirks, and inconsistent error codes. This is the sharpest ICP — it's exactly the
-   adapter work Datari already did (`concepts/architecture.mdx`).
+   adapter work Bridger already did (`concepts/architecture.mdx`).
 2. **Vibe-coders / indie devs** wiring Claude/Cursor/ChatGPT to Korean data who want a single API key
    and a hosted endpoint instead of running local MCP servers per source.
 3. **(Later, BYOAPI-dependent) Korean SaaS teams** that have an internal OpenAPI service and want it
@@ -237,27 +237,27 @@ pulled in users who then say "now also register *my* API."
 
 ---
 
-## 3. Why Datari vs the alternatives a buyer already has
+## 3. Why Bridger vs the alternatives a buyer already has
 
-A skeptical buyer has three "do nothing / do it cheaper" options. Datari must beat each.
+A skeptical buyer has three "do nothing / do it cheaper" options. Bridger must beat each.
 
 ### 3.1 vs. direct public-data integration (the "just call data.go.kr myself" option)
 
 - **Their reality:** per-API `ServiceKey` handling, lat/long→grid conversion, XML→JSON, and
   idiosyncratic error codes — repeated for every one of N data sources, then re-done as MCP tools.
-- **Datari's edge:** that adapter is **already built and centralized** (`concepts/architecture.mdx`),
+- **Bridger's edge:** that adapter is **already built and centralized** (`concepts/architecture.mdx`),
   and exposed as ready MCP tools. The honest caveat: for a team integrating **one** source, DIY may
-  win; Datari's value compounds with **breadth** (many sources) and **agent delivery** (MCP, not just
+  win; Bridger's value compounds with **breadth** (many sources) and **agent delivery** (MCP, not just
   REST).
 
 ### 3.2 vs. h6s-style local wrappers
 
 - **Their reality:** `npx`-launched local MCP server, generic fetch + schema-discovery tools, per-
   machine setup, narrower data domain (finance). Source: [h6s.ai/docs/mcp](https://h6s.ai/docs/mcp).
-- **Datari's edge:** **hosted** (no local process), **central management** (team/remote), **concrete
+- **Bridger's edge:** **hosted** (no local process), **central management** (team/remote), **concrete
   per-operation tools** (better for tool-selection by models), and a **broader public-data catalog**.
   Honest caveat: local-first has real advantages (data never leaves the machine, no vendor in the
-  path); Datari must answer the data-residency/trust question, not hand-wave it.
+  path); Bridger must answer the data-residency/trust question, not hand-wave it.
 
 ### 3.3 vs. ad-hoc MCP (rolling your own MCP server)
 
@@ -265,7 +265,7 @@ A skeptical buyer has three "do nothing / do it cheaper" options. Datari must be
   proxy). The cost is the **long tail** — auth injection, error normalization, audit, secret storage,
   per-source maintenance — multiplied by every source and forever.
   Source: [Composio build-vs-buy](https://composio.dev/content/building-vs-buying-an-enterprise-mcp-gateway).
-- **Datari's edge:** "register, don't deploy" (BYOAPI) + a maintained public-data catalog means the
+- **Bridger's edge:** "register, don't deploy" (BYOAPI) + a maintained public-data catalog means the
   buyer **never owns the maintenance treadmill** for covered sources. Honest caveat: this argument is
   strongest *once BYOAPI is GA and the catalog is broad and current*. Until then it's a roadmap claim,
   not a shipped advantage.
@@ -277,7 +277,7 @@ A skeptical buyer has three "do nothing / do it cheaper" options. Datari must be
 <Note>
   This is an **illustrative** model to pressure-test pricing intuition, **not** a forecast and **not**
   evidence of traction. All numbers are assumptions, labeled as such. Real numbers require live usage
-  telemetry Datari does not yet expose publicly (the `/registry/servers` endpoint returns 404 without
+  telemetry Bridger does not yet expose publicly (the `/registry/servers` endpoint returns 404 without
   auth, so external validation isn't possible here).
 </Note>
 
@@ -292,7 +292,7 @@ prevailing primitives are **tool calls (credits)** + optionally **external users
 - Tavily/Firecrawl: credit buckets + generous free tier.
 - Merge/Apideck: per-connection — explicitly the **legacy** model to avoid copying.
 
-**Recommended Datari primitive:** a **free discovery / metered execution** model — `tools/list`,
+**Recommended Bridger primitive:** a **free discovery / metered execution** model — `tools/list`,
 schema inspection, and registration are free (mirroring Pipedream's free management ops); **`tools/
 call` is the metered unit** (a "data call"), with a generous monthly free allotment and per-seat
 context only at the team tier.
@@ -324,7 +324,7 @@ context only at the team tier.
 - The **per-call meter alone is weak** at these volumes (public data is cheap, so price/call is low).
   **Seat/team revenue dominates** in the model — which means the real business may be **"team gateway
   with governance,"** not "per-call data tax." That mirrors Composio's enterprise-gateway pivot.
-- To make per-call meaningful, Datari needs either **(a)** much higher calls/user (deep agent usage),
+- To make per-call meaningful, Bridger needs either **(a)** much higher calls/user (deep agent usage),
   or **(b)** **premium tiers of data** (latency SLAs, historical/bulk, write actions) — i.e., a reason
   a call is worth more than $0.00025.
 - **Honest conclusion:** the public-data-only wedge is a **great acquisition/retention engine and a
@@ -341,7 +341,7 @@ context only at the team tier.
 | R2 | **Public-data-only revenue is thin** (§4.3) | Per-call price is low; standalone unit economics weak | High |
 | R3 | **230 tools on one endpoint = context bloat** | Apideck/Composio both engineer around this; models degrade with huge tool lists | Medium-High |
 | R4 | **Single-tenant-ish auth** (one key → all tools, `concepts/mcp.mdx`) | Blocks multi-user/agent-on-behalf-of-user and enterprise sales (cf. Arcade) | Medium-High |
-| R5 | **Upstream dependency on 공공데이터포털** | If a source changes schema/limits, Datari's tool breaks; maintenance treadmill | Medium |
+| R5 | **Upstream dependency on 공공데이터포털** | If a source changes schema/limits, Bridger's tool breaks; maintenance treadmill | Medium |
 | R6 | **Data residency / trust for hosted model** | h6s's local-first pitch directly attacks "why send data through a vendor?" | Medium |
 | R7 | **Global incumbents could add Korean presets** | Composio/Pipedream breadth could absorb the wedge if it proves valuable | Medium |
 | R8 | **Read-only, tools-only MCP** (`resources/*`,`prompts/*` unsupported) | Limits use cases vs full-MCP runtimes; may matter as MCP clients mature | Low-Medium |
@@ -379,7 +379,7 @@ gate** each item unlocks. Sorted by impact-to-difficulty leverage.
 | P2 | **Premium data tiers** (historical/bulk, latency SLA) to lift price/call | 4 | 3 | G5: a call in the premium tier sustains a meaningfully higher price |
 | P2 | **Team tier** (multi-seat, scoped endpoints, audit export; consider WorkOS for SSO/SCIM) | 4 | 3 | G5: a team buys seats; SSO/SCIM via WorkOS, not built in-house |
 | P3 | **Upstream-change monitoring** (detect 공공데이터 schema/limit drift before users do) | 3 | 3 | R5: drift caught proactively; tool-break rate trends down |
-| P3 | **Tavily/Firecrawl complement recipe** (docs pattern: discover with web search, ground with Datari) | 2 | 1 | DX: a worked example agent ships in docs |
+| P3 | **Tavily/Firecrawl complement recipe** (docs pattern: discover with web search, ground with Bridger) | 2 | 1 | DX: a worked example agent ships in docs |
 
 **Backlog reading:** the two **P0s are cheap and unlock the core proof gates** — do them first. They
 make the *existing* 230-tool catalog usable at agent scale and turn on the measurement needed to learn
@@ -390,13 +390,13 @@ and the real business unlock; everything in §4's monetization story is gated on
 
 ## 8. One-paragraph synthesis
 
-Datari's honest position: a **strong, locale-specific wedge** (a real Korean public-data adapter
+Bridger's honest position: a **strong, locale-specific wedge** (a real Korean public-data adapter
 exposed as 230 MCP tools) bolted to a **half-built generic platform** (BYOAPI, still "coming soon").
 The global peers prove the model — usage-metered MCP gateways (Composio, Pipedream, Arcade) and
 code-first unified infra (Nango) are commercially viable, while pre-built-schema/per-connection
 pricing (Merge, Apideck) is the pattern to avoid copying. The nearest comparable, **h6s.ai**, validates
-the Korea-data-via-MCP thesis but takes the local-npx path Datari should out-host, not imitate.
-Datari's per-call public-data revenue is structurally thin, so the durable business almost certainly
+the Korea-data-via-MCP thesis but takes the local-npx path Bridger should out-host, not imitate.
+Bridger's per-call public-data revenue is structurally thin, so the durable business almost certainly
 lives in **BYOAPI + team governance**, not a data tax — which makes **(1)** fixing 230-tool context
 bloat with progressive discovery and **(2)** shipping BYOAPI to GA the two moves that matter, in that
 order.
