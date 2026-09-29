@@ -1,0 +1,57 @@
+name: docs-ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: install
+        run: npm ci
+
+      - name: mint broken-links
+        run: npm run lint
+
+      - name: ko/en pairs + forbidden strings
+        run: npm run check:content
+
+      # vendor/spec is a private submodule (bridger-spec): reachable only when
+      # SPEC_READ_TOKEN is in the secret store — fork/dependabot PRs carry the
+      # restricted store, so example verification is skipped there, same as
+      # bridger-api's spec-gated jobs.
+      - name: Checkout vendor/spec submodule
+        env:
+          SPEC_READ_TOKEN: ${{ secrets.SPEC_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SPEC_READ_TOKEN:-}" ]; then
+            echo "SPEC_READ_TOKEN unavailable; example verification will be skipped"
+            exit 0
+          fi
+          git config --local --unset-all "http.https://github.com/.extraheader" || true
+          git config --local --unset-all "credential.helper" || true
+          git submodule init vendor/spec
+          git config --local "submodule.vendor/spec.url" \
+            "https://x-access-token:${SPEC_READ_TOKEN}@github.com/bridger-kr/bridger-spec.git"
+          git submodule update --recursive --depth=1 vendor/spec
+          test -d vendor/spec/presets
+
+      - name: example API ids exist
+        run: |
+          if [ -d vendor/spec/presets ]; then
+            npm run verify:examples
+          else
+            echo "vendor/spec not checked out — skipping example verification"
+          fi
