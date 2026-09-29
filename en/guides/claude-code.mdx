@@ -30,22 +30,6 @@ then authenticate via browser OAuth.
   </Step>
 </Steps>
 
-## Connect with an API key (optional)
-
-Instead of OAuth, you can use an API key issued from the portal. Issue a key at
-[portal.bridger.kr](https://portal.bridger.kr) → **Settings → API Keys**, then pass it as a
-header when adding the server.
-
-```bash
-claude mcp add --transport http bridger https://mcp.bridger.kr/mcp \
-  --header "x-api-key: dk_live_..."
-```
-
-<Warning>
-  The API key is stored in plaintext in your shell history and config file. Prefer OAuth on
-  shared machines.
-</Warning>
-
 ## Troubleshooting
 
 <AccordionGroup>
@@ -58,8 +42,8 @@ claude mcp add --transport http bridger https://mcp.bridger.kr/mcp \
     ```
   </Accordion>
   <Accordion title="Some tools won't run">
-    Certain public-data APIs require a provider key. Register the relevant agency key under
-    **Provider Keys** at [portal.bridger.kr](https://portal.bridger.kr).
+    Some public-data APIs need your own service key. Add it under **My service key** in the
+    [Dashboard](https://portal.bridger.kr) to enable them.
   </Accordion>
   <Accordion title="Still not working?">
     Contact us at [hello@bridger.kr](mailto:hello@bridger.kr) or via Channel Talk.
