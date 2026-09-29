@@ -1,61 +1,50 @@
 ---
 title: "Claude에 연결하기"
-description: "Claude Desktop에서 Bridger MCP를 통해 한국 공공데이터를 바로 사용하는 방법 — 약 2분 소요."
+description: "claude.ai · Desktop · 모바일에서 Bridger 커스텀 커넥터로 한국 공공데이터를 바로 사용하는 방법 — 약 2분 소요."
 ---
 
-Claude Desktop이 Bridger Gateway에 SSE로 연결되면, 230+ 공공데이터 도구를 별도 설치 없이
-자연어로 사용할 수 있습니다.
+Claude에 Bridger를 **커스텀 커넥터**로 추가하면 별도 설치 없이 한국 공공데이터 도구를
+자연어로 사용할 수 있습니다. 웹([claude.ai](https://claude.ai))에서 한 번 추가하면
+같은 계정의 Desktop · 모바일 앱에서도 그대로 사용됩니다.
+
+<Note>
+  설정 파일(`claude_desktop_config.json`)을 직접 편집할 필요가 없습니다. 원격 MCP 서버는
+  **Settings → Connectors** 화면에서 추가하는 방식이 공식 경로입니다. CLI 도구인
+  Claude Code는 [별도 가이드](/guides/claude-code)를 참고하세요.
+</Note>
 
 <Steps>
-  <Step title="Claude Desktop 설치">
-    아직 Claude Desktop이 없다면 [Anthropic 공식 사이트](https://claude.ai/download)에서 다운로드하세요.
-    macOS · Windows 모두 지원됩니다.
+  <Step title="Bridger 계정 준비">
+    [대시보드](https://portal.bridger.kr)에서 계정을 만듭니다.
+    Google · GitHub 로그인을 지원합니다.
   </Step>
 
-  <Step title="MCP 설정 파일 열기">
-    Claude Desktop 메뉴에서 **Claude → Settings → Developer → Edit Config**를 클릭합니다.
-
-    설정 파일 위치:
-
-    <CodeGroup>
-      ```text macOS
-      ~/Library/Application Support/Claude/claude_desktop_config.json
-      ```
-      ```text Windows
-      %APPDATA%\Claude\claude_desktop_config.json
-      ```
-    </CodeGroup>
+  <Step title="Connectors 화면 열기">
+    [claude.ai](https://claude.ai)에서 **Settings → Connectors** 로 이동합니다.
+    (Desktop 앱도 동일한 메뉴 경로입니다.)
   </Step>
 
-  <Step title="Bridger MCP 서버 추가">
-    설정 파일에 다음 내용을 추가합니다.
+  <Step title="커스텀 커넥터 추가">
+    **Add custom connector** 를 선택하고 다음 값을 입력합니다.
 
-    ```json claude_desktop_config.json
-    {
-      "mcpServers": {
-        "data-bridge": {
-          "url": "https://mcp.datari.kr/mcp/sse",
-          "headers": {
-            "Authorization": "Bearer YOUR_API_KEY"
-          }
-        }
-      }
-    }
-    ```
-
-    <Tip>
-      API 키는 [어드민 대시보드](https://admin.datari.kr)에서 계정 생성 후 발급받을 수 있습니다.
-    </Tip>
+    | 항목 | 값 |
+    | --- | --- |
+    | Name | `Bridger` |
+    | Remote MCP server URL | `https://mcp.bridger.kr/mcp` |
   </Step>
 
-  <Step title="Claude 재시작 후 사용">
-    설정을 저장한 뒤 Claude Desktop을 완전히 종료하고 다시 실행하세요. 이제 한국 공공데이터를
-    자연어로 바로 물어볼 수 있습니다.
+  <Step title="Bridger 로그인 · 동의">
+    커넥터를 추가하면 브라우저에서 Bridger 로그인과 권한 동의(OAuth)가 진행됩니다.
+    Google 또는 GitHub로 로그인한 뒤 **Allow** 를 누르면 연결이 완료됩니다.
+  </Step>
+
+  <Step title="바로 사용하기">
+    연결된 커넥터가 있는 상태로 한국 공공데이터를 자연어로 물어보세요.
 
     ```
     서울 강남구 오늘 날씨 어때?
     반포동 아파트 실거래가 알려줘
-    삼성전자 주가 조회해줘
+    서울 중구 미세먼지 상태 알려줘
     ```
   </Step>
 </Steps>
@@ -63,15 +52,24 @@ Claude Desktop이 Bridger Gateway에 SSE로 연결되면, 230+ 공공데이터 �
 ## 문제 해결
 
 <AccordionGroup>
-  <Accordion title="도구가 보이지 않아요">
-    Claude Desktop을 완전히 종료한 뒤 다시 실행해 보세요. 설정 파일의 JSON 형식이
-    올바른지(쉼표 · 따옴표 누락) 확인하세요.
+  <Accordion title="Connectors 메뉴나 Add custom connector가 보이지 않아요">
+    커스텀 커넥터는 플랜 · 리전에 따라 제공 범위가 다릅니다. 메뉴가 보이지 않으면
+    계정의 플랜을 확인하거나, 대신 [Claude Code](/guides/claude-code) 또는
+    [API 직접 연동](/guides/api)을 사용할 수 있습니다.
   </Accordion>
-  <Accordion title="인증 오류가 발생해요">
-    API 키가 올바르게 입력되었는지 확인하고, 필요하면 [어드민 대시보드](https://admin.datari.kr)에서
-    키를 재발급하세요.
+  <Accordion title="로그인 · 동의 화면이 나타나지 않아요">
+    브라우저의 팝업 · 리디렉션 차단을 해제하고, URL이 `https://mcp.bridger.kr/mcp`로
+    정확히 입력됐는지 확인하세요.
+  </Accordion>
+  <Accordion title="어떤 도구는 실행이 안 돼요">
+    일부 공공데이터 API는 내 인증키(서비스키)가 필요합니다. [대시보드](https://portal.bridger.kr)에서
+    해당 기관의 **내 인증키(서비스키)**를 등록하면 사용할 수 있습니다.
+  </Accordion>
+  <Accordion title="연결을 끊거나 다시 인증하고 싶어요">
+    **Settings → Connectors** 에서 Bridger 커넥터를 열어 연결 해제(Disconnect)한 뒤
+    다시 추가하면 재인증됩니다.
   </Accordion>
   <Accordion title="그래도 해결이 안 되면">
-    [이메일](mailto:support@datari.kr) 또는 채널톡으로 문의해 주세요.
+    [hello@bridger.kr](mailto:hello@bridger.kr) 또는 채널톡으로 문의해 주세요.
   </Accordion>
 </AccordionGroup>

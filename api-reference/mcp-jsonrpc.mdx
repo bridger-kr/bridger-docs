@@ -111,14 +111,14 @@ Bridger에 등록된 모든 도구의 메타데이터를 반환합니다.
 
 <CodeGroup>
   ```bash tools/list
-  curl -X POST https://mcp.datari.kr/mcp \
+  curl -X POST https://mcp.bridger.kr/mcp \
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
   ```
 
   ```bash tools/call
-  curl -X POST https://mcp.datari.kr/mcp \
+  curl -X POST https://mcp.bridger.kr/mcp \
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{

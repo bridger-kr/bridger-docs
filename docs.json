@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Bridger",
-  "description": "Bridger 공식 문서 — 230+ 공공데이터 API와 BYOAPI를 AI 도구로 잇는 다리. 인증, 파싱, 에러 처리, 감사 로그, 시크릿 관리.",
+  "description": "Bridger 공식 문서 — 한국 공공데이터 API와 BYOAPI를 AI 도구로 잇는 다리. 인증, 파싱, 에러 처리, 감사 로그, 시크릿 관리.",
   "colors": {
     "primary": "#ea580c",
     "light": "#fb923c",
@@ -22,17 +22,17 @@
   "logo": {
     "light": "/logo/logo-light.svg",
     "dark": "/logo/logo-dark.svg",
-    "href": "https://datari.kr"
+    "href": "https://bridger.kr"
   },
   "navbar": {
     "links": [
       {
         "label": "Landing",
-        "href": "https://datari.kr"
+        "href": "https://bridger.kr"
       },
       {
         "label": "Dashboard",
-        "href": "https://admin.datari.kr"
+        "href": "https://portal.bridger.kr"
       }
     ],
     "primary": {
@@ -46,9 +46,9 @@
       {
         "header": "Product",
         "items": [
-          { "label": "Landing", "href": "https://datari.kr" },
-          { "label": "Dashboard", "href": "https://admin.datari.kr" },
-          { "label": "Gateway status", "href": "https://mcp.datari.kr/health" }
+          { "label": "Landing", "href": "https://bridger.kr" },
+          { "label": "Dashboard", "href": "https://portal.bridger.kr" },
+          { "label": "Gateway status", "href": "https://mcp.bridger.kr/health" }
         ]
       }
     ]
@@ -74,7 +74,9 @@
                 "group": "가이드",
                 "pages": [
                   "guides/claude",
+                  "guides/claude-code",
                   "guides/chatgpt",
+                  "guides/gemini",
                   "guides/api",
                   "guides/api-keys"
                 ]
@@ -153,7 +155,9 @@
                 "group": "Guides",
                 "pages": [
                   "en/guides/claude",
+                  "en/guides/claude-code",
                   "en/guides/chatgpt",
+                  "en/guides/gemini",
                   "en/guides/api",
                   "en/guides/api-keys"
                 ]
