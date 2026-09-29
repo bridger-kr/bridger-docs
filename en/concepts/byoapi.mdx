@@ -24,8 +24,8 @@ Gateway **without building or deploying a separate container** — as long as yo
 
 ```text
 A single Bridger Gateway (mcp.bridger.kr)
-  ├─ Official preset   tool_id: @datari/weather-ultra-shortcast   → tool: getultrashortcast
-  ├─ Official preset   tool_id: @datari/realestate-apt-trade      → tool: getapttrade
+  ├─ Official preset   tool_id: @datari/weather-ultra-shortcast   → tool: kma_get_ultra_shortcast
+  ├─ Official preset   tool_id: @datari/realestate-apt-trade      → tool: molit_get_apt_trade
   ├─ BYOAPI            tool_id: @user123/my-petstore              → tool: listpets, getpetbyid
   ├─ BYOAPI            tool_id: @company/internal-crm             → tool: ...
   └─ ... 230+ tools
@@ -38,18 +38,18 @@ Bridger has two registration paths with different identifier schemes.
 **1. Official presets** — loaded directly by the Gateway from OpenAPI YAML in `vendor/spec`.
 
 - The **Tool ID** (registry registration ID) follows the `@datari/{category}-{name}` format based on the preset file path. e.g. `@datari/weather-ultra-shortcast`. In the in-memory server catalog (`/registry/servers`), the same group is exposed as `servers[].id` = `{category}/{name}` (e.g. `weather/ultra-shortcast`).
-- The **tool name** (`tools[].name`) is derived from the OpenAPI `operationId`: non-alphanumeric characters are replaced with an underscore (`_`), then lowercased. e.g. `getUltraShortcast` → `getultrashortcast`. The tool name itself has no namespace prefix, and you use this name as-is in `tools/call`.
+- The **tool name** (`tools[].name`) follows `{provider prefix}_{snake_case operationId}` (e.g. `getUltraShortcast` → `kma_get_ultra_shortcast`), matching `^[a-z0-9_-]+$` within 64 chars. You use this name as-is in `tools/call`.
 
 **2. BYOAPI tools** — tools a user registers via `/api/v1/register`.
 
 - The **Tool ID** carries an `@{owner}/{slug}` namespace. e.g. `@user123/my-petstore`, `@company/internal-crm`. If the owner doesn't start with `@`, one is added automatically.
-- Individual tool names are derived from `operationId`, the same as presets. e.g. `listpets`.
+- Individual tool names follow `{tool_id slug}_{snake_case operationId}` — e.g. `listPets` on `@user123/my-petstore` becomes `my_petstore_list_pets`.
 - If no category is specified at registration, the default is `byoapi`; if public data is detected, the matching category is applied.
 
 | Type | Identifier format | Example |
 | --- | --- | --- |
 | Official preset (Tool ID) | `@datari/{category}-{name}` | `@datari/weather-ultra-shortcast` |
-| Official preset (tool name) | derived from `operationId` | `getultrashortcast` |
+| Official preset (tool name) | `{toolPrefix}_{snake_case operationId}` | `kma_get_ultra_shortcast` |
 | BYOAPI (tool_id) | `@{owner}/{slug}` | `@user123/my-petstore` |
 
 ## Registration pipeline
@@ -88,7 +88,7 @@ Bridger has two registration paths with different identifier schemes.
 {
   "tools": [
     {
-      "name": "getweatherforecast",
+      "name": "kma_get_village_forecast",
       "description": "KMA short-term forecast — location-based weather info",
       "inputSchema": {
         "type": "object",

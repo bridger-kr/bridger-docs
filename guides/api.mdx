@@ -69,7 +69,7 @@ Claude나 ChatGPT 없이도 Bridger Gateway는 REST와 표준 MCP SDK로 직접 
 
     // 도구 실행
     const result = await client.callTool({
-      name: "getweatherforecast",
+      name: "kma_get_village_forecast",
       arguments: {
         nx: 60,
         ny: 127,
@@ -105,7 +105,7 @@ Claude나 ChatGPT 없이도 Bridger Gateway는 REST와 표준 MCP SDK로 직접 
                 print(tools)
 
                 result = await session.call_tool(
-                    "getweatherforecast",
+                    "kma_get_village_forecast",
                     arguments={"nx": 60, "ny": 127},
                 )
                 print(result)

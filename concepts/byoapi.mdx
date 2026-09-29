@@ -24,8 +24,8 @@ Bridger의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 있다
 
 ```text
 하나의 Bridger Gateway (mcp.bridger.kr)
-  ├─ 공식 프리셋   tool_id: @datari/weather-ultra-shortcast   → tool: getultrashortcast
-  ├─ 공식 프리셋   tool_id: @datari/realestate-apt-trade      → tool: getapttrade
+  ├─ 공식 프리셋   tool_id: @datari/weather-ultra-shortcast   → tool: kma_get_ultra_shortcast
+  ├─ 공식 프리셋   tool_id: @datari/realestate-apt-trade      → tool: molit_get_apt_trade
   ├─ BYOAPI       tool_id: @user123/my-petstore              → tool: listpets, getpetbyid
   ├─ BYOAPI       tool_id: @company/internal-crm             → tool: ...
   └─ ... 230+ tools
@@ -38,18 +38,18 @@ Bridger에는 두 가지 등록 경로가 있고, 식별자 체계가 다릅니�
 **1. 공식 프리셋** — `vendor/spec`의 OpenAPI YAML에서 Gateway가 직접 로드합니다.
 
 - **Tool ID**(레지스트리 등록 ID)는 프리셋 파일 경로 기반의 `@datari/{category}-{name}` 형식입니다. 예: `@datari/weather-ultra-shortcast`. 인메모리 서버 카탈로그(`/registry/servers`)에서는 동일 그룹이 `servers[].id` = `{category}/{name}`(예: `weather/ultra-shortcast`)로 노출됩니다.
-- **도구 이름**(`tools[].name`)은 OpenAPI `operationId`에서 파생됩니다. 영숫자가 아닌 문자를 밑줄(`_`)로 치환한 뒤 소문자로 변환합니다. 예: `getUltraShortcast` → `getultrashortcast`. 도구 이름 자체에는 네임스페이스 접두사가 없으며, `tools/call`에는 이 이름을 그대로 사용합니다.
+- **도구 이름**(`tools[].name`)은 `{제공기관 접두사}_{snake_case operationId}` 형식입니다(예: `getUltraShortcast` → `kma_get_ultra_shortcast`). `^[a-z0-9_-]+$`, 64자 이내이며 `tools/call`에는 이 이름을 그대로 사용합니다.
 
 **2. BYOAPI 도구** — 사용자가 `/api/v1/register`로 등록한 도구입니다.
 
 - **Tool ID**는 `@{owner}/{slug}` 네임스페이스를 가집니다. 예: `@user123/my-petstore`, `@company/internal-crm`. owner가 `@`로 시작하지 않으면 자동으로 `@`가 붙습니다.
-- 개별 도구 이름은 프리셋과 동일하게 `operationId`에서 파생된 이름입니다. 예: `listpets`.
+- 개별 도구 이름은 `{tool_id 슬러그}_{snake_case operationId}` 규칙으로 생성됩니다. 예: `@user123/my-petstore`의 `listPets` → `my_petstore_list_pets`.
 - 등록 시 카테고리를 지정하지 않으면 기본값은 `byoapi`이며, 공개 데이터로 감지되면 해당 카테고리가 적용됩니다.
 
 | 구분 | 식별자 형식 | 예시 |
 | --- | --- | --- |
 | 공식 프리셋 (Tool ID) | `@datari/{category}-{name}` | `@datari/weather-ultra-shortcast` |
-| 공식 프리셋 (도구 이름) | `operationId` 파생 | `getultrashortcast` |
+| 공식 프리셋 (도구 이름) | `{toolPrefix}_{snake_case operationId}` | `kma_get_ultra_shortcast` |
 | BYOAPI (tool_id) | `@{owner}/{slug}` | `@user123/my-petstore` |
 
 ## 등록 파이프라인
@@ -88,7 +88,7 @@ Bridger에는 두 가지 등록 경로가 있고, 식별자 체계가 다릅니�
 {
   "tools": [
     {
-      "name": "getweatherforecast",
+      "name": "kma_get_village_forecast",
       "description": "기상청 단기예보 — 위치 기반 날씨 정보",
       "inputSchema": {
         "type": "object",
