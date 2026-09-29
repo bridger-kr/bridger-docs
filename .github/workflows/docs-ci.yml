@@ -7,7 +7,10 @@ on:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    # Fork PRs stay on GitHub-hosted runners (untrusted code never reaches
+    # the self-hosted fleet); same-repo PRs run on the org runner —
+    # bridger-spec uses the same pattern.
+    runs-on: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork && 'ubuntu-latest' || 'datari-web' }}
     steps:
       - name: checkout
         uses: actions/checkout@v4
