@@ -1,6 +1,6 @@
 # Bridger docs
 
-Mintlify documentation for Bridger, published at `docs.datari.kr`.
+Mintlify documentation for Bridger, published at `docs.bridger.kr`.
 
 > Private internal documentation repository. Served via Mintlify hosting.
 
