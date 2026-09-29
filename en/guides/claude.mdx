@@ -1,20 +1,36 @@
 ---
 title: "Connect to Claude"
-description: "How to use Korean public data directly in Claude by adding Bridger MCP as a custom connector — about 2 minutes."
+description: "How to use Korean public data in claude.ai, Desktop, and mobile via the Bridger custom connector — about 2 minutes."
 ---
 
-Once Claude connects to the Bridger gateway (`https://mcp.bridger.kr/mcp`, Streamable HTTP),
-you can use 230+ Korean public-data tools in natural language with no extra installation.
-Connection uses your Bridger account over OAuth — no config files to edit.
+Add Bridger to Claude as a **custom connector** and you can use Korean public-data tools in
+natural language with nothing to install. Add it once on the web ([claude.ai](https://claude.ai))
+and it's available on the same account's Desktop and mobile apps.
+
+<Note>
+  No need to edit a config file (`claude_desktop_config.json`) by hand — **Settings → Connectors**
+  is the official way to add a remote MCP server. For the Claude Code CLI, see the
+  [dedicated guide](/en/guides/claude-code).
+</Note>
 
 <Steps>
-  <Step title="Add the connector">
-    In [claude.ai](https://claude.ai), go to **Customize → Connectors**, click
-    **Add custom connector**, and enter this remote MCP server URL:
+  <Step title="Prepare a Bridger account">
+    Create an account in the [Dashboard](https://portal.bridger.kr).
+    Google and GitHub sign-in are supported.
+  </Step>
 
-    ```text
-    https://mcp.bridger.kr/mcp
-    ```
+  <Step title="Open the Connectors screen">
+    In [claude.ai](https://claude.ai), go to **Settings → Connectors**
+    (**Customize → Connectors** in the newer layout; same menu path in the Desktop app).
+  </Step>
+
+  <Step title="Add the custom connector">
+    Choose **Add custom connector** and enter:
+
+    | Field | Value |
+    | --- | --- |
+    | Name | `Bridger` |
+    | Remote MCP server URL | `https://mcp.bridger.kr/mcp` |
 
     On Team/Enterprise plans, an Owner must first register the connector under
     **Organization settings → Connectors → Add → Custom → Web**.
@@ -25,65 +41,43 @@ Connection uses your Bridger account over OAuth — no config files to edit.
     </Tip>
   </Step>
 
-  <Step title="Sign in with your Bridger account">
-    Click **Connect** on the Bridger connector to open the Bridger sign-in (OAuth) page.
-    If you don't have an account yet, create one at
-    [portal.bridger.kr](https://portal.bridger.kr). After signing in, you can enable
-    Bridger from the connectors menu in any chat.
+  <Step title="Sign in and consent">
+    Adding the connector starts Bridger sign-in and OAuth consent in your browser.
+    Sign in with Google or GitHub and click **Allow** to finish.
   </Step>
 
   <Step title="Start using it">
-    You can now ask about Korean public data in natural language.
+    With the connector linked, ask about Korean public data in natural language.
 
     ```
     What's the weather in Gangnam-gu, Seoul today?
     Show me apartment transaction prices in Banpo-dong.
+    Tell me the fine-dust level in Jung-gu, Seoul.
     ```
   </Step>
 </Steps>
 
-## Using Claude Code
-
-```bash
-claude mcp add --transport http bridger https://mcp.bridger.kr/mcp
-```
-
-On first use, a browser opens for the Bridger OAuth sign-in.
-
-## Connecting with an API key (advanced)
-
-You can also issue a `dk_live_` key from the
-[portal.bridger.kr](https://portal.bridger.kr) dashboard and pass it as a request header —
-set `Authorization: Bearer <key>` under **Request headers** on the custom connector, or
-use the config file below. OAuth is recommended for most users.
-
-```json claude_desktop_config.json
-{
-  "mcpServers": {
-    "bridger": {
-      "url": "https://mcp.bridger.kr/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_KEY"
-      }
-    }
-  }
-}
-```
-
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="I don't see any tools">
-    Check the Bridger connector status under **Customize → Connectors** and retry
-    **Connect** (OAuth sign-in). Also confirm Bridger is enabled in the connectors
-    menu of your chat.
+  <Accordion title="I don't see Connectors or Add custom connector">
+    Custom connectors are gated by plan and region. If the menu isn't visible, check your
+    plan — or use [Claude Code](/en/guides/claude-code) or the
+    [direct API integration](/en/guides/api) instead.
   </Accordion>
-  <Accordion title="I get an authentication error">
-    Make sure the sign-in popup isn't blocked, and check your account at
-    [portal.bridger.kr](https://portal.bridger.kr). If you use an API key, try
-    re-issuing it.
+  <Accordion title="The sign-in or consent screen doesn't appear">
+    Allow popups and redirects in your browser, and verify the URL is exactly
+    `https://mcp.bridger.kr/mcp`.
+  </Accordion>
+  <Accordion title="Some tools won't run">
+    Some public-data APIs need your own service key. Add it under **My service key** in the
+    [Dashboard](https://portal.bridger.kr) to enable them.
+  </Accordion>
+  <Accordion title="I want to disconnect or re-authenticate">
+    Open the Bridger connector under **Settings → Connectors**, disconnect it, then add it
+    again to re-authenticate.
   </Accordion>
   <Accordion title="Still not working?">
-    Contact us at [hello@bridger.kr](mailto:hello@bridger.kr).
+    Contact us at [hello@bridger.kr](mailto:hello@bridger.kr) or via Channel Talk.
   </Accordion>
 </AccordionGroup>

@@ -1,44 +1,49 @@
 ---
 title: "ChatGPT에 연결하기"
-description: "ChatGPT의 GPTs(Actions)로 Bridger를 호출하는 방법 — 약 2분 소요."
+description: "ChatGPT 개발자 모드에서 Bridger를 원격 MCP 커넥터로 추가하는 방법 — 약 2분 소요."
 ---
 
-Bridger는 **원격 MCP 서버(Connector)** 로 ChatGPT에 연결됩니다. ChatGPT가 `https://mcp.datari.kr/mcp`에
-직접 붙어, 230+ 한국 공공데이터 도구를 자연어로 사용할 수 있습니다. 인증은 OAuth로 처리됩니다.
+Bridger는 **원격 MCP 서버**로 ChatGPT에 연결됩니다. 개발자 모드에서
+`https://mcp.bridger.kr/mcp`를 커넥터로 추가하면 한국 공공데이터 도구를
+자연어로 사용할 수 있습니다. 인증은 OAuth로 처리됩니다.
 
 <Note>
-  원격 MCP 커넥터는 ChatGPT의 **개발자 모드(Developer Mode)** 또는 커넥터를 지원하는
-  워크스페이스(Enterprise/Team 등)에서 사용할 수 있습니다.
+  현재는 개발자 모드로 추가하는 방식만 지원됩니다. ChatGPT 앱 디렉터리 등록이
+  진행 중이며, 등록이 완료되면 디렉터리에서 바로 설치할 수 있습니다.
 </Note>
 
 <Steps>
-  <Step title="커넥터 추가">
-    ChatGPT **Settings → Connectors → Add(또는 Developer Mode → MCP servers)** 에서
-    원격 MCP 서버 URL로 다음을 입력합니다.
+  <Step title="Bridger 계정 준비">
+    [대시보드](https://portal.bridger.kr)에서 계정을 만듭니다.
+    Google · GitHub 로그인을 지원합니다.
+  </Step>
 
-    ```text Remote MCP Server URL
-    https://mcp.datari.kr/mcp
+  <Step title="개발자 모드 켜기">
+    ChatGPT **Settings → Apps(앱)** 에서 **Developer Mode(개발자 모드)** 를 켭니다.
+    개발자 모드는 플랜 · 워크스페이스 설정에 따라 제공되지 않을 수 있습니다.
+  </Step>
+
+  <Step title="커넥터 만들기">
+    개발자 모드에서 **Create(만들기)** 를 선택하고 MCP 서버 주소를 입력합니다.
+
+    ```text MCP Server URL
+    https://mcp.bridger.kr/mcp
     ```
 
-    전송 방식은 **Streamable HTTP**입니다.
+    전송 방식은 **Streamable HTTP** 입니다.
   </Step>
 
   <Step title="OAuth 동의">
-    커넥터를 추가하면 ChatGPT가 OAuth 인증을 시작합니다(Dynamic Client Registration + PKCE).
-    Bridger 로그인 후 **동의(Allow)** 를 누르면 연결이 완료됩니다.
-
-    <Tip>
-      아직 계정이 없다면 [어드민 대시보드](https://admin.datari.kr)에서 먼저 계정을
-      만드세요. 구글/카카오 소셜 로그인을 지원합니다.
-    </Tip>
+    커넥터를 추가하면 ChatGPT가 OAuth 인증을 시작합니다. Bridger 로그인(Google · GitHub) 후
+    **Allow** 를 누르면 연결이 완료됩니다.
   </Step>
 
   <Step title="바로 사용하기">
-    연결이 완료되면 ChatGPT에게 한국 데이터를 자연어로 물어볼 수 있습니다.
+    연결이 완료되면 ChatGPT에게 한국 공공데이터를 자연어로 물어볼 수 있습니다.
 
     ```
     서울 중구 미세먼지 상태 알려줘
-    강남구 학동로 근처 약국 찾아줘
+    사업자등록번호 220-81-62517 상태 조회해줘
     오늘 달러 환율 얼마야?
     ```
   </Step>
@@ -47,18 +52,20 @@ Bridger는 **원격 MCP 서버(Connector)** 로 ChatGPT에 연결됩니다. Chat
 ## 문제 해결
 
 <AccordionGroup>
-  <Accordion title="커넥터 추가 메뉴가 보이지 않아요">
-    원격 MCP 커넥터는 ChatGPT 개발자 모드 또는 커넥터를 지원하는 플랜에서만 노출됩니다.
-    설정에서 개발자 모드를 활성화했는지 확인하세요.
+  <Accordion title="개발자 모드가 보이지 않아요">
+    개발자 모드는 플랜 · 워크스페이스(Enterprise/Team 등) 조건에 따라 노출됩니다.
+    조건이 맞지 않으면 [Claude](/guides/claude)나 [Gemini CLI](/guides/gemini),
+    [API 직접 연동](/guides/api)을 사용할 수 있습니다.
   </Accordion>
   <Accordion title="OAuth 동의 화면이 나타나지 않아요">
-    `https://mcp.datari.kr/mcp` URL이 정확한지, 브라우저 팝업/리디렉션이 차단되지 않았는지
-    확인하세요.
+    URL이 `https://mcp.bridger.kr/mcp`로 정확한지 확인하고, 브라우저 팝업/리디렉션
+    차단을 해제하세요.
   </Accordion>
-  <Accordion title="데이터가 조회되지 않아요">
-    일부 공공데이터 API는 야간에 점검될 수 있습니다. 잠시 후 다시 시도해 주세요.
+  <Accordion title="어떤 도구는 실행이 안 돼요">
+    일부 공공데이터 API는 내 인증키(서비스키)가 필요합니다. [대시보드](https://portal.bridger.kr)에서
+    해당 기관의 **내 인증키(서비스키)**를 등록하면 사용할 수 있습니다.
   </Accordion>
   <Accordion title="그래도 해결이 안 되면">
-    [이메일](mailto:support@datari.kr) 또는 채널톡으로 문의해 주세요.
+    [hello@bridger.kr](mailto:hello@bridger.kr) 또는 채널톡으로 문의해 주세요.
   </Accordion>
 </AccordionGroup>

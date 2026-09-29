@@ -1,45 +1,50 @@
 ---
 title: "Connect to ChatGPT"
-description: "How to call Bridger from ChatGPT via a remote MCP connector — about 2 minutes."
+description: "How to add Bridger as a remote MCP connector in ChatGPT Developer Mode — about 2 minutes."
 ---
 
-Bridger connects to ChatGPT as a **remote MCP server (Connector)**. ChatGPT attaches directly to
-`https://mcp.datari.kr/mcp`, letting you use 230+ Korean public-data tools in natural language.
-Authentication is handled via OAuth.
+Bridger connects to ChatGPT as a **remote MCP server**. Add
+`https://mcp.bridger.kr/mcp` as a connector in Developer Mode to use Korean
+public-data tools in natural language. Authentication is handled via OAuth.
 
 <Note>
-  The remote MCP connector is available in ChatGPT's **Developer Mode** or in workspaces that support
-  connectors (Enterprise/Team, etc.).
+  Developer Mode is the only supported path for now. Submission to the ChatGPT app
+  directory is in progress — once listed, you'll be able to install Bridger directly
+  from the directory.
 </Note>
 
 <Steps>
-  <Step title="Add the connector">
-    In ChatGPT **Settings → Connectors → Add (or Developer Mode → MCP servers)**, enter the following
-    as the remote MCP server URL.
+  <Step title="Prepare a Bridger account">
+    Create an account in the [Dashboard](https://portal.bridger.kr).
+    Google and GitHub sign-in are supported.
+  </Step>
 
-    ```text Remote MCP Server URL
-    https://mcp.datari.kr/mcp
+  <Step title="Enable Developer Mode">
+    In ChatGPT **Settings → Apps**, turn on **Developer Mode**. Availability depends on
+    your plan and workspace settings.
+  </Step>
+
+  <Step title="Create the connector">
+    In Developer Mode choose **Create** and enter the MCP server URL.
+
+    ```text MCP Server URL
+    https://mcp.bridger.kr/mcp
     ```
 
     The transport is **Streamable HTTP**.
   </Step>
 
   <Step title="OAuth consent">
-    Once you add the connector, ChatGPT starts OAuth authentication (Dynamic Client Registration + PKCE).
-    Log in to Bridger and click **Allow** to complete the connection.
-
-    <Tip>
-      If you don't have an account yet, create one first at the
-      [admin dashboard](https://admin.datari.kr). Google/Kakao social login is supported.
-    </Tip>
+    ChatGPT starts OAuth when the connector is added. Sign in to Bridger
+    (Google · GitHub) and click **Allow** to finish.
   </Step>
 
   <Step title="Start using it">
-    Once connected, you can ask ChatGPT about Korean data in natural language.
+    Once connected, ask ChatGPT about Korean public data in natural language.
 
     ```
     Tell me the fine-dust level in Jung-gu, Seoul.
-    Find pharmacies near Hakdong-ro in Gangnam-gu.
+    Check the registration status of business number 220-81-62517.
     What's today's USD exchange rate?
     ```
   </Step>
@@ -48,17 +53,20 @@ Authentication is handled via OAuth.
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="I don't see the Add connector menu">
-    The remote MCP connector only appears in ChatGPT Developer Mode or on plans that support connectors.
-    Make sure Developer Mode is enabled in settings.
+  <Accordion title="I don't see Developer Mode">
+    Developer Mode is gated by plan and workspace (Enterprise/Team, etc.). If it's not
+    available, use [Claude](/en/guides/claude), [Gemini CLI](/en/guides/gemini), or the
+    [direct API integration](/en/guides/api) instead.
   </Accordion>
   <Accordion title="The OAuth consent screen doesn't appear">
-    Verify the `https://mcp.datari.kr/mcp` URL is correct and that browser popups/redirects aren't blocked.
+    Verify the URL is exactly `https://mcp.bridger.kr/mcp` and allow browser
+    popups/redirects.
   </Accordion>
-  <Accordion title="Data isn't returned">
-    Some public-data APIs may undergo maintenance at night. Please try again later.
+  <Accordion title="Some tools won't run">
+    Some public-data APIs need your own service key. Add it under **My service key** in the
+    [Dashboard](https://portal.bridger.kr) to enable them.
   </Accordion>
   <Accordion title="Still not working?">
-    Contact us at [support@datari.kr](mailto:support@datari.kr) or via Channel Talk.
+    Contact us at [hello@bridger.kr](mailto:hello@bridger.kr) or via Channel Talk.
   </Accordion>
 </AccordionGroup>
