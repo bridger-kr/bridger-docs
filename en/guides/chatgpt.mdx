@@ -72,6 +72,19 @@ Authentication is a Bridger account OAuth login.
   </Step>
 </Steps>
 
+## Enabling more tools
+
+Right after connecting, the tool list is limited to the default profile —
+`search_tools`, the most-used tools, and tools you enabled — to keep the
+client fast. Tools not in the list are still reachable: `search_tools`
+finds them with natural-language search and they can be called right away.
+
+- **Enable tools in the Dashboard**: activate the public-data APIs you need in the
+  [Dashboard](https://portal.bridger.kr); they are always included in the default
+  profile from the next `tools/list`.
+- **Full catalog (for developers)**: append `?activation=all` to the connector
+  URL to receive all 230+ tools, e.g. `https://mcp.bridger.kr/mcp?activation=all`
+
 ## Troubleshooting
 
 <AccordionGroup>

@@ -55,6 +55,17 @@ data: {
 }
 ```
 
+### `event: message` — `notifications/tools/list_changed`
+
+When public-data APIs are enabled or disabled in the Dashboard, a tool-list change
+notification is pushed to **every SSE client of the same tenant**. Call
+`tools/list` again on receipt.
+
+```text
+event: message
+data: {"jsonrpc":"2.0","method":"notifications/tools/list_changed"}
+```
+
 ### `event: byoapi`
 
 The progress of a BYOAPI registration job is delivered to the client that requested the registration.
