@@ -70,6 +70,12 @@ for (const en of enPages) {
 
 // --- 2. Forbidden legacy strings -------------------------------------------
 
+// Legitimate `datari` mentions that are not legacy branding:
+//   - `@datari/...` — the live preset tool-ID namespace still served by
+//     the registry (internal/specbuilder in bridger-api)
+//   - `datari-{api,web,gitops,docs}` — org self-hosted runner labels
+const DATARI_ALLOW = /@datari|datari-(?:api|web|gitops|docs)\b/gi;
+
 const FORBIDDEN = [
   { label: "datari", re: /datari/i },
   { label: "data-bridge", re: /data-bridge/i },
@@ -81,7 +87,7 @@ for (const file of tracked) {
   if (VENDOR_RE.test(file) || file === SELF) continue;
   const lines = readFileSync(file, "utf8").split("\n");
   lines.forEach((line, i) => {
-    const scrubbed = line.replace(/@datari/gi, "");
+    const scrubbed = line.replace(DATARI_ALLOW, "");
     for (const { label, re } of FORBIDDEN) {
       if (re.test(scrubbed)) {
         console.error(`forbidden: ${file}:${i + 1} contains '${label}'`);
