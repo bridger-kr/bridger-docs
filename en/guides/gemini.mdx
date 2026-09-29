@@ -54,13 +54,27 @@ in the connector setup screen:
 | Authorization URL | `https://api.bridger.kr/oauth/authorize` |
 | Token URL | `https://api.bridger.kr/oauth/token` |
 | Client ID / Client secret | Request from Bridger ([hello@bridger.kr](mailto:hello@bridger.kr)) |
-| Scopes | `tools:read tools:execute` |
-| Redirect URI | `https://vertexaisearch.cloud.google.com/oauth-redirect` |
+| Scopes (space-separated) | `tools:read tools:execute offline_access` |
+| PKCE | Enabled — Bridger accepts **S256** only |
+| Redirect URI | `https://vertexaisearch.cloud.google.com/oauth-redirect` (fixed by Google) |
 
 <Note>
-  The client ID and secret require a pre-registered confidential client. Share your
-  redirect URI with us and we'll issue the client.
+  Gemini Enterprise doesn't support dynamic client registration (DCR), so it needs a
+  pre-registered, non-expiring confidential client. Request one for the redirect URI above and
+  Bridger will issue the client ID and secret. The secret is shared once — store it securely.
 </Note>
+
+| Scope | Meaning |
+| --- | --- |
+| `tools:read` | List tools (`tools/list`) |
+| `tools:execute` | Run tools (`tools/call`) |
+| `offline_access` | Issue refresh tokens to keep the connection alive |
+
+<Tip>
+  Gemini Enterprise allows at most 100 enabled actions per connector. Bridger trims the tool list
+  for Gemini Enterprise connections to stay within that cap. After saving, enable the actions
+  you need in the connector's **Actions** list.
+</Tip>
 
 ## Troubleshooting
 
@@ -72,6 +86,15 @@ in the connector setup screen:
   <Accordion title="The auth browser doesn't open">
     In the CLI, select `bridger` under `/mcp` and retry authentication. On headless
     environments, create the settings file on a machine with a browser first.
+  </Accordion>
+  <Accordion title="Enterprise authorization fails with invalid_redirect_uri / invalid_target">
+    Make sure the issued client's redirect exactly matches
+    `https://vertexaisearch.cloud.google.com/oauth-redirect`. The `resource` parameter is
+    optional; if sent, it must exactly equal `https://mcp.bridger.kr/mcp`.
+  </Accordion>
+  <Accordion title="Enterprise shows a PKCE error">
+    Enable PKCE in the connector settings with method `S256`. Plain PKCE or no PKCE is not
+    supported.
   </Accordion>
   <Accordion title="Some tools won't run">
     Some public-data APIs need your own service key. Add it under **My service key** in the
