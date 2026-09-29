@@ -1,15 +1,15 @@
 ---
-title: "GET /mcp/sse"
+title: "GET /mcp"
 description: "Bridger Gateway 실시간 이벤트 스트림 — Server-Sent Events 기반 도구 실행 알림."
 ---
 
-`/mcp/sse`는 Gateway에서 발생한 도구 실행 결과를 실시간으로 받는 SSE 엔드포인트입니다.
+`/mcp`는 Gateway에서 발생한 도구 실행 결과를 실시간으로 받는 SSE 엔드포인트입니다.
 대시보드 라이브 뷰, 멀티 클라이언트 협업, 외부 옵저버블리티 연동에 사용됩니다.
 
 ## Request
 
 ```http
-GET /mcp/sse HTTP/1.1
+GET /mcp HTTP/1.1
 Accept: text/event-stream
 x-api-key: dk_live_...
 ```
@@ -77,7 +77,7 @@ data: {"jobId":"...","status":"registered","job":{ ... }}
 ## cURL
 
 ```bash
-curl -N https://mcp.datari.kr/mcp/sse \
+curl -N https://mcp.bridger.kr/mcp \
   -H "x-api-key: $DATA_BRIDGE_API_KEY" \
   -H "Accept: text/event-stream"
 ```
@@ -89,7 +89,7 @@ curl -N https://mcp.datari.kr/mcp/sse \
 ```javascript
 import EventSource from "eventsource";
 
-const es = new EventSource("https://mcp.datari.kr/mcp/sse", {
+const es = new EventSource("https://mcp.bridger.kr/mcp", {
   headers: { "x-api-key": process.env.DATA_BRIDGE_API_KEY },
 });
 

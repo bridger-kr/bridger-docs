@@ -1,47 +1,74 @@
 ---
 title: "Connect to ChatGPT"
-description: "How to call Bridger from ChatGPT via a remote MCP connector — about 2 minutes."
+description: "How to connect Bridger MCP as a custom app (connector) in ChatGPT — about 3 minutes."
 ---
 
-Bridger connects to ChatGPT as a **remote MCP server (Connector)**. ChatGPT attaches directly to
-`https://mcp.datari.kr/mcp`, letting you use 230+ Korean public-data tools in natural language.
-Authentication is handled via OAuth.
+Once ChatGPT is attached to the Bridger gateway (`https://mcp.bridger.kr/mcp`,
+Streamable HTTP), you can use Korean public-data tools in natural language.
+Authentication is a Bridger account OAuth login.
 
 <Note>
-  The remote MCP connector is available in ChatGPT's **Developer Mode** or in workspaces that support
-  connectors (Enterprise/Team, etc.).
+  Creating a custom MCP app requires **Developer Mode**, and the requirements
+  depend on your plan.
+
+  - **Business**: only workspace admins/owners can create apps. Enable developer mode and
+    create the app from **Workspace settings → Apps → Create** (each admin turns it on
+    for themselves).
+  - **Enterprise/Edu**: an admin grants developer access under **Permissions & Roles →
+    Connected Data** (RBAC); the member then toggles **Settings → Apps → Advanced
+    Settings → Developer mode**.
+  - **Plus/Pro**: self-enable at **Settings → Apps → Advanced settings → Developer mode**
+    to connect read-only connectors.
+  - Free/Go plans are not supported.
+
+  A ChatGPT app-directory listing is in progress; once approved you can install Bridger straight from the directory.
 </Note>
 
 <Steps>
-  <Step title="Add the connector">
-    In ChatGPT **Settings → Connectors → Add (or Developer Mode → MCP servers)**, enter the following
-    as the remote MCP server URL.
-
-    ```text Remote MCP Server URL
-    https://mcp.datari.kr/mcp
-    ```
-
-    The transport is **Streamable HTTP**.
+  <Step title="Enable developer mode">
+    Turn on developer mode per your plan above. If you don't see the toggle, check
+    your plan or workspace permissions first.
   </Step>
 
-  <Step title="OAuth consent">
-    Once you add the connector, ChatGPT starts OAuth authentication (Dynamic Client Registration + PKCE).
-    Log in to Bridger and click **Allow** to complete the connection.
+  <Step title="Create the app (connector)">
+    Go to **Settings → Apps → Create** (admins: Workspace settings → Apps → Create),
+    enter the following as the MCP server URL, and choose **OAuth** as the auth method.
+
+    ```text Remote MCP Server URL
+    https://mcp.bridger.kr/mcp
+    ```
+
+    The transport is **Streamable HTTP**. Use exactly `/mcp` — not `/mcp/openai` or
+    any other path.
+  </Step>
+
+  <Step title="Scan tools + OAuth login">
+    Click **Scan Tools**. ChatGPT probes the server, then opens the Bridger
+    OAuth login. Client registration happens automatically (DCR) — no client ID
+    to paste. Log in with your Bridger account and click **Allow** to finish the scan.
 
     <Tip>
-      If you don't have an account yet, create one first at the
-      [admin dashboard](https://admin.datari.kr). Google/Kakao social login is supported.
+      Don't have an account yet? Sign up first in the
+      [Dashboard](https://portal.bridger.kr). Google/GitHub social login is supported.
     </Tip>
   </Step>
 
-  <Step title="Start using it">
-    Once connected, you can ask ChatGPT about Korean data in natural language.
+  <Step title="Create and start using it">
+    When the scan finishes, click **Create**. The app shows up under Settings →
+    Apps → Enabled Apps with a **Dev** label. Select it in a new chat and ask for
+    Korean data in natural language.
 
     ```
-    Tell me the fine-dust level in Jung-gu, Seoul.
-    Find pharmacies near Hakdong-ro in Gangnam-gu.
-    What's today's USD exchange rate?
+    What's the weather in Gangnam-gu, Seoul tomorrow?
+    Tell me the current fine-dust level in Seoul.
+    Show me apartment trade prices in Banpo-dong.
     ```
+
+    <Note>
+      Tools that need a data.go.kr key (e.g. apartment trades) return a
+      **service-key registration notice** instead of data when your account has none.
+      Add **My service key** in the [Dashboard](https://portal.bridger.kr) to get live results.
+    </Note>
   </Step>
 </Steps>
 
@@ -61,17 +88,22 @@ finds them with natural-language search and they can be called right away.
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="I don't see the Add connector menu">
-    The remote MCP connector only appears in ChatGPT Developer Mode or on plans that support connectors.
-    Make sure Developer Mode is enabled in settings.
+  <Accordion title="No developer-mode toggle / Create button">
+    Check that your plan supports developer mode. On Business only admins/owners can
+    create apps; on Enterprise/Edu an admin must grant access via RBAC.
   </Accordion>
-  <Accordion title="The OAuth consent screen doesn't appear">
-    Verify the `https://mcp.datari.kr/mcp` URL is correct and that browser popups/redirects aren't blocked.
+  <Accordion title="Scan Tools fails">
+    Verify `https://mcp.bridger.kr/mcp` exactly — no `/openai` or other suffix.
+    Also check that browser popups/redirects aren't blocked.
   </Accordion>
-  <Accordion title="Data isn't returned">
-    Some public-data APIs may undergo maintenance at night. Please try again later.
+  <Accordion title="It keeps asking me to log in again">
+    This can be an OAuth token-refresh issue. Retry shortly; if it persists, delete
+    the connector and create it again.
+  </Accordion>
+  <Accordion title="No data returned">
+    Some public-data APIs undergo maintenance at night. Please try again later.
   </Accordion>
   <Accordion title="Still not working?">
-    Contact us at [support@datari.kr](mailto:support@datari.kr) or via Channel Talk.
+    Contact [hello@bridger.kr](mailto:hello@bridger.kr).
   </Accordion>
 </AccordionGroup>

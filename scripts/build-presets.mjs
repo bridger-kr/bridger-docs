@@ -266,12 +266,12 @@ ${L.usageHeading}
 <CodeGroup>
   \`\`\`${L.serverQueryLabel}
   ${L.serverQueryComment}
-  curl https://mcp.datari.kr/registry/servers \\
+  curl https://api.bridger.kr/registry/servers \\
     | jq '.servers[] | select(.id | startswith("${category}/"))'
   \`\`\`
 
   \`\`\`${L.toolsListLabel}
-  curl -X POST https://mcp.datari.kr/mcp \\
+  curl -X POST https://mcp.bridger.kr/mcp \\
     -H "x-api-key: $DATA_BRIDGE_API_KEY" \\
     -H "Content-Type: application/json" \\
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
@@ -326,7 +326,7 @@ ${L.totalRow(grandTotal, grandOps)}
 ${L.quickHeading}
 
 \`\`\`bash
-curl -X POST https://mcp.datari.kr/mcp \\
+curl -X POST https://mcp.bridger.kr/mcp \\
   -H "x-api-key: $DATA_BRIDGE_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'

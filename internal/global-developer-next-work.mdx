@@ -19,7 +19,7 @@ Web access succeeded at authoring time. Reference points re-checked live on 2026
 
 | Source | Check | Result |
 | --- | --- | --- |
-| `mcp.datari.kr/health` | `curl` | `{"status":"ok"}` |
+| `mcp.bridger.kr/health` | `curl` | `{"status":"ok"}` |
 | `h6s.ai/docs/mcp` | `curl` HTTP | `200` (reachable) |
 | `h6s.ai/pricing` | `curl` HTTP + FAQ schema | `200` — pricing data below is **freshly read**, not carried from the base memo |
 | `stripe.com/docs`, `stripe.com/pricing` | `curl` HTTP | `301`→docs, `200` |
@@ -153,7 +153,7 @@ front-loading cheap unlocks. Each ticket names the **owning repo**, the **stage 
   collapses if *Datari's own* signup needs a Korean phone/identity step.
 - **Acceptance:**
   1. A signup with a non-KR email + no Korean phone yields a working key.
-  2. Key works against `mcp.datari.kr/mcp` immediately (`tools/list` returns 200).
+  2. Key works against `mcp.bridger.kr/mcp` immediately (`tools/list` returns 200).
   3. Free-tier limits are shown at issuance time in English.
 
 ### T3 — Activation + usage telemetry, free/metered boundary
