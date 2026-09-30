@@ -8,6 +8,7 @@
     "build:content": "node scripts/build-presets.mjs && node scripts/build-api-reference.mjs",
     "preview": "mintlify dev --port 3334",
     "lint": "mintlify broken-links",
+    "verify:examples": "node scripts/verify-examples.mjs",
     "presets": "node scripts/build-presets.mjs",
     "openapi": "node scripts/build-api-reference.mjs"
   },

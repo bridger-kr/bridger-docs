@@ -1,29 +1,31 @@
 ---
 title: "Issue API keys"
-description: "How to set up your Bridger API key and your data.go.kr service key."
+description: "The Bridger API key and the data.go.kr service key — two keys with different purposes."
 ---
 
-You need two keys to use Bridger.
+Bridger uses two kinds of keys with different purposes. You don't always need both —
+it depends on the data you want and the client you call from.
 
 <CardGroup cols={2}>
-  <Card title="Bridger API Key" icon="key" href="https://portal.bridger.kr/settings">
-    For calling the Bridger Gateway. Issued from the admin dashboard.
+  <Card title="Bridger API key" icon="key" href="https://portal.bridger.kr/api-keys">
+    Used when external AI clients or your own server call the Bridger Gateway (`dk_live_…`).
+    Not needed for browser test calls in the portal.
   </Card>
   <Card title="data.go.kr service key" icon="building-columns">
-    To use public data, you need to apply for API access on data.go.kr (often approved instantly).
+    A key issued by the provider (data.go.kr). Required only for that provider's APIs —
+    APIs callable with the default key don't need one.
   </Card>
 </CardGroup>
 
-## Issue a Bridger API Key
+## Issue a Bridger API key
 
 <Steps>
-  <Step title="Open the admin dashboard">
-    Create an account at [portal.bridger.kr](https://portal.bridger.kr).
-    Google / Kakao social login is supported.
+  <Step title="Sign in to the portal">
+    Sign in at [portal.bridger.kr](https://portal.bridger.kr) with **Google** or **GitHub**.
   </Step>
 
   <Step title="Create an API key">
-    Click **Settings → API Keys → Create new key** and it's issued instantly.
+    Issue a new key on the **Bridger API keys** page in the left menu. It works immediately.
   </Step>
 
   <Step title="Store the key securely">
@@ -35,11 +37,13 @@ You need two keys to use Bridger.
   </Step>
 </Steps>
 
-## Apply for a data.go.kr service key
+## Register a data.go.kr service key
 
-Many of the public-data APIs that Bridger calls require a
-[Public Data Portal (data.go.kr)](https://www.data.go.kr) service key. A single service key can often
-be reused across multiple APIs from the same provider.
+Some of the public-data APIs Bridger calls require a
+[Public Data Portal (data.go.kr)](https://www.data.go.kr) service key. To check whether an
+API needs one, open its detail page in the portal's **Government APIs** menu — some APIs
+work with the default key, others require your own service key. A single service key can
+often be reused across multiple APIs from the same provider.
 
 <Steps>
   <Step title="Sign up at data.go.kr">
@@ -48,8 +52,7 @@ be reused across multiple APIs from the same provider.
   </Step>
 
   <Step title='Click "Apply" on the API you want'>
-    Press the **Apply** button for the API you want, from the Provider Keys screen in
-    [portal.bridger.kr](https://portal.bridger.kr) or on data.go.kr.
+    Press the **Apply** button for the API you want on data.go.kr.
 
     <Tip>You can keep the purpose of use brief. (e.g. "Data lookup for an AI service")</Tip>
   </Step>
@@ -64,10 +67,10 @@ be reused across multiple APIs from the same provider.
     </Warning>
   </Step>
 
-  <Step title="Enter the key in Bridger">
-    Enter the copied service key under **Settings → Provider Keys** in the Bridger admin dashboard
-    and you can start using it. A single service key can often be used across multiple APIs from the
-    same provider.
+  <Step title="Register the key in Bridger">
+    Paste the key into **Register service key** on the API's detail page under the portal's
+    **Government APIs** menu, or add it in the **Public-data service keys** section of
+    **Account settings**. It takes effect right away.
   </Step>
 </Steps>
 
@@ -81,7 +84,7 @@ be reused across multiple APIs from the same provider.
     Use the **general key (Decoding)**. The Encoding key is URL-encoded, and Bridger only uses the Decoding key.
   </Accordion>
   <Accordion title="Can I use an API that isn't listed here?">
-    Any API with an OpenAPI spec can be registered directly via [BYOAPI](/en/concepts/byoapi). (coming soon)
+    Any API with an OpenAPI spec can be registered directly via [BYOAPI](/en/concepts/byoapi).
     If you'd like your API added as a public preset, contact us at [hello@bridger.kr](mailto:hello@bridger.kr) or via Channel Talk.
   </Accordion>
 </AccordionGroup>
