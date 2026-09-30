@@ -38,14 +38,13 @@ linked to that organization's tenant.
 
 ## OAuth 2.0
 
-When you need organization-level permission management or SSO integration, use the OAuth 2.0
-Authorization Code or Client Credentials flow.
+MCP clients can obtain an access token (prefix `mcat_`) through the OAuth 2.0 Authorization
+Code + PKCE(S256) flow and pass it the same way in the `Authorization: Bearer mcat_...` header.
 
-<Note>
-  OAuth client registration is currently in beta and can be requested at
-  [portal.bridger.kr](https://portal.bridger.kr). After issuance, pass the access token the same way in the
-  `Authorization: Bearer ...` header.
-</Note>
+- Authorization server (issuer): {oauthIssuer} — RFC 8414 metadata at {oauthDiscoveryUrl}
+- Dynamic Client Registration (DCR): POST {oauthRegistrationUrl} — registers instantly, no approval step
+- Scopes: {oauthScopes}
+- Protected-resource metadata (RFC 9728): {oauthPrmUrl}
 
 ## cURL example
 
