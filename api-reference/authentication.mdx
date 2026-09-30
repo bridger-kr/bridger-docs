@@ -41,10 +41,10 @@ Authorization: Bearer dk_live_xxx
 MCP 클라이언트는 OAuth 2.0 Authorization Code + PKCE(S256) 흐름으로 `mcat_` 접두사 access token을
 발급받아 동일하게 `Authorization: Bearer mcat_...` 헤더로 전달할 수 있습니다.
 
-- 인가 서버(issuer): {oauthIssuer} — RFC 8414 메타데이터는 {oauthDiscoveryUrl}에서 조회
-- 동적 클라이언트 등록(DCR): POST {oauthRegistrationUrl} — 별도 승인 없이 즉시 등록
-- 스코프: {oauthScopes}
-- 리소스 서버 메타데이터(RFC 9728): {oauthPrmUrl}
+- 인가 서버(issuer): {{oauthIssuer}} — RFC 8414 메타데이터는 {{oauthDiscoveryUrl}}에서 조회
+- 동적 클라이언트 등록(DCR): POST {{oauthRegistrationUrl}} — 별도 승인 없이 즉시 등록
+- 스코프: {{oauthScopes}}
+- 리소스 서버 메타데이터(RFC 9728): {{oauthPrmUrl}}
 
 ## cURL 예시
 
