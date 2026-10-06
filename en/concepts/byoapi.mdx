@@ -7,8 +7,8 @@ Bridger's **BYOAPI (Bring Your Own API)** lets you register any API as an MCP to
 Gateway **without building or deploying a separate container** — as long as you have an OpenAPI spec.
 
 <Note>
-  BYOAPI is available from the **Register API** screen at
-  [portal.bridger.kr](https://portal.bridger.kr) or via `POST /api/v1/register`.
+  BYOAPI is **live**: any authenticated account API key can register an OpenAPI spec.
+  Register via POST {{byoapiRegisterUrl}} and poll progress via GET {{byoapiStatusUrl}}.
 </Note>
 
 ## Core idea — registration, not deployment
@@ -28,7 +28,7 @@ A single Bridger Gateway (mcp.bridger.kr)
   ├─ Official preset   tool_id: @datari/realestate-apt-trade      → tool: molit_get_apt_trade
   ├─ BYOAPI            tool_id: @user123/my-petstore              → tool: listpets, getpetbyid
   ├─ BYOAPI            tool_id: @company/internal-crm             → tool: ...
-  └─ ... 230+ tools
+  └─ ... full preset catalog
 ```
 
 ## Tool names and identifier scheme

@@ -223,5 +223,30 @@
   },
   "search": {
     "prompt": "Bridger 문서 검색…"
+  },
+  "variables": {
+    "catalogTotal": "446",
+    "apiBaseUrl": "https://api.bridger.kr",
+    "docsUrl": "https://docs.bridger.kr",
+    "landingUrl": "https://bridger.kr",
+    "portalUrl": "https://portal.bridger.kr",
+    "supportEmail": "hello@bridger.kr",
+    "mcpUrl": "https://mcp.bridger.kr/mcp",
+    "mcpOpenaiUrl": "https://mcp.bridger.kr/mcp/openai",
+    "mcpGeminiUrl": "https://mcp.bridger.kr/mcp/gemini",
+    "mcpLegacySseUrl": "https://mcp.bridger.kr/mcp/sse",
+    "oauthIssuer": "https://api.bridger.kr",
+    "oauthDiscoveryUrl": "https://api.bridger.kr/.well-known/oauth-authorization-server",
+    "oauthRegistrationUrl": "https://api.bridger.kr/oauth/register",
+    "oauthScopes": "tools:read, tools:execute, offline_access",
+    "apiKeyPrefix": "dk_live_",
+    "oauthTokenPrefix": "mcat_",
+    "loginProviders": "Google / GitHub",
+    "metaTools": "search_tools",
+    "activationAllParam": "activation=all",
+    "byoapiStatus": "live",
+    "byoapiRegisterUrl": "https://api.bridger.kr/api/v1/register",
+    "byoapiStatusUrl": "https://api.bridger.kr/api/v1/register/{id}/status",
+    "oauthPrmUrl": "https://mcp.bridger.kr/.well-known/oauth-protected-resource"
   }
 }

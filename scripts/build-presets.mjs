@@ -2,7 +2,7 @@
 /**
  * build-presets.mjs
  *
- * Parses vendor/spec/presets/{category}/*.yaml (the datari-spec submodule,
+ * Parses vendor/spec/presets/{category}/*.yaml (the bridger-spec submodule,
  * the single source of truth) and writes one MDX page per category to
  * presets/{category}.mdx, plus a master index at presets/index.mdx.
  *
@@ -55,8 +55,8 @@ const LOCALES = {
     metaTitle: (m) => m.title,
     metaDesc: (m) => m.desc,
     catTitle: (m) => m.title,
-    catDesc: (m, total, ops) => `${m.desc} 총 ${total}개 프리셋 · ${ops}개 도구.`,
-    catIntro: (total, ops) => `이 카테고리에는 **${total}개의 프리셋**이 등록되어 있으며, 합산 **${ops}개의 MCP 도구**가 노출됩니다.`,
+    catDesc: (m, total, ops) => `${m.desc} 총 ${total}종 프리셋 · ${ops}종 도구.`,
+    catIntro: (total, ops) => `이 카테고리에는 **${total}**개의 프리셋이 등록되어 있으며, 합산 **${ops}**개의 MCP 도구가 노출됩니다.`,
     tip: "필요한 도구 이름은 `tools/list` 응답에서 확인한 뒤 `tools/call`로 바로 호출할 수 있습니다.",
     listHeading: "## 프리셋 목록",
     tableHeader: "| 이름 | 제공기관 | 도구 수 | data.go.kr |",
@@ -65,9 +65,9 @@ const LOCALES = {
     serverQueryComment: "# 이 카테고리의 프리셋 서버와 도구를 확인합니다. (공개 카탈로그 — 인증 불필요)",
     toolsListLabel: "bash 전체 도구 목록 (MCP)",
     indexTitle: "카탈로그 인덱스",
-    indexDesc: (cats, total, ops) => `Bridger가 제공하는 ${cats}개 카테고리 · ${total}개 프리셋 · ${ops}개 도구의 전체 인덱스.`,
-    indexIntro: (total) => `Bridger는 공공·민간 OpenAPI를 카테고리별로 정리한 **${total}개의 프리셋**을 제공합니다.\n카테고리별 도구는 Bridger 호스팅 Gateway에서 \`tools/list\`로 확인하고 즉시 호출할 수 있습니다.`,
-    cardCount: (total, ops) => `**${total}개 프리셋 · ${ops}개 도구**`,
+    indexDesc: (cats, total, ops) => `Bridger가 제공하는 ${cats}개 카테고리 · ${total}종 프리셋 · ${ops}종 도구의 전체 인덱스.`,
+    indexIntro: (total) => `Bridger는 공공·민간 OpenAPI를 카테고리별로 정리한 **${total}**개의 프리셋을 제공합니다.\n카테고리별 도구는 Bridger 호스팅 Gateway에서 \`tools/list\`로 확인하고 즉시 호출할 수 있습니다.`,
+    cardCount: (total, ops) => `**${total}**개 프리셋 · **${ops}**개 도구`,
     overviewHeading: "## 한눈에 보기",
     overviewTableHeader: "| 카테고리 | 프리셋 수 | 도구 수 |",
     totalRow: (total, ops) => `| **합계** | **${total}** | **${ops}** |`,

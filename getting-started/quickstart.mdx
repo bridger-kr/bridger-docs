@@ -65,16 +65,16 @@ description: "로그인하고 Claude · ChatGPT에 브릿저를 연결해 첫 �
 REST · MCP SDK로 직접 호출하는 경로는 따로 있습니다.
 
 <CardGroup cols={2}>
+  <Card title="Claude에 연결" icon="comment" href="/guides/claude">
+    Claude 커스텀 커넥터로 자연어로 Bridger 도구 호출.
+  </Card>
   <Card title="API 키 발급" icon="key" href="/guides/api-keys">
     외부 클라이언트·서버에서 쓰는 브릿저 API 키(`dk_live_…`) 발급.
   </Card>
   <Card title="REST / MCP SDK" icon="code" href="/guides/api">
     curl · Node.js · Python으로 `tools/list` · `tools/call` 호출.
   </Card>
-  <Card title="환경 설정" icon="gear" href="/getting-started/installation">
-    `BRIDGER_API_KEY` · Gateway URL 설정.
-  </Card>
-  <Card title="첫 도구 호출" icon="play" href="/getting-started/first-tool">
-    JSON-RPC 요청·응답을 직접 확인.
+  <Card title="자체 API 등록 (BYOAPI)" icon="plug" href="/concepts/byoapi">
+    OpenAPI 스펙이 있는 어떤 API든 도구로 변환.
   </Card>
 </CardGroup>

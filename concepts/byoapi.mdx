@@ -7,8 +7,8 @@ Bridger의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 있다
 **별도 컨테이너 빌드/배포 없이** Bridger Gateway의 MCP 도구로 등록하는 기능입니다.
 
 <Note>
-  BYOAPI는 [portal.bridger.kr](https://portal.bridger.kr)의 **API 등록** 화면 또는
-  `POST /api/v1/register`로 사용할 수 있습니다.
+  BYOAPI는 **인증된 계정의 API Key**가 있으면 바로 사용할 수 있습니다.
+  등록은 POST {{byoapiRegisterUrl}}, 진행 상태는 GET {{byoapiStatusUrl}}로 확인합니다.
 </Note>
 
 ## 핵심 아이디어 — 배포가 아니라 등록
@@ -28,7 +28,7 @@ Bridger의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 있다
   ├─ 공식 프리셋   tool_id: @datari/realestate-apt-trade      → tool: molit_get_apt_trade
   ├─ BYOAPI       tool_id: @user123/my-petstore              → tool: listpets, getpetbyid
   ├─ BYOAPI       tool_id: @company/internal-crm             → tool: ...
-  └─ ... 230+ tools
+  └─ ... full preset catalog
 ```
 
 ## 도구 이름과 식별자 체계
