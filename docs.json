@@ -234,7 +234,6 @@
     "mcpUrl": "https://mcp.bridger.kr/mcp",
     "mcpOpenaiUrl": "https://mcp.bridger.kr/mcp/openai",
     "mcpGeminiUrl": "https://mcp.bridger.kr/mcp/gemini",
-    "mcpLegacySseUrl": "https://mcp.bridger.kr/mcp/sse",
     "oauthIssuer": "https://api.bridger.kr",
     "oauthDiscoveryUrl": "https://api.bridger.kr/.well-known/oauth-authorization-server",
     "oauthRegistrationUrl": "https://api.bridger.kr/oauth/register",

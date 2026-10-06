@@ -74,7 +74,9 @@ for (const en of enPages) {
 //   - `@datari/...` — the live preset tool-ID namespace still served by
 //     the registry (internal/specbuilder in bridger-api)
 //   - `datari-{api,web,gitops,docs}` — org self-hosted runner labels
-const DATARI_ALLOW = /@datari|datari-(?:api|web|gitops|docs)\b/gi;
+//   - `datariauth` — the live Go auth package in bridger-api
+//     (`internal/datariauth/`), cited by decision records
+const DATARI_ALLOW = /@datari|datari-(?:api|web|gitops|docs)\b|datariauth/gi;
 
 const FORBIDDEN = [
   { label: "datari", re: /datari/i },
