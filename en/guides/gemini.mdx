@@ -76,6 +76,79 @@ in the connector setup screen:
   you need in the connector's **Actions** list.
 </Tip>
 
+## Gemini API (GenAI SDK) developer sample
+
+The Google GenAI SDK (`google-genai`) has experimental MCP support: an MCP
+`ClientSession` can be passed directly as a `generate_content` tool, letting
+Gemini pick and run Bridger tools via `tools/call`.
+
+<Warning>
+  The SDK's MCP support is **experimental** and covers tools only (no resources
+  or prompts). For production use the Gemini CLI/Enterprise paths above.
+</Warning>
+
+```bash
+pip install mcp google-genai
+```
+
+```python gemini_mcp_sample.py
+import asyncio
+import os
+
+from google import genai
+from google.genai import types
+from mcp import ClientSession
+from mcp.client.streamable_http import streamable_http_client
+
+async def main() -> None:
+    # The Gemini endpoint caps the tool list at 100. The generic endpoint is
+    # https://mcp.bridger.kr/mcp.
+    # Issue a Bridger API key (dk_live_…) in the dashboard and send it as x-api-key.
+    headers = {"x-api-key": os.environ["BRIDGER_API_KEY"]}
+    async with streamable_http_client(
+        "https://mcp.bridger.kr/mcp/gemini", headers=headers
+    ) as (read_stream, write_stream):
+        async with ClientSession(read_stream, write_stream) as session:
+            await session.initialize()
+            client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+            response = client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents="Tell me the weather in Jung-gu, Seoul using a Bridger tool",
+                config=types.GenerateContentConfig(tools=[session]),
+            )
+            print(response.text)
+
+asyncio.run(main())
+```
+
+On `mcp` 2.x the helper is named `streamable_http_client` (1.x named it
+`streamablehttp_client`).
+
+<AccordionGroup>
+  <Accordion title="Connectivity check — real run output">
+    `tools/list` and `search_tools` are open anonymously without an API key.
+    This is the actual output of the same code against
+    `https://mcp.bridger.kr/mcp` (2026-10-06):
+
+    ```text
+    tools/list: 5 tools
+    first: search_tools
+    ```
+
+    The Gemini path `/mcp/gemini` returns a curated catalog of up to 100 tools.
+    Executing public-data tools (`tools/call`) requires the activation policy
+    and a service key — anonymous calls are rejected with
+    `grant verification failed`.
+  </Accordion>
+  <Accordion title="search_tools response shape caveat">
+    Bridger `search_tools` returns results as a structured JSON object rather
+    than an MCP `content` array. `session.call_tool("search_tools", …)` in the
+    `mcp` SDK can fail `CallToolResult` validation (`content` is required), so
+    prefer delegating calls through the GenAI `tools=[session]` path or reading
+    via a raw JSON-RPC `tools/call` POST.
+  </Accordion>
+</AccordionGroup>
+
 ## Troubleshooting
 
 <AccordionGroup>

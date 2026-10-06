@@ -76,6 +76,78 @@ CLI 안에서 `/mcp`를 입력하면 서버 연결 상태와 인증 메뉴를 �
   저장 후 커넥터의 **Actions** 목록에서 사용할 액션을 켜 주세요.
 </Tip>
 
+## Gemini API (GenAI SDK) 개발자 샘플
+
+Google GenAI SDK(`google-genai`)의 실험적 MCP 지원으로, MCP `ClientSession`을
+`generate_content`의 도구로 직접 넘길 수 있습니다. Gemini가 필요한 도구를 골라
+`tools/call`까지 수행합니다.
+
+<Warning>
+  SDK의 MCP 지원은 **실험적**이며 도구 호출만 됩니다(리소스·프롬프트 미지원).
+  안정성이 필요한 프로덕션 경로는 위 Gemini CLI/Enterprise 연결을 사용하세요.
+</Warning>
+
+```bash
+pip install mcp google-genai
+```
+
+```python gemini_mcp_sample.py
+import asyncio
+import os
+
+from google import genai
+from google.genai import types
+from mcp import ClientSession
+from mcp.client.streamable_http import streamable_http_client
+
+async def main() -> None:
+    # Gemini 전용 엔드포인트는 도구 목록을 100개로 맞춥니다. 범용 엔드포인트는
+    # https://mcp.bridger.kr/mcp 입니다.
+    # 브릿저 API 키(dk_live_…)를 대시보드에서 발급받아 x-api-key로 보냅니다.
+    headers = {"x-api-key": os.environ["BRIDGER_API_KEY"]}
+    async with streamable_http_client(
+        "https://mcp.bridger.kr/mcp/gemini", headers=headers
+    ) as (read_stream, write_stream):
+        async with ClientSession(read_stream, write_stream) as session:
+            await session.initialize()
+            client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+            response = client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents="서울 중구 날씨를 브릿저 도구로 알려줘",
+                config=types.GenerateContentConfig(tools=[session]),
+            )
+            print(response.text)
+
+asyncio.run(main())
+```
+
+`mcp` 2.x 기준 함수명은 `streamable_http_client`입니다(1.x의
+`streamablehttp_client`과 이름이 다릅니다).
+
+<AccordionGroup>
+  <Accordion title="연결 확인 — 실제 실행 결과">
+    도구 목록(`tools/list`)과 `search_tools` 검색은 API 키 없이도 익명으로
+    열립니다. 아래는 같은 코드로 `https://mcp.bridger.kr/mcp`에 붙은 실제
+    출력입니다(2026-10-06).
+
+    ```text
+    tools/list: 5 tools
+    first: search_tools
+    ```
+
+    Gemini 전용 경로 `/mcp/gemini`는 100개까지의 정제된 카탈로그를 반환하고,
+    공공데이터 도구 실행(`tools/call`)은 활성화 정책과 서비스키가 필요합니다 —
+    익명으로 호출하면 `grant verification failed`로 거절됩니다.
+  </Accordion>
+  <Accordion title="search_tools 응답 형식 주의">
+    Bridger `search_tools`는 결과를 MCP `content` 배열이 아니라 구조화된
+    JSON 객체로 돌려줍니다. `mcp` SDK의 `session.call_tool("search_tools", …)`은
+    `CallToolResult` 검증(`content` 필드 필수)에서 실패할 수 있으니, SDK 경로에서는
+    GenAI `tools=[session]`에 위임하거나 원시 JSON-RPC POST(`tools/call`)로
+    읽는 편이 안전합니다.
+  </Accordion>
+</AccordionGroup>
+
 ## 문제 해결
 
 <AccordionGroup>
