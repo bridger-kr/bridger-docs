@@ -1,29 +1,31 @@
 ---
 title: "API 키 발급"
-description: "Bridger API 키와 data.go.kr 인증키를 설정하는 흐름."
+description: "브릿저 API 키와 공공데이터포털 서비스키 — 용도가 다른 두 키의 발급·등록 방법."
 ---
 
-Bridger를 사용하려면 두 가지 키가 필요합니다.
+Bridger에는 용도가 다른 두 종류의 키가 있습니다. 둘 다 항상 필요한 것은 아니며,
+사용하려는 데이터와 클라이언트에 따라 달라집니다.
 
 <CardGroup cols={2}>
-  <Card title="Bridger API Key" icon="key" href="https://portal.bridger.kr/settings">
-    Bridger Gateway 호출용. 어드민 대시보드에서 발급합니다.
+  <Card title="브릿저 API 키" icon="key" href="https://portal.bridger.kr/api-keys">
+    외부 AI 클라이언트나 자체 서버에서 Bridger Gateway를 호출할 때 사용합니다 (`dk_live_…`).
+    브라우저에서의 포털 시험 호출에는 필요하지 않습니다.
   </Card>
-  <Card title="data.go.kr 인증키" icon="building-columns">
-    공공데이터를 사용하려면 data.go.kr에서 API 활용신청이 필요합니다 (즉시 승인되는 경우가 많음).
+  <Card title="공공데이터포털 서비스키" icon="building-columns">
+    제공기관(data.go.kr)이 발급하는 키입니다. 해당 기관 API를 사용할 때만 필요하며,
+    기본키로 호출 가능한 API에는 필요하지 않습니다.
   </Card>
 </CardGroup>
 
-## Bridger API Key 발급
+## 브릿저 API 키 발급
 
 <Steps>
-  <Step title="어드민 대시보드 접속">
-    [portal.bridger.kr](https://portal.bridger.kr)에서 계정을 만듭니다.
-    {{loginProviders}} 소셜 로그인을 지원합니다.
+  <Step title="포털 로그인">
+    [portal.bridger.kr](https://portal.bridger.kr)에서 {{loginProviders}}로 로그인합니다.
   </Step>
 
   <Step title="API 키 생성">
-    **Settings → API Keys → Create new key**를 클릭하면 즉시 발급됩니다.
+    왼쪽 메뉴의 **브릿저 API 키** 페이지에서 새 키를 발급합니다. 발급 즉시 사용할 수 있습니다.
   </Step>
 
   <Step title="키를 안전하게 저장">
@@ -35,11 +37,13 @@ Bridger를 사용하려면 두 가지 키가 필요합니다.
   </Step>
 </Steps>
 
-## data.go.kr 인증키 신청
+## 공공데이터포털 서비스키 등록
 
-Bridger가 호출하는 공공데이터 API의 상당수는 [공공데이터포털(data.go.kr)](https://www.data.go.kr)
-인증키가 필요합니다. 한 번 발급받은 인증키는 같은 제공기관의 여러 API에 재사용할 수 있는
-경우가 많습니다.
+Bridger가 호출하는 공공데이터 API 중 일부는 [공공데이터포털(data.go.kr)](https://www.data.go.kr)
+서비스키가 필요합니다. 어떤 API에 필요한지는 포털의 **정부 API** 메뉴에서 각 API 상세
+화면을 열면 확인할 수 있습니다 — 기본키로 호출 가능한 API도 있고, 내 서비스키를
+등록해야 하는 API도 있습니다. 한 번 발급받은 서비스키는 같은 제공기관의 여러 API에
+재사용할 수 있는 경우가 많습니다.
 
 <Steps>
   <Step title="data.go.kr 회원가입">
@@ -48,8 +52,7 @@ Bridger가 호출하는 공공데이터 API의 상당수는 [공공데이터포�
   </Step>
 
   <Step title='원하는 API "활용신청" 클릭'>
-    [portal.bridger.kr](https://portal.bridger.kr)의 Provider Keys 화면 또는 data.go.kr에서 사용할 API의
-    **활용신청** 버튼을 누릅니다.
+    data.go.kr에서 사용할 API의 **활용신청** 버튼을 누릅니다.
 
     <Tip>활용 목적은 간단히 입력해도 됩니다. (예: "AI 서비스 데이터 조회")</Tip>
   </Step>
@@ -65,10 +68,9 @@ Bridger가 호출하는 공공데이터 API의 상당수는 [공공데이터포�
     </Warning>
   </Step>
 
-  <Step title="Bridger에 키 입력">
-    Bridger 어드민 대시보드의 **Settings → Provider Keys**에 복사한 인증키를 입력하면
-    바로 사용할 수 있습니다. 하나의 인증키로 같은 제공기관의 여러 API를 사용할 수 있는 경우가
-    많습니다.
+  <Step title="Bridger에 키 등록">
+    포털 **정부 API** 메뉴에서 해당 API 상세 화면의 **서비스키 등록**에 복사한 키를 입력하거나,
+    **계정 설정**의 **공공데이터 서비스키 관리** 섹션에서 등록합니다. 등록 후 바로 사용할 수 있습니다.
   </Step>
 </Steps>
 

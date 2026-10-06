@@ -1,90 +1,81 @@
 ---
 title: "Quickstart"
-description: "Call your first MCP tool through Bridger in under 5 minutes."
+description: "Sign in, connect Bridger to Claude or ChatGPT, and ask your first question — 3 steps, no developer tools."
 ---
 
-Bridger is used by connecting to the **hosted Gateway** (`mcp.bridger.kr`) with an API key.
-You can start right away — no separate server to install or operate.
+Bridger is a connector that lets AI apps like Claude and ChatGPT answer questions with
+Korean public data. There is nothing to install and no API key to issue up front.
 
-## Why Bridger exists
+## Three steps
 
-When you connect directly to public-data APIs, every provider does things a little differently.
+<Steps>
+  <Step title="Sign in to Bridger">
+    Open [portal.bridger.kr](https://portal.bridger.kr) and sign in with **Google** or
+    **GitHub**. No separate registration — your social account starts you right away.
+  </Step>
+  <Step title="Connect Bridger to your AI app">
+    Add Bridger as a connector in your AI app's settings. The server URL is the same for
+    both apps: `https://mcp.bridger.kr/mcp`.
 
-- `serviceKey` names and placement vary.
-- Some APIs return JSON, others only XML.
-- Coordinate, region-code, and pagination parameter names are inconsistent.
-- Error codes and retry rules are not standardized.
-- Audit logs and operational traces need separate handling.
+    - **Claude (web · desktop):** Settings → Connectors →
+      **Add custom connector** → name `Bridger`, paste the server URL →
+      **Connect**. Follow the step-by-step screens in the [Claude guide](/en/guides/claude).
+    - **ChatGPT:** Settings → Apps → enable **Developer mode** →
+      Create → name `Bridger`, paste the MCP server URL → **Scan tools**.
+      Developer mode may be hidden depending on your plan. See the
+      [ChatGPT guide](/en/guides/chatgpt) for details.
 
-Bridger normalizes those differences in the Gateway so you can connect with one key,
-activate only the provider keys you need, find the tool, and call it.
+    Clicking **Connect** opens the Bridger sign-in and consent (OAuth) screen in your
+    browser. Sign in with the same Google · GitHub account from step 1 and click
+    **Allow** — done.
+  </Step>
+  <Step title="Ask your first question">
+    Turn the Bridger connector on in a new chat and just ask. The questions below use
+    public data from the Bridger catalog.
 
-## 1. Issue an API key
+    {/* example-api: environment/air-quality-realtime */}
+    - "Tell me the air quality in Jung-gu, Seoul" — real-time air pollution
+    {/* example-api: weather/village-forecast */}
+    - "What's the weather in Seoul today?" — KMA short-term forecast
+    {/* example-api: realestate/apt-trade */}
+    - "Show apartment sale prices in Banpo-dong" — MOLIT apartment transactions
+    {/* example-api: economy/stock-price */}
+    - "What's Samsung Electronics' stock price?" — FSC stock price information
+  </Step>
+</Steps>
 
-Create an account at [portal.bridger.kr](https://portal.bridger.kr) and issue a key under
-**Settings → API Keys**. See the [API key guide](/en/guides/api-keys) for details.
+## If you get stuck
 
-```bash
-export BRIDGER_API_KEY="dk_live_..."
-```
+<AccordionGroup>
+  <Accordion title="The sign-in / consent window doesn't open">
+    Disable your browser's popup blocker and click **Connect** again.
+  </Accordion>
+  <Accordion title="A question returns nothing or asks for a key">
+    Some public-data APIs need a **service key** from the provider (data.go.kr).
+    Open the API in the portal's **Government APIs** menu to see whether it works with
+    the default key or requires your own service key. See the [API key guide](/en/guides/api-keys).
+  </Accordion>
+  <Accordion title="Developer mode is missing in ChatGPT">
+    It depends on your plan and workspace permissions. Ask your admin for app access,
+    or start with the [Claude guide](/en/guides/claude), which needs no developer mode.
+  </Accordion>
+</AccordionGroup>
 
-## 2. Connect to the Gateway
+## For developers
 
-The Gateway host is `mcp.bridger.kr`. Connect to that address from your MCP client or curl.
-
-## 3. List available tools
-
-Use JSON-RPC `tools/list` to retrieve every tool registered with Bridger.
-
-```bash
-curl -X POST https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $BRIDGER_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
-```
-
-If you prefer a flatter catalog view, `GET /registry/tools` shows the same tools in a searchable list.
-
-## 4. Activate the provider key you need
-
-For presets that require a public-data `serviceKey`, follow the [API key guide](/en/guides/api-keys)
-and register the provider key under **Settings → Provider Keys** before you call the tool.
-
-## 5. Call your first tool
-
-Run a single tool for real. The example below calls the KMA ultra-short-term forecast.
-
-```bash
-curl -X POST https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $BRIDGER_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "id": 2,
-    "method": "tools/call",
-    "params": {
-      "name": "kma_get_ultra_shortcast",
-      "arguments": {
-        "searchKeyword": "Seoul",
-        "numOfRows": 10
-      }
-    }
-  }'
-```
-
-## Next steps
+A direct REST · MCP SDK path is documented separately.
 
 <CardGroup cols={2}>
   <Card title="Connect to Claude" icon="comment" href="/en/guides/claude">
     Call Bridger tools in natural language via the Claude custom connector.
   </Card>
-  <Card title="Connect to ChatGPT" icon="message" href="/en/guides/chatgpt">
-    Use Bridger via ChatGPT.
+  <Card title="Issue API keys" icon="key" href="/en/guides/api-keys">
+    Issue Bridger API keys (`dk_live_…`) for external clients and servers.
   </Card>
-  <Card title="Use REST / SDK" icon="code" href="/en/guides/api">
-    Call directly with the Node.js or Python SDK.
+  <Card title="REST / MCP SDK" icon="code" href="/en/guides/api">
+    Call `tools/list` · `tools/call` from curl, Node.js, or Python.
   </Card>
-  <Card title="Register your own API (BYOAPI)" icon="plug" href="/en/concepts/byoapi">
-    Turn any API with an OpenAPI spec into a tool.
+  <Card title="Bring your own API (BYOAPI)" icon="plug" href="/en/concepts/byoapi">
+    Turn any OpenAPI spec into tools.
   </Card>
 </CardGroup>

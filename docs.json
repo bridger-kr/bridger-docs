@@ -8,12 +8,6 @@
     "light": "#fb923c",
     "dark": "#ea580c"
   },
-  "background": {
-    "color": {
-      "light": "#fafaf6",
-      "dark": "#0a0b0f"
-    }
-  },
   "appearance": {
     "default": "system",
     "strict": false
@@ -27,37 +21,28 @@
   "navbar": {
     "links": [
       {
-        "label": "Landing",
+        "label": "홈",
         "href": "https://bridger.kr"
       },
       {
-        "label": "Dashboard",
+        "label": "대시보드",
         "href": "https://portal.bridger.kr"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Get started",
+      "label": "빠른 시작",
       "href": "/getting-started/quickstart"
     }
   },
   "footer": {
     "links": [
       {
-        "header": "Product",
+        "header": "제품",
         "items": [
-          {
-            "label": "Landing",
-            "href": "https://bridger.kr"
-          },
-          {
-            "label": "Dashboard",
-            "href": "https://portal.bridger.kr"
-          },
-          {
-            "label": "Gateway status",
-            "href": "https://mcp.bridger.kr/health"
-          }
+          { "label": "홈", "href": "https://bridger.kr" },
+          { "label": "대시보드", "href": "https://portal.bridger.kr" },
+          { "label": "게이트웨이 상태", "href": "https://mcp.bridger.kr/health" }
         ]
       }
     ]
@@ -68,7 +53,7 @@
         "language": "ko",
         "tabs": [
           {
-            "tab": "Documentation",
+            "tab": "문서",
             "groups": [
               {
                 "group": "시작하기",
@@ -229,6 +214,13 @@
     ]
   },
   "integrations": {},
+  "errors": {
+    "404": {
+      "redirect": false,
+      "title": "페이지를 찾을 수 없습니다",
+      "description": "주소가 바뀌었거나 페이지가 옮겨졌을 수 있습니다. [빠른 시작](/getting-started/quickstart)이나 [문서 홈](/getting-started/introduction)에서 다시 시작해 보세요."
+    }
+  },
   "search": {
     "prompt": "Bridger 문서 검색…"
   },

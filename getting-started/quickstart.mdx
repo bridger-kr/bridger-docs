@@ -1,89 +1,78 @@
 ---
-title: "Quickstart"
-description: "5분 안에 Bridger를 통해 첫 MCP 도구를 호출합니다."
+title: "빠른 시작"
+description: "로그인하고 Claude · ChatGPT에 브릿저를 연결해 첫 질문까지 — 개발 도구 없이 3단계."
 ---
 
-Bridger는 **호스팅 Gateway**(`mcp.bridger.kr`)에 API 키로 연결해 사용합니다.
-별도 서버를 설치하거나 운영하지 않아도 바로 시작할 수 있습니다.
+브릿저(Bridger)는 Claude · ChatGPT 같은 AI 앱에서 한국 공공데이터를 바로 물어볼 수 있게 해주는
+커넥터입니다. 설치할 프로그램도, 미리 발급할 API 키도 없습니다.
 
-## 왜 Bridger를 쓰나요
+## 3단계면 끝납니다
 
-공공데이터 API를 직접 붙이면 제공기관마다 규칙이 조금씩 달라집니다.
+<Steps>
+  <Step title="브릿저 로그인">
+    [portal.bridger.kr](https://portal.bridger.kr)을 열고 **Google** 또는 **GitHub** 계정으로
+    로그인합니다. 별도 회원가입 절차 없이 소셜 계정으로 바로 시작됩니다.
+  </Step>
+  <Step title="AI 앱에 브릿저 연결">
+    사용하는 AI 앱의 설정 화면에서 브릿저를 커넥터로 추가합니다. 서버 주소는 두 앱 모두
+    `https://mcp.bridger.kr/mcp` 하나입니다.
 
-- `serviceKey` 이름과 전달 위치가 다릅니다.
-- 어떤 API는 JSON, 어떤 API는 XML만 줍니다.
-- 좌표, 지역코드, 페이지 파라미터 이름이 제각각입니다.
-- 에러 코드와 재시도 기준도 서로 다릅니다.
-- 감사 로그와 운영 추적 포맷을 직접 맞춰야 합니다.
+    - **Claude (웹 · 데스크톱):** 설정(Settings) → 커넥터(Connectors) →
+      **사용자 지정 커넥터 추가(Add custom connector)** → 이름 `브릿저`, 서버 주소 붙여넣기 →
+      **연결(Connect)**. 화면에 맞춘 단계별 안내는 [Claude 연결 가이드](/guides/claude)에 있습니다.
+    - **ChatGPT:** 설정(Settings) → 앱(Apps) → **개발자 모드(Developer mode)** 켜기 →
+      만들기(Create) → 이름 `브릿저`, MCP 서버 주소 붙여넣기 → **도구 스캔(Scan tools)**.
+      계정 플랜에 따라 개발자 모드가 보이지 않을 수 있습니다. 자세한 내용은
+      [ChatGPT 연결 가이드](/guides/chatgpt)에 있습니다.
 
-Bridger는 이런 차이를 Gateway에서 정리해서, 사용자는 공통 키로 연결하고
-필요한 제공기관 키만 활성화한 뒤 도구를 찾고 바로 호출하면 됩니다.
+    연결(Connect)을 누르면 브라우저에서 브릿저 로그인과 권한 동의(OAuth) 화면이 열립니다.
+    1단계와 같은 Google · GitHub 계정으로 로그인하고 **승인(Allow)** 을 누르면 완료입니다.
+  </Step>
+  <Step title="첫 질문">
+    새 대화에서 브릿저 커넥터를 켠 뒤 그대로 물어보세요. 아래 질문은 브릿저 카탈로그의
+    공공데이터를 사용합니다.
 
-## 1. API 키 발급
+    {/* example-api: environment/air-quality-realtime */}
+    - "서울 중구 미세먼지 상태 알려줘" — 대기오염 실시간 측정
+    {/* example-api: weather/village-forecast */}
+    - "오늘 서울 날씨 어때?" — 기상청 동네예보
+    {/* example-api: realestate/apt-trade */}
+    - "반포동 아파트 실거래가 알려줘" — 국토교통부 아파트 매매 실거래가
+    {/* example-api: economy/stock-price */}
+    - "삼성전자 주가 알려줘" — 금융위원회 주식시세정보
+  </Step>
+</Steps>
 
-[portal.bridger.kr](https://portal.bridger.kr)에서 계정을 만들고 **Settings → API Keys**에서
-키를 발급받습니다. 자세한 내용은 [API 키 가이드](/guides/api-keys)를 참고하세요.
+## 막혔을 때
 
-```bash
-export BRIDGER_API_KEY="dk_live_..."
-```
+<AccordionGroup>
+  <Accordion title="로그인·승인 창이 열리지 않아요">
+    브라우저 팝업 차단을 해제하고 다시 **연결(Connect)** 을 눌러 보세요.
+  </Accordion>
+  <Accordion title="질문에 답이 없거나 키를 요구해요">
+    일부 공공데이터는 제공기관(data.go.kr)의 **서비스키**가 필요합니다.
+    포털의 **정부 API** 메뉴에서 사용할 API를 열면 기본키로 호출 가능한지, 내 서비스키가
+    필요한지 바로 확인할 수 있습니다. 등록 방법은 [API 키 가이드](/guides/api-keys)를 참고하세요.
+  </Accordion>
+  <Accordion title="ChatGPT에서 개발자 모드가 보이지 않아요">
+    계정 플랜·워크스페이스 권한에 따라 제한됩니다. 관리자에게 앱 사용 권한을 요청하거나,
+    개발자 모드 없이 되는 [Claude 연결 가이드](/guides/claude)를 먼저 따라 해 보세요.
+  </Accordion>
+</AccordionGroup>
 
-## 2. Gateway에 연결
+## 개발자라면
 
-Gateway 호스트는 `mcp.bridger.kr`입니다. MCP 클라이언트나 curl로 이 주소에 붙습니다.
-
-## 3. 사용 가능한 도구 확인
-
-JSON-RPC `tools/list`로 Bridger에 등록된 모든 도구 목록을 조회합니다.
-
-```bash
-curl -X POST https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $BRIDGER_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
-```
-
-도구 카탈로그가 더 편하면 `GET /registry/tools`도 볼 수 있습니다. 등록된 도구가 평탄하게
-정리되어 있어서, 어떤 프리셋이 있는지 빠르게 훑을 수 있습니다.
-
-## 4. 필요한 제공기관 키 활성화
-
-공공데이터포털 `serviceKey`가 필요한 프리셋은 [API 키 가이드](/guides/api-keys)를 따라
-**Settings → Provider Keys**에 인증키를 등록한 뒤 사용합니다.
-
-## 5. 첫 도구 호출
-
-도구 한 개를 실제로 실행해 봅니다. 아래는 기상청 초단기예보 호출 예시입니다.
-
-```bash
-curl -X POST https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $BRIDGER_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "id": 2,
-    "method": "tools/call",
-    "params": {
-      "name": "kma_get_ultra_shortcast",
-      "arguments": {
-        "searchKeyword": "서울",
-        "numOfRows": 10
-      }
-    }
-  }'
-```
-
-## 다음 단계
+REST · MCP SDK로 직접 호출하는 경로는 따로 있습니다.
 
 <CardGroup cols={2}>
   <Card title="Claude에 연결" icon="comment" href="/guides/claude">
     Claude 커스텀 커넥터로 자연어로 Bridger 도구 호출.
   </Card>
-  <Card title="ChatGPT에 연결" icon="message" href="/guides/chatgpt">
-    ChatGPT 커스텀 커넥터(개발자 모드)로 Bridger 호출.
+  <Card title="API 키 발급" icon="key" href="/guides/api-keys">
+    외부 클라이언트·서버에서 쓰는 브릿저 API 키(`dk_live_…`) 발급.
   </Card>
-  <Card title="REST / SDK 사용" icon="code" href="/guides/api">
-    Node.js · Python SDK로 직접 호출.
+  <Card title="REST / MCP SDK" icon="code" href="/guides/api">
+    curl · Node.js · Python으로 `tools/list` · `tools/call` 호출.
   </Card>
   <Card title="자체 API 등록 (BYOAPI)" icon="plug" href="/concepts/byoapi">
     OpenAPI 스펙이 있는 어떤 API든 도구로 변환.

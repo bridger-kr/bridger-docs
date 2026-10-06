@@ -35,7 +35,7 @@ curl -X POST https://mcp.bridger.kr/mcp \
 ```
 
 - 헤더: `x-api-key` 또는 `Authorization: Bearer <key>`
-- 키는 [portal.bridger.kr](https://portal.bridger.kr) → **Settings → API Keys**에서 발급/회수
+- 키는 [portal.bridger.kr](https://portal.bridger.kr)의 **브릿저 API 키** 페이지에서 발급/회수
 - 키는 필요할 때 즉시 회수할 수 있습니다.
 
 ### OAuth 2.0
@@ -99,7 +99,7 @@ Bridger가 처리하는 시크릿은 다음 세 종류입니다.
 
 - 입력 파라미터의 민감 필드는 마스킹 후 저장되며, 시크릿은 절대 기록되지 않습니다.
 - 시크릿 작업(`secret.store`·`secret.read`·`secret.rotate`·`secret.revoke`)은 값 대신 불투명 참조(`opaqueRef`)만 별도 기록합니다.
-- [portal.bridger.kr](https://portal.bridger.kr) → **Audit**에서 `GET /api/v1/audit/logs`로 검색·다운로드합니다.
+- [portal.bridger.kr](https://portal.bridger.kr)의 **실행 로그** 화면에서 확인하거나 `GET /api/v1/audit/logs`로 검색·다운로드합니다.
 
 ## 5. 네트워크 경계
 
