@@ -2,7 +2,7 @@
 /**
  * build-presets.mjs
  *
- * Parses vendor/spec/presets/{category}/*.yaml (the datari-spec submodule,
+ * Parses vendor/spec/presets/{category}/*.yaml (the bridger-spec submodule,
  * the single source of truth) and writes one MDX page per category to
  * presets/{category}.mdx, plus a master index at presets/index.mdx.
  *
