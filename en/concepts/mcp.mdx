@@ -9,20 +9,12 @@ HTTP + SSE transports.
 
 ## Core concepts
 
-<CardGroup cols={2}>
-  <Card title="Server" icon="server">
-    A process that exposes tools (`tools`), resources (`resources`), and prompts (`prompts`).
-  </Card>
-  <Card title="Client" icon="plug">
-    Claude, Cursor, custom agents — attach to a Server and call tools.
-  </Card>
-  <Card title="Tool" icon="wrench">
-    A callable function with a name, description, and input schema (JSON Schema).
-  </Card>
-  <Card title="Transport" icon="route">
-    Two standard transports: STDIO (local process) or Streamable HTTP (remote).
-  </Card>
-</CardGroup>
+| 이름 | 하는 일 |
+| --- | --- |
+| **Server** | A process that exposes tools (`tools`), resources (`resources`), and prompts (`prompts`). |
+| **Client** | Claude, Cursor, custom agents — attach to a Server and call tools. |
+| **Tool** | A callable function with a name, description, and input schema (JSON Schema). |
+| **Transport** | Two standard transports: STDIO (local process) or Streamable HTTP (remote). |
 
 ## Standard methods
 
@@ -73,10 +65,10 @@ OpenAPI spec (preset YAML or BYOAPI registration)
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="View the architecture" icon="diagram-project" href="/en/concepts/architecture">
+  <Card title="View the architecture" href="/en/concepts/architecture">
     How the Gateway, Registry, and middleware fit together.
   </Card>
-  <Card title="Call your first tool" icon="play" href="/en/getting-started/first-tool">
+  <Card title="Call your first tool" href="/en/getting-started/first-tool">
     Run a real JSON-RPC call yourself.
   </Card>
 </CardGroup>

@@ -6,16 +6,16 @@ description: "An at-a-glance view of the REST, SSE, and JSON-RPC interfaces the 
 The Bridger Gateway exposes the following four kinds of interfaces under a single domain.
 
 <CardGroup cols={2}>
-  <Card title="Health" icon="heart-pulse" href="/en/api-reference/health">
+  <Card title="Health" href="/en/api-reference/health">
     `GET /health` — liveness check.
   </Card>
-  <Card title="Registry" icon="boxes-stacked" href="/en/api-reference/registry-servers">
+  <Card title="Registry" href="/en/api-reference/registry-servers">
     `GET /registry/{servers,tools}` — catalog of loaded presets and tools.
   </Card>
-  <Card title="MCP JSON-RPC" icon="code" href="/en/api-reference/mcp-jsonrpc">
+  <Card title="MCP JSON-RPC" href="/en/api-reference/mcp-jsonrpc">
     `POST /mcp` — `tools/list`, `tools/call`.
   </Card>
-  <Card title="MCP SSE" icon="bolt" href="/en/api-reference/mcp-sse">
+  <Card title="MCP SSE" href="/en/api-reference/mcp-sse">
     `GET /mcp` — real-time tool execution events.
   </Card>
 </CardGroup>

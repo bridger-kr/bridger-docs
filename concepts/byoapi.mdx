@@ -1,9 +1,9 @@
 ---
 title: "BYOAPI — 자체 API 등록"
-description: "OpenAPI 스펙이 있는 어떤 API든 Bridger에 도구로 등록하는 멀티-테넌트 ID 기반 파이프라인."
+description: "OpenAPI 스펙이 있는 REST API를 Bridger에 도구로 등록하는 멀티-테넌트 ID 기반 파이프라인."
 ---
 
-Bridger의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 있다면 어떤 API든
+Bridger의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 있다면 REST API를
 **별도 컨테이너 빌드/배포 없이** Bridger Gateway의 MCP 도구로 등록하는 기능입니다.
 
 <Note>
@@ -13,14 +13,10 @@ Bridger의 **BYOAPI(Bring Your Own API)** 는 OpenAPI 스펙만 가지고 있다
 
 ## 핵심 아이디어 — 배포가 아니라 등록
 
-<CardGroup cols={2}>
-  <Card title="기존 방식" icon="container-storage">
-    API 한 개당 컨테이너 한 개를 빌드·배포·운영. 비용·관리 모두 폭증.
-  </Card>
-  <Card title="Bridger BYOAPI" icon="bolt">
-    Tool 정의만 DB에 등록. 단일 Gateway가 ID로 라우팅 → 수 초 내 완료.
-  </Card>
-</CardGroup>
+| 이름 | 하는 일 |
+| --- | --- |
+| **기존 방식** | API 한 개당 컨테이너 한 개를 빌드·배포·운영. 비용·관리 모두 폭증. |
+| **Bridger BYOAPI** | Tool 정의만 DB에 등록. 단일 Gateway가 ID로 라우팅해 등록 직후 바로 호출됩니다. |
 
 ```text
 하나의 Bridger Gateway (mcp.bridger.kr)
@@ -144,10 +140,10 @@ CREATE TABLE tool_registrations (
 ## 다음 단계
 
 <CardGroup cols={2}>
-  <Card title="API Reference" icon="book" href="/api-reference/introduction">
+  <Card title="API Reference" href="/api-reference/introduction">
     Registry · MCP JSON-RPC · SSE 전체 스펙.
   </Card>
-  <Card title="인증·보안" icon="shield" href="/concepts/auth-and-security">
+  <Card title="인증·보안" href="/concepts/auth-and-security">
     BYOAPI 등록 도구의 시크릿/감사/PII 처리.
   </Card>
 </CardGroup>

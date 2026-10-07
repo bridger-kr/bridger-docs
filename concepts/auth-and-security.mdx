@@ -6,20 +6,12 @@ description: "API 키, 시크릿 관리, PII 필터, 감사 로그가 Bridger에
 Bridger Gateway는 공공데이터와 직접 등록한 API를 한 도메인으로 노출하는 만큼, 보안 경계가 가장 중요한 책임입니다.
 다음 4개 레이어가 모든 요청에 적용됩니다.
 
-<CardGroup cols={2}>
-  <Card title="인증" icon="key">
-    API Key / OAuth 2.0 으로 호출자 식별.
-  </Card>
-  <Card title="시크릿 관리" icon="lock">
-    공공데이터 ServiceKey, BYOAPI 토큰을 Vault에 격리.
-  </Card>
-  <Card title="PII 필터" icon="user-shield">
-    응답에서 개인정보 패턴을 마스킹.
-  </Card>
-  <Card title="감사 로그" icon="clipboard-check">
-    누가 · 언제 · 어떤 도구를 호출했는지 추적.
-  </Card>
-</CardGroup>
+| 이름 | 하는 일 |
+| --- | --- |
+| **인증** | API Key / OAuth 2.0 으로 호출자 식별. |
+| **시크릿 관리** | 공공데이터 ServiceKey, BYOAPI 토큰을 Vault에 격리. |
+| **PII 필터** | 응답에서 개인정보 패턴을 마스킹. |
+| **감사 로그** | 누가 · 언제 · 어떤 도구를 호출했는지 추적. |
 
 ## 1. 인증
 
@@ -110,10 +102,10 @@ Bridger가 처리하는 시크릿은 다음 세 종류입니다.
 ## 다음 단계
 
 <CardGroup cols={2}>
-  <Card title="API Reference: Auth" icon="key" href="/api-reference/authentication">
+  <Card title="API Reference: Auth" href="/api-reference/authentication">
     헤더, 에러 코드, OAuth 흐름.
   </Card>
-  <Card title="아키텍처" icon="diagram-project" href="/concepts/architecture">
+  <Card title="아키텍처" href="/concepts/architecture">
     어디에서 인증·미들웨어·로그가 실행되는지.
   </Card>
 </CardGroup>
