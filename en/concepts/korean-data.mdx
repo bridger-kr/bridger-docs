@@ -1,0 +1,82 @@
+---
+title: "Working with Korean public data"
+description: "What non-Korean users need to know before calling Bridger tools — Korean-language values, region inputs, service keys, and merged family tools."
+---
+
+Bridger tools are usable from any language, but the underlying providers are Korean
+government APIs. A few things work differently than typical REST APIs — the notes
+below cover the points foreign users trip on most.
+
+<Note>
+  **Responses stay in Korean.** Display names, addresses, and status strings come
+  back in Korean (`yadmNm` → "서울대학교병원", `addr` → "서울특별시 종로구…") even
+  when you call the tool in English. Codes, coordinates, counts, and datetimes are
+  language-neutral — build your UI on those and let the AI translate names for
+  display.
+</Note>
+
+## Region inputs
+
+Providers accept regions in three different shapes. Check the tool's input schema —
+the parameter names tell you which one it wants:
+
+| Shape | Looks like | Example |
+| --- | --- | --- |
+| Legal codes | `sido` 2 digits, `sigungu` 5 digits | `"11"` Seoul, `"41463"` Giheung-gu |
+| Korean names | free text | `서울특별시`, `강남구` |
+| Coordinates | WGS84 `lat`/`lng` + `radius` (m) | `37.4979`, `127.0276` |
+
+<Note>
+  Coordinates are the most reliable path for non-Korean callers: hospital,
+  pharmacy, and campsite lookups all accept `xPos`/`yPos`/`radius` (or
+  `mapX`/`mapY`/`radius`) and work nationwide. A few providers — notably the ER
+  live-bed feed — only take Korean region names; merged family tools expose those
+  as optional `sidoName`/`sigunguName` inputs instead.
+</Note>
+
+## Prefer merged family tools
+
+Several regions publish the same kind of API under different providers and
+different response shapes. **Family tools** merge them: you pass a `location`
+hint and the family routes to the right provider, normalizes the fields, and
+returns one item type.
+
+<CardGroup cols={2}>
+  <Card title="Transport" icon="bus">
+    `bus_arrival`, `bus_location` — Seoul · Gyeonggi · Jeonju + national TAGO
+    fallback in one call.
+  </Card>
+  <Card title="Safety" icon="shield-halved">
+    `emergency_shelter` — regional shelter lists + the national civil-defense
+    registry.
+  </Card>
+  <Card title="Culture & lodging" icon="masks-theater">
+    `culture_events`, `local_heritage`, `public_library`, `lodging` — festivals,
+    heritage, libraries, and stays across regions.
+  </Card>
+  <Card title="Health" icon="hand-holding-medical">
+    `medical_care` — hospitals, pharmacies, and ER live beds around a point.
+  </Card>
+</CardGroup>
+
+<Tip>
+  The full, always-current list is the "Region-unified tools (families)" table
+  on the [catalog index](/en/presets/index).
+</Tip>
+
+## API keys
+
+<Warning>
+  **Bridger-managed vs. your own service key.** Most data.go.kr APIs run on the
+  managed key — your `dk_live_…` Bridger key is enough. Some providers require a
+  **service key you issue yourself on data.go.kr** (marked `byok`/provider-key in
+  the catalog). If a call returns an auth error, check whether that preset needs
+  your own key in the portal's Government APIs menu — see the
+  [API key guide](/en/guides/api-keys).
+</Warning>
+
+## In-band errors
+
+Public-data APIs report failures inside a `200` envelope (`resultCode` /
+`resultMessage`), not HTTP status codes. Presets normalize these into the
+`errors` catalog — read `errors[]` on the tool output instead of checking HTTP.

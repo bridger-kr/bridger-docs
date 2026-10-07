@@ -24,6 +24,7 @@ import { parse as parseYaml } from "yaml";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, "..");
 const PRESETS_DIR = join(REPO_ROOT, "vendor", "spec", "presets");
+const FAMILIES_DIR = join(REPO_ROOT, "vendor", "spec", "families");
 const OUT_DIR = join(REPO_ROOT, "presets");
 const PUBLIC_DATA_REGISTRY = "data.go.kr";
 const DEFAULT_LOCALE = "ko";
@@ -68,6 +69,10 @@ const LOCALES = {
     indexDesc: (cats, total, ops) => `Bridger가 제공하는 ${cats}개 카테고리 · ${total}종 프리셋 · ${ops}종 도구의 전체 인덱스.`,
     indexIntro: (total) => `Bridger는 공공·민간 OpenAPI를 카테고리별로 정리한 **${total}**개의 프리셋을 제공합니다.\n카테고리별 도구는 Bridger 호스팅 Gateway에서 \`tools/list\`로 확인하고 즉시 호출할 수 있습니다.`,
     cardCount: (total, ops) => `**${total}**개 프리셋 · **${ops}**개 도구`,
+    familiesHeading: "## 지역 통합 도구 (Families)",
+    familiesIntro: "지역·제공기관별로 나뉜 공공데이터 API를 하나의 도구로 묶은 스펙입니다. `location` 입력만으로 라우팅되어 여러 제공기관을 한 번에 조회합니다.",
+    familiesTableHeader: "| 도구 | 설명 | 제공기관 수 | 상태 |",
+    statusLabel: { draft: "초안", beta: "베타", ga: "정식" },
     overviewHeading: "## 한눈에 보기",
     overviewTableHeader: "| 카테고리 | 프리셋 수 | 도구 수 |",
     totalRow: (total, ops) => `| **합계** | **${total}** | **${ops}** |`,
@@ -93,6 +98,10 @@ const LOCALES = {
     indexDesc: (cats, total, ops) => `Full index of ${cats} categories · ${total} presets · ${ops} tools provided by Bridger.`,
     indexIntro: (total) => `Bridger provides **${total} presets** organizing public and private OpenAPIs by category.\nTools per category can be discovered via \`tools/list\` on the Bridger hosted Gateway and called immediately.`,
     cardCount: (total, ops) => `**${total} presets · ${ops} tools**`,
+    familiesHeading: "## Region-unified tools (families)",
+    familiesIntro: "Specs that merge region- or provider-split public APIs into a single tool. Pass a `location` input and the family routes to the right providers for you.",
+    familiesTableHeader: "| Tool | Description | Providers | Status |",
+    statusLabel: { draft: "draft", beta: "beta", ga: "ga" },
     overviewHeading: "## At a glance",
     overviewTableHeader: "| Category | Presets | Tools |",
     totalRow: (total, ops) => `| **Total** | **${total}** | **${ops}** |`,
@@ -215,6 +224,46 @@ function readCategory(categoryDir) {
   return out;
 }
 
+/** @typedef {{ id: string, title?: LocalizedString, description?: LocalizedString, status: string, members: number }} FamilyInfo */
+
+/**
+ * Reads vendor/spec/families/*.yaml (region-unified API specs).
+ * Missing directory (old submodule pins) returns an empty list.
+ * @returns {FamilyInfo[]}
+ */
+function readFamilies() {
+  /** @type {FamilyInfo[]} */
+  const out = [];
+  let names = [];
+  try {
+    names = readdirSync(FAMILIES_DIR).sort();
+  } catch {
+    return out;
+  }
+  for (const fname of names) {
+    if (!fname.endsWith(".yaml") && !fname.endsWith(".yml")) continue;
+    const fpath = join(FAMILIES_DIR, fname);
+    if (!statSync(fpath).isFile()) continue;
+    let doc;
+    try {
+      doc = parseYaml(readFileSync(fpath, "utf8"));
+    } catch (err) {
+      console.warn(`[build-presets] skip invalid family yaml: ${fpath}: ${err.message}`);
+      continue;
+    }
+    if (!doc || typeof doc !== "object" || doc.apiVersion !== "bridger.family/v1") continue;
+    const catalog = isRecord(doc.catalog) ? doc.catalog : {};
+    out.push({
+      id: typeof doc.id === "string" ? doc.id : fname.replace(/\.ya?ml$/, ""),
+      title: catalog.title,
+      description: catalog.description,
+      status: typeof doc.status === "string" ? doc.status : "draft",
+      members: Array.isArray(doc.members) ? doc.members.length : 0,
+    });
+  }
+  return out;
+}
+
 function escapeMdxCell(s) {
   return String(s ?? "")
     .replace(/\|/g, "\\|")
@@ -283,10 +332,22 @@ ${L.usageHeading}
 /**
  * @param {Array<{ category: string, total: number, totalOps: number }>} summary
  * @param {typeof LOCALES.ko} L
+ * @param {FamilyInfo[]} families
  */
-function renderIndexMdx(summary, L) {
+function renderIndexMdx(summary, L, families = []) {
   const grandTotal = summary.reduce((acc, s) => acc + s.total, 0);
   const grandOps = summary.reduce((acc, s) => acc + s.totalOps, 0);
+
+  const familyRows = families
+    .map((f) => {
+      const name = escapeMdxCell(localizedString(f.title, L.locale) || f.id);
+      const status = escapeMdxCell(L.statusLabel[f.status] ?? f.status);
+      return `| \`${escapeMdxCell(f.id)}\` | ${name} | ${f.members} | ${status} |`;
+    })
+    .join("\n");
+  const familiesSection = familyRows
+    ? `\n${L.familiesHeading}\n\n${L.familiesIntro}\n\n${L.familiesTableHeader}\n| --- | --- | --- | --- |\n${familyRows}\n`
+    : "";
 
   const cards = summary
     .map((s) => {
@@ -322,7 +383,7 @@ ${L.overviewTableHeader}
 | --- | --- | --- |
 ${rows}
 ${L.totalRow(grandTotal, grandOps)}
-
+${familiesSection}
 ${L.quickHeading}
 
 \`\`\`bash
@@ -358,6 +419,11 @@ function main() {
     summary.push({ category, total: presets.length, totalOps });
   }
 
+  const families = readFamilies();
+  if (families.length > 0) {
+    console.log(`[build-presets] ${families.length} families loaded from ${FAMILIES_DIR}`);
+  }
+
   for (const [locale, L] of Object.entries(LOCALES)) {
     const localeOutDir = join(REPO_ROOT, ...L.outSubdir.split("/"));
     mkdirSync(localeOutDir, { recursive: true });
@@ -371,7 +437,7 @@ function main() {
         `[build-presets] [${locale}] ${category.padEnd(15)} ${String(presets.length).padStart(3)} presets, ${String(totalOps).padStart(3)} ops -> ${out}`,
       );
     }
-    const indexMdx = renderIndexMdx(summary, L);
+    const indexMdx = renderIndexMdx(summary, L, families);
     const indexOut = join(localeOutDir, "index.mdx");
     writeFileSync(indexOut, indexMdx, "utf8");
     console.log(`[build-presets] [${locale}] index -> ${indexOut}`);

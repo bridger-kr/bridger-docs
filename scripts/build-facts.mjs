@@ -52,7 +52,8 @@ Object.assign(variables, {
   mcpUrl: facts.mcpUrl,
   mcpOpenaiUrl: facts.mcpProfiles.openai,
   mcpGeminiUrl: facts.mcpProfiles.gemini,
-  mcpLegacySseUrl: facts.transports.legacySseAlias,
+  // facts.transports.legacySseAlias intentionally not exposed:
+  // check-content forbids the legacy SSE URL from re-entering the docs.
   oauthIssuer: facts.oauth.issuer,
   oauthDiscoveryUrl: facts.oauth.discovery,
   oauthRegistrationUrl: facts.oauth.registrationEndpoint,

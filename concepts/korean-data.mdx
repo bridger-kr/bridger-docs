@@ -1,0 +1,76 @@
+---
+title: "한국 공공데이터 다루기"
+description: "Bridger 도구 호출 전에 알아둘 것 — 한글 응답 값, 지역 입력 방식, 서비스키, 지역 통합 패밀리 도구."
+---
+
+Bridger 도구는 어떤 언어로든 호출할 수 있지만, 원천 제공기관은 한국 공공기관
+API입니다. 일반적인 REST API와 다르게 동작하는 몇 가지 지점을 아래에 정리했습니다.
+
+<Note>
+  **응답 값은 한글입니다.** 표시명·주소·상태 문자열은 영어로 호출해도 한글로
+  돌아옵니다(`yadmNm` → "서울대학교병원", `addr` → "서울특별시 종로구…").
+  코드·좌표·수치·일시는 언어와 무관하므로 UI는 그 값들로 구성하고, 표시용
+  번역은 AI에 맡기는 것이 안전합니다.
+</Note>
+
+## 지역 입력 방식
+
+제공기관마다 지역을 받는 방식이 세 가지로 나뉩니다. 도구의 입력 스키마에서
+파라미터 이름으로 구분할 수 있습니다.
+
+| 방식 | 형태 | 예시 |
+| --- | --- | --- |
+| 법정 코드 | `sido` 2자리, `sigungu` 5자리 | `"11"` 서울, `"41463"` 기흥구 |
+| 한글 지역명 | 자유 텍스트 | `서울특별시`, `강남구` |
+| 좌표 | WGS84 `lat`/`lng` + `radius`(m) | `37.4979`, `127.0276` |
+
+<Note>
+  좌표가 가장 범용적인 경로입니다. 병원·약국·캠핑장 조회는 `xPos`/`yPos`/`radius`
+  (또는 `mapX`/`mapY`/`radius`)를 받아 전국 어디서든 동작합니다. 응급실 실시간
+  병상처럼 한글 지역명만 받는 제공기관은 패밀리 도구에서 `sidoName`/`sigunguName`
+  선택 입력으로 노출됩니다.
+</Note>
+
+## 지역 통합(패밀리) 도구 우선
+
+같은 종류의 API가 지역별 제공기관·응답 형태로 나뉘어 있습니다. **패밀리 도구**는
+이를 하나로 묶습니다 — `location` 힌트만 넘기면 알맞은 제공기관으로 라우팅하고
+필드를 정규화해 단일 아이템 타입으로 돌려줍니다.
+
+<CardGroup cols={2}>
+  <Card title="교통" icon="bus">
+    `bus_arrival`, `bus_location` — 서울·경기·전주 + 전국 TAGO 폴백을 한 호출로.
+  </Card>
+  <Card title="안전" icon="shield-halved">
+    `emergency_shelter` — 지자체 대피시설 목록 + 전국 민방위대피시설 등록부.
+  </Card>
+  <Card title="문화·숙박" icon="masks-theater">
+    `culture_events`, `local_heritage`, `public_library`, `lodging` — 축제,
+    문화재, 도서관, 숙박을 지역 통합으로.
+  </Card>
+  <Card title="의료" icon="hand-holding-medical">
+    `medical_care` — 한 지점 주변의 병원·약국·응급실 가용병상.
+  </Card>
+</CardGroup>
+
+<Tip>
+  항상 최신 목록은 [카탈로그 인덱스](/presets/index)의 "지역 통합 도구
+  (Families)" 표에서 확인하세요.
+</Tip>
+
+## API 키
+
+<Warning>
+  **Bridger 관리형 키 vs 직접 발급 서비스키.** 대부분의 data.go.kr API는 관리형
+  키로 동작해 `dk_live_…` Bridger 키만으로 호출됩니다. 일부 제공기관은
+  **data.go.kr에서 직접 발급받은 서비스키**가 필요합니다(카탈로그에서
+  `byok`/provider-key로 표기). 인증 오류가 나면 포털의 공공데이터 API 메뉴에서
+  해당 프리셋의 키 요구사항을 확인하세요 — [API 키 가이드](/guides/api-keys)
+  참고.
+</Warning>
+
+## 인밴드 오류
+
+공공데이터 API는 HTTP 상태가 아니라 `200` 봉투 안의 `resultCode`/`resultMessage`로
+실패를 보고합니다. 프리셋은 이를 `errors` 카탈로그로 정규화하므로 HTTP 코드가 아니라
+도구 출력의 `errors[]`를 읽으세요.
