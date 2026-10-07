@@ -1,9 +1,9 @@
 ---
 title: "카탈로그 인덱스"
-description: "Bridger가 제공하는 14개 카테고리 · 218종 프리셋 · 285종 도구의 전체 인덱스."
+description: "Bridger가 제공하는 14개 카테고리 · 222종 프리셋 · 291종 도구의 전체 인덱스."
 ---
 
-Bridger는 공공·민간 OpenAPI를 카테고리별로 정리한 **218**개의 프리셋을 제공합니다.
+Bridger는 공공·민간 OpenAPI를 카테고리별로 정리한 **222**개의 프리셋을 제공합니다.
 카테고리별 도구는 Bridger 호스팅 Gateway에서 `tools/list`로 확인하고 즉시 호출할 수 있습니다.
 
 <CardGroup cols={2}>
@@ -53,7 +53,7 @@ Bridger는 공공·민간 OpenAPI를 카테고리별로 정리한 **218**개의 
   </Card>
   <Card title="교통" icon="bus" href="/presets/transportation">
     버스, 지하철, 항공, 철도, 주차, 도로 교통 데이터.\
-    **23**개 프리셋 · **26**개 도구
+    **27**개 프리셋 · **32**개 도구
   </Card>
   <Card title="기상" icon="cloud-sun-rain" href="/presets/weather">
     예보, 경보, 레이더, 자외선, 태풍 데이터.\
@@ -80,10 +80,25 @@ Bridger는 공공·민간 OpenAPI를 카테고리별로 정리한 **218**개의 
 | [부동산](/presets/realestate) | 18 | 19 |
 | [안전 · 재난](/presets/safety) | 14 | 16 |
 | [과학 · 기술](/presets/science) | 4 | 4 |
-| [교통](/presets/transportation) | 23 | 26 |
+| [교통](/presets/transportation) | 27 | 32 |
 | [기상](/presets/weather) | 17 | 21 |
 | [복지 · 의료](/presets/welfare) | 26 | 27 |
-| **합계** | **218** | **285** |
+| **합계** | **222** | **291** |
+
+## 지역 통합 도구 (Families)
+
+지역·제공기관별로 나뉜 공공데이터 API를 하나의 도구로 묶은 스펙입니다. `location` 입력만으로 라우팅되어 여러 제공기관을 한 번에 조회합니다.
+
+| 도구 | 설명 | 제공기관 수 | 상태 |
+| --- | --- | --- | --- |
+| `bus_arrival` | 전국 버스 도착 통합 | 4 | 베타 |
+| `bus_location` | 전국 버스 위치 통합 조회 | 2 | 초안 |
+| `culture_events` | 전국 문화행사·축제 통합 조회 | 3 | 초안 |
+| `emergency_shelter` | 전국 재난 대피시설 통합 | 3 | 초안 |
+| `local_heritage` | 지역 문화재 통합 조회 | 2 | 초안 |
+| `lodging` | 전국 숙박 통합 조회 | 3 | 초안 |
+| `medical_care` | 전국 병원·약국·응급실 통합 조회 | 3 | 초안 |
+| `public_library` | 전국 공공도서관 통합 조회 | 2 | 초안 |
 
 ## 빠른 사용
 

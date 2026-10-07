@@ -40,9 +40,18 @@
       {
         "header": "제품",
         "items": [
-          { "label": "홈", "href": "https://bridger.kr" },
-          { "label": "대시보드", "href": "https://portal.bridger.kr" },
-          { "label": "게이트웨이 상태", "href": "https://mcp.bridger.kr/health" }
+          {
+            "label": "홈",
+            "href": "https://bridger.kr"
+          },
+          {
+            "label": "대시보드",
+            "href": "https://portal.bridger.kr"
+          },
+          {
+            "label": "게이트웨이 상태",
+            "href": "https://mcp.bridger.kr/health"
+          }
         ]
       }
     ]
@@ -81,7 +90,8 @@
                   "concepts/mcp",
                   "concepts/byoapi",
                   "concepts/auth-and-security",
-                  "concepts/architecture"
+                  "concepts/architecture",
+                  "concepts/korean-data"
                 ]
               }
             ]
@@ -162,7 +172,8 @@
                   "en/concepts/mcp",
                   "en/concepts/byoapi",
                   "en/concepts/auth-and-security",
-                  "en/concepts/architecture"
+                  "en/concepts/architecture",
+                  "en/concepts/korean-data"
                 ]
               }
             ]
