@@ -49,8 +49,8 @@
             "href": "https://portal.bridger.kr"
           },
           {
-            "label": "게이트웨이 상태",
-            "href": "https://mcp.bridger.kr/health"
+            "label": "서비스 상태",
+            "href": "https://bridger.kr/trust"
           }
         ]
       }
