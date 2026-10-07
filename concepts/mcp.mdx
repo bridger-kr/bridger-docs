@@ -9,20 +9,12 @@ SSE 트랜스포트를 사용합니다.
 
 ## 핵심 개념
 
-<CardGroup cols={2}>
-  <Card title="Server" icon="server">
-    도구(`tools`), 리소스(`resources`), 프롬프트(`prompts`)를 노출하는 프로세스.
-  </Card>
-  <Card title="Client" icon="plug">
-    Claude, Cursor, 커스텀 에이전트 — Server에 붙어 도구를 호출.
-  </Card>
-  <Card title="Tool" icon="wrench">
-    이름 + 설명 + 입력 스키마(JSON Schema)를 가진 호출 가능한 함수.
-  </Card>
-  <Card title="Transport" icon="route">
-    STDIO(로컬 프로세스) 또는 Streamable HTTP(원격) 두 가지 표준 트랜스포트.
-  </Card>
-</CardGroup>
+| 이름 | 하는 일 |
+| --- | --- |
+| **Server** | 도구(`tools`), 리소스(`resources`), 프롬프트(`prompts`)를 노출하는 프로세스. |
+| **Client** | Claude, Cursor, 커스텀 에이전트 — Server에 붙어 도구를 호출. |
+| **Tool** | 이름 + 설명 + 입력 스키마(JSON Schema)를 가진 호출 가능한 함수. |
+| **Transport** | STDIO(로컬 프로세스) 또는 Streamable HTTP(원격) 두 가지 표준 트랜스포트. |
 
 ## 표준 메서드
 
@@ -73,10 +65,10 @@ OpenAPI 스펙 (preset YAML 또는 BYOAPI 등록)
 ## 다음 단계
 
 <CardGroup cols={2}>
-  <Card title="아키텍처 보기" icon="diagram-project" href="/concepts/architecture">
+  <Card title="아키텍처 보기" href="/concepts/architecture">
     Gateway · Registry · 미들웨어가 어떻게 맞물리는지.
   </Card>
-  <Card title="첫 도구 호출" icon="play" href="/getting-started/first-tool">
+  <Card title="첫 도구 호출" href="/getting-started/first-tool">
     실제 JSON-RPC 호출을 직접 실행.
   </Card>
 </CardGroup>

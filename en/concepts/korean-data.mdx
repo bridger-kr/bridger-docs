@@ -41,23 +41,12 @@ different response shapes. **Family tools** merge them: you pass a `location`
 hint and the family routes to the right provider, normalizes the fields, and
 returns one item type.
 
-<CardGroup cols={2}>
-  <Card title="Transport" icon="bus">
-    `bus_arrival`, `bus_location` — Seoul · Gyeonggi · Jeonju + national TAGO
-    fallback in one call.
-  </Card>
-  <Card title="Safety" icon="shield-halved">
-    `emergency_shelter` — regional shelter lists + the national civil-defense
-    registry.
-  </Card>
-  <Card title="Culture & lodging" icon="masks-theater">
-    `culture_events`, `local_heritage`, `public_library`, `lodging` — festivals,
-    heritage, libraries, and stays across regions.
-  </Card>
-  <Card title="Health" icon="hand-holding-medical">
-    `medical_care` — hospitals, pharmacies, and ER live beds around a point.
-  </Card>
-</CardGroup>
+| 이름 | 하는 일 |
+| --- | --- |
+| **Transport** | `bus_arrival`, `bus_location` — Seoul · Gyeonggi · Jeonju + national TAGO fallback in one call. |
+| **Safety** | `emergency_shelter` — regional shelter lists + the national civil-defense registry. |
+| **Culture & lodging** | `culture_events`, `local_heritage`, `public_library`, `lodging` — festivals, heritage, libraries, and stays across regions. |
+| **Health** | `medical_care` — hospitals, pharmacies, and ER live beds around a point. |
 
 <Tip>
   The full, always-current list is the "Region-unified tools (families)" table

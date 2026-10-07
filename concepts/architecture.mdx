@@ -8,20 +8,12 @@ Bridger는 OpenAPI 기반 데이터 소스를 MCP 도구로 변환하고, 하나
 
 ## 구성요소
 
-<CardGroup cols={2}>
-  <Card title="Gateway" icon="cloud">
-    MCP JSON-RPC, SSE, Registry API를 노출하는 실행 계층입니다.
-  </Card>
-  <Card title="Tool Registry" icon="boxes-stacked">
-    프리셋과 BYOAPI 등록 도구의 스키마, 권한, 라우팅 정보를 관리합니다.
-  </Card>
-  <Card title="Public Data Adapter" icon="building-columns">
-    공공데이터 인증키 주입, 좌표 변환, XML/JSON 정규화, 에러 매핑을 처리합니다.
-  </Card>
-  <Card title="포털 (관리 콘솔)" icon="key">
-    브릿저 API 키, 공공데이터 서비스키, 실행 로그를 관리합니다.
-  </Card>
-</CardGroup>
+| 이름 | 하는 일 |
+| --- | --- |
+| **Gateway** | MCP JSON-RPC, SSE, Registry API를 노출하는 실행 계층입니다. |
+| **Tool Registry** | 프리셋과 BYOAPI 등록 도구의 스키마, 권한, 라우팅 정보를 관리합니다. |
+| **Public Data Adapter** | 공공데이터 인증키 주입, 좌표 변환, XML/JSON 정규화, 에러 매핑을 처리합니다. |
+| **포털 (관리 콘솔)** | 브릿저 API 키, 공공데이터 서비스키, 실행 로그를 관리합니다. |
 
 ## 런타임 데이터 흐름
 
@@ -78,10 +70,10 @@ paths:
 ## 다음 단계
 
 <CardGroup cols={2}>
-  <Card title="BYOAPI" icon="plug" href="/concepts/byoapi">
+  <Card title="BYOAPI" href="/concepts/byoapi">
     임의의 OpenAPI 스펙을 도구로 등록하는 흐름.
   </Card>
-  <Card title="인증·보안" icon="shield" href="/concepts/auth-and-security">
+  <Card title="인증·보안" href="/concepts/auth-and-security">
     API Key, 시크릿, PII 필터, 감사 로그.
   </Card>
 </CardGroup>

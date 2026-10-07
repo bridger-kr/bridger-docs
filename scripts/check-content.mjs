@@ -13,6 +13,12 @@
  *      preset tool-ID namespace still served by the registry, so bare
  *      `@datari` tokens are allowlisted.
  *
+ *   3. Slop gate (issue #40 / EDD-236) — descriptive `<Card>` components
+ *      must not carry `icon=` (link cards keep theirs is the historical
+ *      pattern, but the current house style is icon-free throughout, so
+ *      icon= is banned outright), and the banned marketing-hyperbole
+ *      phrases must not re-enter the docs.
+ *
  * Scope: files tracked by git (`git ls-files`), excluding vendor/ (the
  * pinned spec submodule is upstream-owned) and this script.
  */
@@ -99,8 +105,42 @@ for (const file of tracked) {
   });
 }
 
+// --- 3. Slop gate (issue #40) ----------------------------------------------
+//
+//   - MDX <Card> elements must not carry an icon= attribute — descriptive
+//     icon-card grids read as template filler; the house style is a
+//     definition table for descriptions and icon-free link cards for nav.
+//   - Marketing hyperbole that overpromises ("any API", "done in seconds",
+//     "어떤 API든", "수 초/몇 초") must stay out; claims are bounded to the
+//     real contract (REST APIs with OpenAPI specs).
+
+const SLOP_PHRASES = [
+  { label: "any API", re: /\bany API\b/i },
+  { label: "done in seconds", re: /done in seconds|in seconds\b/i },
+  { label: "어떤 API든", re: /어떤 API든/ },
+  { label: "수 초/몇 초", re: /[수몇]\s*초/ },
+];
+
+for (const file of tracked) {
+  if (!file.endsWith(".mdx")) continue;
+  if (VENDOR_RE.test(file) || file === SELF) continue;
+  const text = readFileSync(file, "utf8");
+  text.split("\n").forEach((line, i) => {
+    if (/<Card[^>]*\bicon=/.test(line)) {
+      console.error(`slop: ${file}:${i + 1} <Card> carries icon= — strip it`);
+      failures++;
+    }
+    for (const { label, re } of SLOP_PHRASES) {
+      if (re.test(line)) {
+        console.error(`slop: ${file}:${i + 1} hyperbole '${label}'`);
+        failures++;
+      }
+    }
+  });
+}
+
 if (failures > 0) {
   console.error(`\ncheck-content: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log("check-content: ko/en pairs OK, no forbidden strings");
+console.log("check-content: ko/en pairs OK, no forbidden strings, no slop");

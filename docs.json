@@ -258,5 +258,11 @@
     "byoapiRegisterUrl": "https://api.bridger.kr/api/v1/register",
     "byoapiStatusUrl": "https://api.bridger.kr/api/v1/register/{id}/status",
     "oauthPrmUrl": "https://mcp.bridger.kr/.well-known/oauth-protected-resource"
+  },
+  "background": {
+    "color": {
+      "light": "#ffffff",
+      "dark": "#0a0a0a"
+    }
   }
 }

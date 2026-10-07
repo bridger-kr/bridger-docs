@@ -6,20 +6,12 @@ description: "How API keys, secret management, the PII filter, and audit logs ar
 Because the Bridger Gateway exposes public data and self-registered APIs under a single domain, the
 security boundary is its most important responsibility. The following four layers apply to every request.
 
-<CardGroup cols={2}>
-  <Card title="Authentication" icon="key">
-    Identify the caller via API Key / OAuth 2.0.
-  </Card>
-  <Card title="Secret management" icon="lock">
-    Isolate public-data ServiceKeys and BYOAPI tokens in Vault.
-  </Card>
-  <Card title="PII filter" icon="user-shield">
-    Mask personal-information patterns in responses.
-  </Card>
-  <Card title="Audit log" icon="clipboard-check">
-    Track who called which tool, and when.
-  </Card>
-</CardGroup>
+| 이름 | 하는 일 |
+| --- | --- |
+| **Authentication** | Identify the caller via API Key / OAuth 2.0. |
+| **Secret management** | Isolate public-data ServiceKeys and BYOAPI tokens in Vault. |
+| **PII filter** | Mask personal-information patterns in responses. |
+| **Audit log** | Track who called which tool, and when. |
 
 ## 1. Authentication
 
@@ -112,10 +104,10 @@ Every `tools/call` is recorded with the following fields.
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="API Reference: Auth" icon="key" href="/en/api-reference/authentication">
+  <Card title="API Reference: Auth" href="/en/api-reference/authentication">
     Headers, error codes, OAuth flows.
   </Card>
-  <Card title="Architecture" icon="diagram-project" href="/en/concepts/architecture">
+  <Card title="Architecture" href="/en/concepts/architecture">
     Where authentication, middleware, and logging run.
   </Card>
 </CardGroup>

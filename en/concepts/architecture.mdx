@@ -8,20 +8,12 @@ auditing in a single Gateway. Users call the Gateway endpoint without operating 
 
 ## Components
 
-<CardGroup cols={2}>
-  <Card title="Gateway" icon="cloud">
-    The execution layer that exposes MCP JSON-RPC, SSE, and the Registry API.
-  </Card>
-  <Card title="Tool Registry" icon="boxes-stacked">
-    Manages schemas, permissions, and routing for preset and BYOAPI-registered tools.
-  </Card>
-  <Card title="Public Data Adapter" icon="building-columns">
-    Handles public-data service-key injection, coordinate conversion, XML/JSON normalization, and error mapping.
-  </Card>
-  <Card title="Portal (admin console)" icon="key">
-    Manages Bridger API keys, public-data service keys, and execution logs.
-  </Card>
-</CardGroup>
+| 이름 | 하는 일 |
+| --- | --- |
+| **Gateway** | The execution layer that exposes MCP JSON-RPC, SSE, and the Registry API. |
+| **Tool Registry** | Manages schemas, permissions, and routing for preset and BYOAPI-registered tools. |
+| **Public Data Adapter** | Handles public-data service-key injection, coordinate conversion, XML/JSON normalization, and error mapping. |
+| **Portal (admin console)** | Manages Bridger API keys, public-data service keys, and execution logs. |
 
 ## Runtime data flow
 
@@ -78,10 +70,10 @@ paths:
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="BYOAPI" icon="plug" href="/en/concepts/byoapi">
+  <Card title="BYOAPI" href="/en/concepts/byoapi">
     How to register an arbitrary OpenAPI spec as a tool.
   </Card>
-  <Card title="Auth & security" icon="shield" href="/en/concepts/auth-and-security">
+  <Card title="Auth & security" href="/en/concepts/auth-and-security">
     API keys, secrets, PII filtering, audit logs.
   </Card>
 </CardGroup>

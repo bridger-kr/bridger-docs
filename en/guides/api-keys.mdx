@@ -6,16 +6,9 @@ description: "The Bridger API key and the data.go.kr service key — two keys wi
 Bridger uses two kinds of keys with different purposes. You don't always need both —
 it depends on the data you want and the client you call from.
 
-<CardGroup cols={2}>
-  <Card title="Bridger API key" icon="key" href="https://portal.bridger.kr/api-keys">
-    Used when external AI clients or your own server call the Bridger Gateway (`dk_live_…`).
-    Not needed for browser test calls in the portal.
-  </Card>
-  <Card title="data.go.kr service key" icon="building-columns">
-    A key issued by the provider (data.go.kr). Required only for that provider's APIs —
-    APIs callable with the default key don't need one.
-  </Card>
-</CardGroup>
+| 이름 | 하는 일 |
+| --- | --- |
+| **data.go.kr service key** | A key issued by the provider (data.go.kr). Required only for that provider's APIs — APIs callable with the default key don't need one. |
 
 ## Issue a Bridger API key
 
@@ -84,7 +77,7 @@ often be reused across multiple APIs from the same provider.
     Use the **general key (Decoding)**. The Encoding key is URL-encoded, and Bridger only uses the Decoding key.
   </Accordion>
   <Accordion title="Can I use an API that isn't listed here?">
-    Any API with an OpenAPI spec can be registered directly via [BYOAPI](/en/concepts/byoapi).
+    A REST API with an OpenAPI spec can be registered directly via [BYOAPI](/en/concepts/byoapi).
     If you'd like your API added as a public preset, contact us at [hello@bridger.kr](mailto:hello@bridger.kr) or via Channel Talk.
   </Accordion>
 </AccordionGroup>
