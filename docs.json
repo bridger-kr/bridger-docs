@@ -85,6 +85,13 @@
                 ]
               },
               {
+                "group": "작업 예시",
+                "pages": [
+                  "workflows/business-check",
+                  "workflows/place-brief"
+                ]
+              },
+              {
                 "group": "개념",
                 "pages": [
                   "concepts/mcp",
@@ -164,6 +171,13 @@
                   "en/guides/gemini",
                   "en/guides/api",
                   "en/guides/api-keys"
+                ]
+              },
+              {
+                "group": "Workflow examples",
+                "pages": [
+                  "en/workflows/business-check",
+                  "en/workflows/place-brief"
                 ]
               },
               {

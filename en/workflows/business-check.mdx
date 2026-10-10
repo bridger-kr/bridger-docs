@@ -1,0 +1,80 @@
+---
+title: 'Business basics check'
+description: 'Inputs, permissions and failure boundaries for business status and limited regional normalization'
+---
+
+<Warning>This is a workflow design with offline examples, not evidence of live provider responses, customer adoption or legal approval. It is not credit, fraud or street-address verification.</Warning>
+
+## Intended users
+
+Product teams and automation partners handling repeated counterparty onboarding can query NTS business status using a registration number they lawfully hold.
+They may optionally normalize a Korean region name or coordinates into administrative codes and a weather grid.
+A business status, including closure status, is not a trust score or a transaction approval. A responsible operator makes that decision.
+
+## Inputs and acceptable adoption
+
+| Item | Contract |
+| --- | --- |
+| Required | Business registration number, submitted only on the execution path after purpose and authorization review |
+| Optional | Region name or coordinates. Unrequested location normalization is not a required output |
+| Acceptable output | Provider status with source and reference time, requested regional codes and missing-data reasons; the operator explicitly confirms work use |
+| Unsupported | Credit, fraud, beneficial-owner or identity verification; street/building/postal address validation; automatic transaction approval |
+| Privacy | No numbers, addresses, keys or raw queries in optional analytics or public examples. Operational log retention/deletion needs separate review |
+
+`resolve_location` is a regional gazetteer and coordinate-computation meta-tool.
+Unsupported street addresses and ambiguous names must be marked `unsupported_address` or `ambiguous` and clarified, not presented as nationwide address validation.
+
+## Reuse the existing tools
+
+1. Follow the [AI connection guide](/en/guides/claude) and [first tool](/en/getting-started/first-tool) authentication/activation steps.
+2. Inspect `getBusinessRegistrationStatus` in `civil/business-registration` in the [civil catalog](/en/presets/civil).
+3. Preserve provider status and reference time; distinguish status lookup from registration-information matching.
+4. The existing business-information widget serves `validateBusinessRegistration`. Use it only with authorized additional inputs; it is not a substitute for status lookup or credit scoring.
+5. An executed result is not adoption. Record `adopted` only after explicit confirmation that the result was used in the task.
+
+Do not execute before required keys and activation are available. Reading documentation or selecting a catalog tool is not task success.
+
+## Sources, time, permissions and cost
+
+Repository metadata review date: 2026-10-10. No live provider request was made for this page.
+
+| Source | Boundary |
+| --- | --- |
+| [NTS business registration](/en/presets/civil) | [Public Data Portal listing](https://www.data.go.kr/data/15081808/openapi.do). Status lookup and information matching are distinct |
+| `resolve_location` | [API reference implementation](https://github.com/bridger-kr/bridger-api/blob/86017b0666c9e8578ec4a8c4260b007dea92219f/internal/mcpedge/resolve_location.go). Show embedded-data version and processing time |
+| `source` / `asOf` | Preserve provider reference time. An unknown reference time is `missing_asof`, never an invented current timestamp |
+| Permission | Provider terms, key application/approval and redistribution rights remain unreviewed until an owner checks them. Bridger API authorization is separate from provider approval |
+| Cost | Check provider quota, personal/managed-key availability and Bridger pricing/support before execution. No free or unlimited guarantee |
+
+A location-computation timestamp is not the business-status reference time.
+Even a valid status must satisfy a freshness policy agreed for its intended use.
+Do not claim production readiness until documentation, rights, keys and separately approved live smoke evidence are checked.
+
+## Outcomes and unavailable data
+
+This is a **proposed normalized workflow envelope**, not a change to the current MCP wire schema.
+Every requested component includes a source, `asOf` and `unavailable` reason.
+
+| Outcome | Meaning | Action |
+| --- | --- | --- |
+| `success` | Every requested component has usable rows with a known reference time | Review content and limitations, then explicitly adopt |
+| `partial` | Some usable rows, but another requested component is empty or unavailable | Show omissions and supplement; do not count complete/first success |
+| `empty` | No usable rows and at least one valid empty response; preserve any other error reasons | Check input/scope; do not confuse this with an all-error response |
+| `error` | All requested components are unavailable | Distinguish keys, input, provider errors and timeout before retry/support |
+
+Status returned with unsupported address normalization is `partial`.
+A status-only request is judged only on its requested status output.
+Rows with reference-time or freshness failures are not usable.
+A closed-business status may still be a successful lookup; interpret status codes according to the provider, not as a business approval.
+
+## Offline evidence and support
+
+The [offline evidence pack](https://github.com/bridger-kr/bridger-docs/tree/main/docs/gtm) contains 25 synthetic normalized cases for this bundle, out of 50 total.
+They contain no real business numbers, addresses, keys or provider payloads; they test four outcomes and missing-data handling only.
+They do not prove provider-wire compatibility, executability or adoption rates.
+
+Check input authority, rights, support ownership and expected costs before use.
+Display unknown time and unsupported-address reasons explicitly.
+Support requests should contain tool name, time and sanitized error code, not raw private inputs.
+
+Related: [Place briefing](/en/workflows/place-brief), [authentication and security](/en/concepts/auth-and-security), [BYOAPI](/en/concepts/byoapi).

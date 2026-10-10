@@ -1,0 +1,71 @@
+---
+title: 'Place briefing'
+description: 'Read location, forecasts, air quality and Suwon charging data with explicit source and unavailable metadata'
+---
+
+<Warning>This is a workflow contract, not a live result. It does not guarantee nationwide charging coverage, real-time data, currently available chargers or distance-ranked results.</Warning>
+
+## Users and inputs
+
+Product teams and automation partners repeatedly checking Korean regional environmental information are the intended users.
+Inputs include a Korean region name or coordinates, weather issue date/time, forecast target time and a verified air-monitoring station name.
+`resolve_location` can normalize location into weather-grid/administrative codes, but does not automatically establish an air-monitoring station.
+Invalid coordinates and ambiguous names require clarification.
+
+This contract requests all four components: location, weather, air quality and charging stations.
+Acceptable adoption means an operator confirms using a briefing that explicitly preserves differing times, geographic scope and omissions.
+Recommendations, safety guarantees, reservations, medical judgments and route optimization are out of scope.
+Raw addresses, coordinates, queries and keys are excluded from optional analytics.
+
+## Existing guides and tools
+
+1. Reuse [AI connection](/en/guides/claude) and [first tool](/en/getting-started/first-tool) authentication/activation.
+2. Check `resolve_location` coverage and ask the user to disambiguate locations.
+3. Use `weather/village-forecast`, `getVillageForecast` in the [weather catalog](/en/presets/weather) and the existing weather widget. Distinguish forecasts from observations.
+4. Read station and measurement time with `environment/air-quality-realtime`, `getAirQualityRealtimeByStation` in the [environment catalog](/en/presets/environment).
+5. `transportation/ev-charging`, `getEvCharging` in the [transportation catalog](/en/presets/transportation) covers **Suwon**. Other regions are `unsupported_region`.
+6. Preserve reference times and missing-data reasons for human review. Fetching results and adopting them are separate actions.
+
+Station coordinates/addresses do not make the provider query a distance-ranked or charger-availability search.
+Determining nearby stations needs separately verified coordinates/distance computation; that was not executed for this example.
+
+## Sources, time, permissions and cost
+
+Repository metadata review date: 2026-10-10. No live provider smoke was performed.
+
+| Component | Source and scope | `asOf` |
+| --- | --- | --- |
+| Location | [Embedded regional/grid tool](https://github.com/bridger-kr/bridger-api/blob/86017b0666c9e8578ec4a8c4260b007dea92219f/internal/mcpedge/resolve_location.go), not street-address verification | Data version + calculation time, not provider measurement time |
+| Weather | [KMA village forecast](https://www.data.go.kr/data/15084084/openapi.do); grid, issue time and forecast target required | Show issue and forecast times separately |
+| Air quality | [Air Korea](https://www.data.go.kr/data/15073861/openapi.do); station-level, possibly missing measurements | Measurement time; not a region-wide value |
+| Charging | [Suwon listing](https://www.data.go.kr/data/15144026/openapi.do); official attachment recorded unavailable in the pinned spec | Provider update/status time; unknown is `missing_asof` |
+
+An owner must check keys, provider application/quota, terms and redistribution rights.
+Check personal/managed-key availability and Bridger pricing/support before execution.
+This page contains no rights approval or free/unlimited guarantee.
+Agree and document freshness limits per component and use case; HTTP response time is not measurement time.
+
+## Outcome contract
+
+This page and synthetic fixtures describe a proposed normalized envelope, not changes to current MCP responses or connectors.
+Each requested component includes `source`, `asOf` and `unavailable`.
+
+| Outcome | Meaning |
+| --- | --- |
+| `success` | All four components have usable rows with known reference times. Not `adopted` until a person confirms use |
+| `partial` | Some usable rows, but another component is empty/unavailable. Show reasons such as outside Suwon, missing measurements or stale forecast |
+| `empty` | No usable rows and at least one valid empty response; preserve any other errors |
+| `error` | Every component unavailable due to keys, input, timeout, provider error or similar failure |
+
+Unsupported regions and stale data are not successful rows.
+Unknown reference times remain `missing_asof`; never insert the current time to disguise them.
+Partial results are not complete/first successes. Review again after input/key correction or approved retries.
+
+## Offline evidence and support
+
+The [evidence pack](https://github.com/bridger-kr/bridger-docs/tree/main/docs/gtm) includes 25 synthetic cases for this bundle.
+Rows and reference times are invented for tests, not measurements, coordinates, addresses or provider responses; they do not verify provider wire schemas or live state.
+Cases include unsupported regions, missing keys, ambiguous locations, empty responses, stale values, unknown reference times and provider errors.
+Do not claim production readiness before rights, keys, the missing attachment, real smoke and support ownership are checked.
+
+Related: [Business basics check](/en/workflows/business-check), [authentication and security](/en/concepts/auth-and-security), [BYOAPI](/en/concepts/byoapi).

@@ -1,0 +1,17 @@
+{
+  "id": "team_01",
+  "organization": "org_01",
+  "segment": "product_team",
+  "bundle": "business_check",
+  "channel": "workflow_page",
+  "consented": false,
+  "interviewAt": null,
+  "pilot": false,
+  "firstAdoptedAt": null,
+  "adoptions": [],
+  "priceEvidence": null,
+  "dropout": "none",
+  "evidenceRef": null,
+  "tool": null,
+  "independenceReviewed": false
+}
