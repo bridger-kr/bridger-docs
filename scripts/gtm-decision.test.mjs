@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import test from 'node:test';
-import {evaluateGtm, SUPPLIER_CHECKS} from './gtm-decision.mjs';
+import {evaluateGtm as evaluateGtmWithClock, SUPPLIER_CHECKS} from './gtm-decision.mjs';
 
 const blank = JSON.parse(readFileSync(new URL('../docs/gtm/evidence-template.json', import.meta.url)));
 const at = (day) => `2026-10-${String(day).padStart(2, '0')}T09:00:00Z`;
+const evaluateGtm = (input) => evaluateGtmWithClock(input, {now: Date.parse(at(30))});
 function evidence() {
   const input = structuredClone(blank);
   input.evidence = 'synthetic';
@@ -136,4 +137,28 @@ test('raw fields, nonconsent observations, future repeats, duplicates and overla
   const over = evidence(); over.experiment.participants.slice(0, 12).forEach((p) => {p.pilot = true;});
   assert.ok(evaluateGtm(over).failures.includes('pilot_bundle_cap'));
   assert.equal(evaluateGtm({evidence: 'raw-secret'}).evidence, 'pending');
+});
+
+test('actual evidence cannot mature an observation window later than the evaluation clock', () => {
+  const input = evidence(); input.evidence = 'actual';
+  const report = evaluateGtmWithClock(input, {now: Date.parse(at(10))});
+  assert.ok(report.failures.includes('future_actual_window'));
+  assert.equal(report.publicExpansion, 'blocked');
+  assert.equal(report.observedDay14, undefined);
+  assert.equal(evaluateGtmWithClock(input, {now: Date.parse(at(30))}).publicExpansion, 'eligible_for_manual_review');
+  input.evidence = 'synthetic';
+  assert.deepEqual(evaluateGtmWithClock(input, {now: Date.parse(at(10))}).failures, []);
+  assert.equal(evaluateGtmWithClock(input, {now: Date.parse(at(10))}).publicExpansion, 'blocked');
+});
+
+test('default clock rejects future actual windows and invalid clocks fail closed', () => {
+  const input = evidence(); input.evidence = 'actual';
+  input.experiment.asOf = '2999-01-01T00:00:00Z';
+  assert.ok(evaluateGtmWithClock(input).failures.includes('future_actual_window'));
+  input.experiment.asOf = at(30);
+  for (const now of [NaN, Infinity]) {
+    const report = evaluateGtmWithClock(input, {now});
+    assert.ok(report.failures.includes('future_actual_window'));
+    assert.equal(report.publicExpansion, 'blocked');
+  }
 });

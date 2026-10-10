@@ -48,6 +48,8 @@ official attachment; region normalization is not street-address validation.
 5. Run `node scripts/gtm-decision.mjs <private-file.json>` after updating `asOf`.
    Invalid, unsupported, future or non-consented evidence fails closed. Output
    does not contain free-text responses or contact fields.
+   Actual evidence cannot use an `asOf` later than the process clock to claim
+   an observed retention window. Future synthetic scenarios remain test-only.
 6. Record continue/narrow/revise-once/stop-or-pivot in the owner's next-30-day
    decision log. Do not infer channel winners from this small sample.
 7. Follow `supplier-intake.md`. The script produces readiness **for manual

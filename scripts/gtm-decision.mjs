@@ -23,7 +23,7 @@ const repeatAt = (participant, day, asOf) => participant.adoptions.some((date) =
 const mature = (participant, day, asOf) => participant.consented && time(participant.firstAdoptedAt)
   && Date.parse(asOf) >= Date.parse(participant.firstAdoptedAt) + day * DAY;
 
-export function validateEvidence(input) {
+export function validateEvidence(input, {now = Date.now()} = {}) {
   const failures = [];
   if (!keys(input, ['version', 'evidence', 'experiment', 'suppliers'])) return ['envelope'];
   if (input.version !== 1 || !Object.values(EVIDENCE).includes(input.evidence)) failures.push('version_or_evidence');
@@ -34,6 +34,8 @@ export function validateEvidence(input) {
     || (experiment.asOf !== null && !time(experiment.asOf))
     || ((experiment.windowStart === null) !== (experiment.asOf === null))
     || (experiment.asOf && Date.parse(experiment.asOf) < Date.parse(experiment.windowStart))) failures.push('window');
+  if (input.evidence === EVIDENCE.Actual && time(experiment.asOf)
+    && (!Number.isFinite(now) || Date.parse(experiment.asOf) > now)) failures.push('future_actual_window');
   if (experiment.participants.length > 30
     || new Set(experiment.participants.map((p) => p?.id)).size !== experiment.participants.length) failures.push('cohort_size_or_duplicate');
   for (const p of experiment.participants) {
@@ -82,8 +84,8 @@ export function validateEvidence(input) {
   return failures;
 }
 
-export function evaluateGtm(input) {
-  const failures = validateEvidence(input);
+export function evaluateGtm(input, options) {
+  const failures = validateEvidence(input, options);
   if (failures.length) return {evidence: Object.values(EVIDENCE).includes(input?.evidence) ? input.evidence : EVIDENCE.Pending, failures, publicExpansion: 'blocked'};
   const {participants, windowStart, asOf, revision} = input.experiment;
   const day14 = time(windowStart) ? Date.parse(windowStart) + 14 * DAY : Infinity;
