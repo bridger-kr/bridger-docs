@@ -29,21 +29,24 @@ export function validateWorkflowFixture(fixture, sources) {
   if (!exactKeys(fixture, ['version', 'id', 'evidence', 'bundle', 'scenario', 'requested', 'components', 'outcome', 'adopted'])) {
     return ['envelope_keys'];
   }
-  if (fixture.version !== 1 || !/^synthetic-\d{2}$/.test(fixture.id) || fixture.evidence !== 'synthetic') fail('identity');
+  if (fixture.version !== 1 || typeof fixture.id !== 'string'
+    || !/^synthetic-\d{2}$/.test(fixture.id) || fixture.evidence !== 'synthetic') fail('identity');
   if (typeof fixture.scenario !== 'string' || !/^[a-z_]+$/.test(fixture.scenario)) fail('scenario');
-  const allowed = BUNDLES[fixture.bundle];
+  const allowed = typeof fixture.bundle === 'string' && Object.hasOwn(BUNDLES, fixture.bundle) ? BUNDLES[fixture.bundle] : null;
   if (!allowed || !Array.isArray(fixture.requested) || fixture.requested.length === 0
     || new Set(fixture.requested).size !== fixture.requested.length
     || fixture.requested.some((name) => !allowed.includes(name))
     || (fixture.bundle === 'business_check' && !fixture.requested.includes('business_status'))
     || (fixture.bundle === 'place_brief' && allowed.some((name) => !fixture.requested.includes(name)))) fail('requested');
   if (!Array.isArray(fixture.components) || fixture.components.length === 0) return [...errors, 'components'];
+  if (!sources || typeof sources !== 'object' || Array.isArray(sources)) return [...errors, 'source_registry'];
   const names = fixture.components.map((c) => c?.name);
   if (new Set(names).size !== names.length || names.sort().join(',') !== [...(Array.isArray(fixture.requested) ? fixture.requested : [])].sort().join(',')) fail('component_set');
   for (const component of fixture.components) {
     if (!exactKeys(component, ['name', 'status', 'source', 'asOf', 'unavailable', 'rows'])) {fail('component_keys'); continue;}
     if (!Object.values(COMPONENT_STATUS).includes(component.status)) fail('component_status');
-    if (!sources[component.source] || sources[component.source].component !== component.name) fail('source');
+    if (typeof component.source !== 'string' || !Object.hasOwn(sources, component.source)
+      || sources[component.source]?.component !== component.name) fail('source');
     if (!Array.isArray(component.rows) || component.rows.some((row) => !exactKeys(row, ['sample'])
       || !Number.isInteger(row.sample) || row.sample < 1)) fail('synthetic_rows');
     if (component.status === COMPONENT_STATUS.Available) {

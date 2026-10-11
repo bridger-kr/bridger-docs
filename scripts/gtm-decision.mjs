@@ -12,7 +12,8 @@ const BUNDLES = ['business_check', 'place_brief'];
 const CHANNELS = ['workflow_page', 'ai_guide'];
 const time = (value) => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(value)
   && Number.isFinite(Date.parse(value)) && new Date(value).toISOString().replace('.000', '') === value;
-const ref = (value) => typeof value === 'string' && /^evidence_\d{2,4}$/.test(value);
+const identifier = (value, pattern) => typeof value === 'string' && pattern.test(value);
+const ref = (value) => identifier(value, /^evidence_\d{2,4}$/);
 const keys = (value, names) => value && typeof value === 'object' && !Array.isArray(value)
   && Object.keys(value).sort().join(',') === [...names].sort().join(',');
 const dateInWindow = (date, start, end) => time(date) && time(start) && time(end)
@@ -39,13 +40,13 @@ export function validateEvidence(input) {
   for (const p of experiment.participants) {
     if (!keys(p, ['id', 'organization', 'segment', 'bundle', 'channel', 'consented', 'interviewAt', 'pilot', 'firstAdoptedAt',
       'adoptions', 'priceEvidence', 'dropout', 'evidenceRef', 'tool', 'independenceReviewed'])
-      || !/^team_\d{2,4}$/.test(p.id) || !/^org_\d{2,4}$/.test(p.organization)
+      || !identifier(p.id, /^team_\d{2,4}$/) || !identifier(p.organization, /^org_\d{2,4}$/)
       || !BUNDLES.includes(p.bundle) || !CHANNELS.includes(p.channel)
       || !['product_team', 'automation_partner'].includes(p.segment)
       || ![p.consented, p.pilot, p.independenceReviewed].every((flag) => typeof flag === 'boolean')
       || !['none', 'no_need', 'no_permission', 'key_cost', 'support', 'declined', 'other'].includes(p.dropout)
       || !Array.isArray(p.adoptions) || new Set(p.adoptions).size !== p.adoptions.length
-      || (p.tool !== null && !/^tool_\d{2,4}$/.test(p.tool))
+      || (p.tool !== null && !identifier(p.tool, /^tool_\d{2,4}$/))
       || (p.priceEvidence !== null && !ref(p.priceEvidence)) || (p.evidenceRef !== null && !ref(p.evidenceRef))) {
       failures.push('participant_schema'); continue;
     }
@@ -63,13 +64,13 @@ export function validateEvidence(input) {
   if (!Array.isArray(input.suppliers) || input.suppliers.length !== 3) return [...failures, 'supplier_count'];
   if (new Set(input.suppliers.map((s) => s?.id)).size !== 3 || new Set(input.suppliers.map((s) => s?.tool)).size !== 3) failures.push('supplier_duplicate');
   for (const supplier of input.suppliers) {
-    if (!keys(supplier, ['id', 'tool', 'terms', 'checks']) || !/^supplier_\d{2,4}$/.test(supplier.id)
-      || !/^tool_\d{2,4}$/.test(supplier.tool) || !keys(supplier.checks, SUPPLIER_CHECKS)
+    if (!keys(supplier, ['id', 'tool', 'terms', 'checks']) || !identifier(supplier.id, /^supplier_\d{2,4}$/)
+      || !identifier(supplier.tool, /^tool_\d{2,4}$/) || !keys(supplier.checks, SUPPLIER_CHECKS)
       || !keys(supplier.terms, ['priceUnit', 'freshnessMaxAgeHours', 'supportOwnerRef', 'failurePolicy'])) {failures.push('supplier_schema'); continue;}
     const terms = supplier.terms;
     if (![null, 'request', 'month', 'usage'].includes(terms.priceUnit)
       || (terms.freshnessMaxAgeHours !== null && (!Number.isFinite(terms.freshnessMaxAgeHours) || terms.freshnessMaxAgeHours <= 0))
-      || (terms.supportOwnerRef !== null && !/^owner_\d{2,4}$/.test(terms.supportOwnerRef))
+      || (terms.supportOwnerRef !== null && !identifier(terms.supportOwnerRef, /^owner_\d{2,4}$/))
       || ![null, 'not_charged_on_error', 'documented_manual_review'].includes(terms.failurePolicy)) failures.push('supplier_terms');
     for (const check of Object.values(supplier.checks)) {
       if (!keys(check, ['status', 'evidenceRef', 'reviewedAt']) || !Object.values(CHECK_STATUS).includes(check.status)
