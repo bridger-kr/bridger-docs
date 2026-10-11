@@ -45,3 +45,27 @@ test('the corpus gate rejects duplicates/count loss and lost outcome coverage', 
   assert.ok(checkFixtures(fixtures.map((f) => ({...f, id: 'synthetic-01'})), sources).failures.length);
   assert.ok(checkFixtures(fixtures.filter((f) => f.outcome !== 'error'), sources).failures.length);
 });
+
+for (const mutation of ['array_id', 'array_bundle', 'array_source', 'inherited_bundle', 'null_sources']) {
+  test(`malformed ${mutation} produces a diagnostic instead of accepting or throwing`, () => {
+    const f = structuredClone(fixtures[0]);
+    let registry = sources;
+    switch (mutation) {
+      case 'array_id': f.id = [f.id]; break;
+      case 'array_bundle': f.bundle = [f.bundle]; break;
+      case 'array_source': f.components[0].source = [f.components[0].source]; break;
+      case 'inherited_bundle': f.bundle = 'constructor'; break;
+      case 'null_sources': registry = null; break;
+    }
+    assert.ok(validateWorkflowFixture(f, registry).length > 0);
+  });
+}
+
+test('invalid corpus entries are diagnosed without echoing unvalidated identities', () => {
+  for (const input of [null, {}, [null], [{id: 'private-customer-value'}]]) {
+    const report = checkFixtures(input, sources);
+    assert.ok(report.failures.length > 0);
+    assert.equal(report.schemaValid, 0);
+    assert.doesNotMatch(JSON.stringify(report), /private-customer-value/);
+  }
+});

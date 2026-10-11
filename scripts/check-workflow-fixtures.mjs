@@ -3,17 +3,22 @@ import {fileURLToPath} from 'node:url';
 import {validateWorkflowFixture, OUTCOME} from './workflow-contract.mjs';
 
 export function checkFixtures(fixtures, sources) {
-  const failures = fixtures.flatMap((fixture) => validateWorkflowFixture(fixture, sources)
-    .map((reason) => ({id: fixture.id, reason})));
-  if (fixtures.length !== 50 || new Set(fixtures.map((f) => f.id)).size !== 50) failures.push({reason: 'count_or_duplicates'});
+  if (!Array.isArray(fixtures)) return {evidence: 'synthetic_only', total: 0, schemaValid: 0,
+    failures: [{reason: 'fixture_list'}], liveProviderCalls: 0};
+  const validations = fixtures.map((fixture) => validateWorkflowFixture(fixture, sources));
+  const failures = validations.flatMap((errors, index) => errors.map((reason) => ({
+    id: typeof fixtures[index]?.id === 'string' && /^synthetic-\d{2}$/.test(fixtures[index].id) ? fixtures[index].id : null,
+    reason,
+  })));
+  if (fixtures.length !== 50 || new Set(fixtures.map((f) => f?.id)).size !== 50) failures.push({reason: 'count_or_duplicates'});
   for (const bundle of ['business_check', 'place_brief']) {
-    if (fixtures.filter((f) => f.bundle === bundle).length !== 25) failures.push({reason: 'bundle_count'});
+    if (fixtures.filter((f) => f?.bundle === bundle).length !== 25) failures.push({reason: 'bundle_count'});
     for (const outcome of Object.values(OUTCOME)) {
-      if (!fixtures.some((f) => f.bundle === bundle && f.outcome === outcome)) failures.push({reason: 'outcome_coverage'});
+      if (!fixtures.some((f) => f?.bundle === bundle && f.outcome === outcome)) failures.push({reason: 'outcome_coverage'});
     }
   }
   return {evidence: 'synthetic_only', total: fixtures.length,
-    schemaValid: fixtures.filter((f) => validateWorkflowFixture(f, sources).length === 0).length,
+    schemaValid: validations.filter((errors) => errors.length === 0).length,
     failures, liveProviderCalls: 0};
 }
 

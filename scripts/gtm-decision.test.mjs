@@ -92,6 +92,31 @@ test('two accounts in one organization or absent independence evidence do not me
   assert.equal(evaluateGtm(input).publicExpansion, 'blocked');
 });
 
+test('JSON array organization aliases cannot inflate independent buyer count', () => {
+  const input = evidence(); input.evidence = 'actual';
+  input.experiment.participants[0].organization = ['org_01'];
+  input.experiment.participants[1].organization = ['org_01'];
+  const report = evaluateGtm(JSON.parse(JSON.stringify(input)));
+  assert.equal(report.publicExpansion, 'blocked');
+  assert.ok(report.failures.includes('participant_schema'));
+});
+
+for (const field of ['participant_id', 'participant_tool', 'supplier_id', 'supplier_tool', 'support_owner']) {
+  test(`non-string ${field} is rejected rather than coerced into an identifier`, () => {
+    const input = evidence(); input.evidence = 'actual';
+    switch (field) {
+      case 'participant_id': input.experiment.participants[0].id = ['team_01']; break;
+      case 'participant_tool': input.experiment.participants[0].tool = ['tool_01']; break;
+      case 'supplier_id': input.suppliers[0].id = ['supplier_01']; break;
+      case 'supplier_tool': input.suppliers[0].tool = ['tool_01']; break;
+      case 'support_owner': input.suppliers[0].terms.supportOwnerRef = ['owner_01']; break;
+    }
+    const report = evaluateGtm(input);
+    assert.ok(report.failures.length > 0);
+    assert.equal(report.publicExpansion, 'blocked');
+  });
+}
+
 test('no second-week reuse or using a different tool cannot unlock expansion', () => {
   const input = evidence(); input.evidence = 'actual';
   input.experiment.participants[1].adoptions = [at(9)];
