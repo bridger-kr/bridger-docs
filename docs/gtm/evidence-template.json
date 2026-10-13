@@ -1,0 +1,258 @@
+{
+  "version": 1,
+  "evidence": "pending",
+  "experiment": {
+    "windowStart": null,
+    "asOf": null,
+    "revision": 0,
+    "participants": []
+  },
+  "suppliers": [
+    {
+      "id": "supplier_01",
+      "tool": "tool_01",
+      "terms": {
+        "priceUnit": null,
+        "freshnessMaxAgeHours": null,
+        "supportOwnerRef": null,
+        "failurePolicy": null
+      },
+      "checks": {
+        "rights_license": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "schema": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "fixture": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "pii": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "freshness": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "price_unit": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "failure_policy": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "support_owner": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "contract": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "security": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "legal": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "kyc": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "seller_tax": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "psp": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        }
+      }
+    },
+    {
+      "id": "supplier_02",
+      "tool": "tool_02",
+      "terms": {
+        "priceUnit": null,
+        "freshnessMaxAgeHours": null,
+        "supportOwnerRef": null,
+        "failurePolicy": null
+      },
+      "checks": {
+        "rights_license": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "schema": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "fixture": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "pii": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "freshness": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "price_unit": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "failure_policy": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "support_owner": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "contract": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "security": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "legal": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "kyc": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "seller_tax": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "psp": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        }
+      }
+    },
+    {
+      "id": "supplier_03",
+      "tool": "tool_03",
+      "terms": {
+        "priceUnit": null,
+        "freshnessMaxAgeHours": null,
+        "supportOwnerRef": null,
+        "failurePolicy": null
+      },
+      "checks": {
+        "rights_license": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "schema": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "fixture": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "pii": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "freshness": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "price_unit": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "failure_policy": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "support_owner": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "contract": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "security": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "legal": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "kyc": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "seller_tax": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        },
+        "psp": {
+          "status": "pending",
+          "evidenceRef": null,
+          "reviewedAt": null
+        }
+      }
+    }
+  ]
+}

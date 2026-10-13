@@ -1,0 +1,47 @@
+{
+  "nts_status": {
+    "component": "business_status",
+    "preset": "civil/business-registration",
+    "operation": "getBusinessRegistrationStatus",
+    "officialPage": "https://www.data.go.kr/data/15081808/openapi.do",
+    "rights": "unreviewed",
+    "coverage": "NTS business status; not credit or fraud scoring",
+    "key": "provider approval/serviceKey required; managed availability must be checked"
+  },
+  "embedded_location": {
+    "component": "location",
+    "preset": null,
+    "operation": "resolve_location",
+    "officialPage": "https://github.com/bridger-kr/bridger-api/blob/86017b0666c9e8578ec4a8c4260b007dea92219f/internal/mcpedge/resolve_location.go",
+    "rights": "unreviewed",
+    "coverage": "embedded Korean regional gazetteer / computed KMA grid, not street-address validation",
+    "key": "tools:read; no provider network call for this meta-tool"
+  },
+  "kma_forecast": {
+    "component": "weather",
+    "preset": "weather/village-forecast",
+    "operation": "getVillageForecast",
+    "officialPage": "https://www.data.go.kr/data/15084084/openapi.do",
+    "rights": "unreviewed",
+    "coverage": "KMA grid forecast by issuance and forecast time; not guaranteed current observations",
+    "key": "provider approval/serviceKey required; managed availability must be checked"
+  },
+  "air_korea": {
+    "component": "air_quality",
+    "preset": "environment/air-quality-realtime",
+    "operation": "getAirQualityRealtimeByStation",
+    "officialPage": "https://www.data.go.kr/data/15073861/openapi.do",
+    "rights": "unreviewed",
+    "coverage": "station-level measurements; missing values and station lookup required",
+    "key": "provider approval/serviceKey required; managed availability must be checked"
+  },
+  "suwon_charging": {
+    "component": "charging",
+    "preset": "transportation/ev-charging",
+    "operation": "getEvCharging",
+    "officialPage": "https://www.data.go.kr/data/15144026/openapi.do",
+    "rights": "unreviewed",
+    "coverage": "Suwon only; original document marked unavailable in pinned spec; no guaranteed free charger or distance query",
+    "key": "provider approval/serviceKey required; managed availability must be checked"
+  }
+}

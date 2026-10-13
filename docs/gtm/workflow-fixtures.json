@@ -1,0 +1,2231 @@
+[
+  {
+    "version": 1,
+    "id": "synthetic-01",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "status_only_success",
+    "requested": [
+      "business_status"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "success",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-02",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "regional_location_success",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "success",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-03",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "status_empty",
+    "requested": [
+      "business_status"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      }
+    ],
+    "outcome": "empty",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-04",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "all_empty",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      },
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      }
+    ],
+    "outcome": "empty",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-05",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "missing_status_key",
+    "requested": [
+      "business_status"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "unavailable",
+        "source": "nts_status",
+        "asOf": null,
+        "unavailable": "missing_key",
+        "rows": []
+      }
+    ],
+    "outcome": "error",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-06",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "location_ambiguous",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": null,
+        "unavailable": "ambiguous",
+        "rows": []
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-07",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "status_timeout",
+    "requested": [
+      "business_status"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "unavailable",
+        "source": "nts_status",
+        "asOf": null,
+        "unavailable": "timeout",
+        "rows": []
+      }
+    ],
+    "outcome": "error",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-08",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "status_provider_error",
+    "requested": [
+      "business_status"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "unavailable",
+        "source": "nts_status",
+        "asOf": null,
+        "unavailable": "provider_error",
+        "rows": []
+      }
+    ],
+    "outcome": "error",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-09",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "both_provider_error",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "unavailable",
+        "source": "nts_status",
+        "asOf": null,
+        "unavailable": "provider_error",
+        "rows": []
+      },
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": null,
+        "unavailable": "provider_error",
+        "rows": []
+      }
+    ],
+    "outcome": "error",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-10",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "all_missing_key",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "unavailable",
+        "source": "nts_status",
+        "asOf": null,
+        "unavailable": "missing_key",
+        "rows": []
+      },
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": null,
+        "unavailable": "invalid_input",
+        "rows": []
+      }
+    ],
+    "outcome": "error",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-11",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "unknown_status_time",
+    "requested": [
+      "business_status"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "unavailable",
+        "source": "nts_status",
+        "asOf": null,
+        "unavailable": "missing_asof",
+        "rows": []
+      }
+    ],
+    "outcome": "error",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-12",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "stale_status",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "unavailable",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": "stale",
+        "rows": []
+      },
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-13",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "unsupported_street_address",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": null,
+        "unavailable": "unsupported_address",
+        "rows": []
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-14",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "location_empty",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-15",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "invalid_business_input",
+    "requested": [
+      "business_status"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "unavailable",
+        "source": "nts_status",
+        "asOf": null,
+        "unavailable": "invalid_input",
+        "rows": []
+      }
+    ],
+    "outcome": "error",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-16",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "status_empty_location_available",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      },
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-17",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "all_timeout",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "unavailable",
+        "source": "nts_status",
+        "asOf": null,
+        "unavailable": "timeout",
+        "rows": []
+      },
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": null,
+        "unavailable": "no_match",
+        "rows": []
+      }
+    ],
+    "outcome": "error",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-18",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "location_no_match",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": null,
+        "unavailable": "no_match",
+        "rows": []
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-19",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "location_stale",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": "stale",
+        "rows": []
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-20",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "multiple_status_samples",
+    "requested": [
+      "business_status"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          },
+          {
+            "sample": 2
+          },
+          {
+            "sample": 3
+          }
+        ]
+      }
+    ],
+    "outcome": "success",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-21",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "all_unknown_time",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "unavailable",
+        "source": "nts_status",
+        "asOf": null,
+        "unavailable": "missing_asof",
+        "rows": []
+      },
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": null,
+        "unavailable": "missing_asof",
+        "rows": []
+      }
+    ],
+    "outcome": "error",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-22",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "location_invalid_input",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": null,
+        "unavailable": "invalid_input",
+        "rows": []
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-23",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "status_empty_location_missing",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      },
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": null,
+        "unavailable": "no_match",
+        "rows": []
+      }
+    ],
+    "outcome": "empty",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-24",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "status_recovery_success",
+    "requested": [
+      "business_status"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          },
+          {
+            "sample": 2
+          }
+        ]
+      }
+    ],
+    "outcome": "success",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-25",
+    "evidence": "synthetic",
+    "bundle": "business_check",
+    "scenario": "location_recovery_success",
+    "requested": [
+      "business_status",
+      "location"
+    ],
+    "components": [
+      {
+        "name": "business_status",
+        "status": "available",
+        "source": "nts_status",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          },
+          {
+            "sample": 2
+          }
+        ]
+      },
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "success",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-26",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "complete_suwon_example",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "success",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-27",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "multiple_charging_samples",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          },
+          {
+            "sample": 2
+          },
+          {
+            "sample": 3
+          }
+        ]
+      }
+    ],
+    "outcome": "success",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-28",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "weather_missing_key",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "unavailable",
+        "source": "kma_forecast",
+        "asOf": null,
+        "unavailable": "missing_key",
+        "rows": []
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-29",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "air_missing_key",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "air_quality",
+        "status": "unavailable",
+        "source": "air_korea",
+        "asOf": null,
+        "unavailable": "missing_key",
+        "rows": []
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-30",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "charging_missing_key",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "charging",
+        "status": "unavailable",
+        "source": "suwon_charging",
+        "asOf": null,
+        "unavailable": "missing_key",
+        "rows": []
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-31",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "outside_suwon",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "charging",
+        "status": "unavailable",
+        "source": "suwon_charging",
+        "asOf": null,
+        "unavailable": "unsupported_region",
+        "rows": []
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-32",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "ambiguous_location",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": null,
+        "unavailable": "ambiguous",
+        "rows": []
+      },
+      {
+        "name": "weather",
+        "status": "unavailable",
+        "source": "kma_forecast",
+        "asOf": null,
+        "unavailable": "invalid_input",
+        "rows": []
+      },
+      {
+        "name": "air_quality",
+        "status": "unavailable",
+        "source": "air_korea",
+        "asOf": null,
+        "unavailable": "invalid_input",
+        "rows": []
+      },
+      {
+        "name": "charging",
+        "status": "unavailable",
+        "source": "suwon_charging",
+        "asOf": null,
+        "unavailable": "invalid_input",
+        "rows": []
+      }
+    ],
+    "outcome": "error",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-33",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "location_no_match",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": null,
+        "unavailable": "no_match",
+        "rows": []
+      },
+      {
+        "name": "weather",
+        "status": "unavailable",
+        "source": "kma_forecast",
+        "asOf": null,
+        "unavailable": "invalid_input",
+        "rows": []
+      },
+      {
+        "name": "air_quality",
+        "status": "unavailable",
+        "source": "air_korea",
+        "asOf": null,
+        "unavailable": "invalid_input",
+        "rows": []
+      },
+      {
+        "name": "charging",
+        "status": "unavailable",
+        "source": "suwon_charging",
+        "asOf": null,
+        "unavailable": "unsupported_region",
+        "rows": []
+      }
+    ],
+    "outcome": "error",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-34",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "all_empty",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      }
+    ],
+    "outcome": "empty",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-35",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "all_timeouts",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": null,
+        "unavailable": "timeout",
+        "rows": []
+      },
+      {
+        "name": "weather",
+        "status": "unavailable",
+        "source": "kma_forecast",
+        "asOf": null,
+        "unavailable": "timeout",
+        "rows": []
+      },
+      {
+        "name": "air_quality",
+        "status": "unavailable",
+        "source": "air_korea",
+        "asOf": null,
+        "unavailable": "timeout",
+        "rows": []
+      },
+      {
+        "name": "charging",
+        "status": "unavailable",
+        "source": "suwon_charging",
+        "asOf": null,
+        "unavailable": "timeout",
+        "rows": []
+      }
+    ],
+    "outcome": "error",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-36",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "stale_weather",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "unavailable",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": "stale",
+        "rows": []
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-37",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "stale_air",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "air_quality",
+        "status": "unavailable",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": "stale",
+        "rows": []
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-38",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "unknown_weather_time",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "unavailable",
+        "source": "kma_forecast",
+        "asOf": null,
+        "unavailable": "missing_asof",
+        "rows": []
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-39",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "unknown_air_time",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "air_quality",
+        "status": "unavailable",
+        "source": "air_korea",
+        "asOf": null,
+        "unavailable": "missing_asof",
+        "rows": []
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-40",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "unknown_charging_time",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "charging",
+        "status": "unavailable",
+        "source": "suwon_charging",
+        "asOf": null,
+        "unavailable": "missing_asof",
+        "rows": []
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-41",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "no_charging_rows",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-42",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "no_station_rows",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-43",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "no_forecast_rows",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-44",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "weather_provider_error",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "unavailable",
+        "source": "kma_forecast",
+        "asOf": null,
+        "unavailable": "provider_error",
+        "rows": []
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-45",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "air_provider_error",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "air_quality",
+        "status": "unavailable",
+        "source": "air_korea",
+        "asOf": null,
+        "unavailable": "provider_error",
+        "rows": []
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-46",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "charging_provider_error",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "charging",
+        "status": "unavailable",
+        "source": "suwon_charging",
+        "asOf": null,
+        "unavailable": "provider_error",
+        "rows": []
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-47",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "invalid_coordinates",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "unavailable",
+        "source": "embedded_location",
+        "asOf": null,
+        "unavailable": "invalid_input",
+        "rows": []
+      },
+      {
+        "name": "weather",
+        "status": "unavailable",
+        "source": "kma_forecast",
+        "asOf": null,
+        "unavailable": "invalid_input",
+        "rows": []
+      },
+      {
+        "name": "air_quality",
+        "status": "unavailable",
+        "source": "air_korea",
+        "asOf": null,
+        "unavailable": "invalid_input",
+        "rows": []
+      },
+      {
+        "name": "charging",
+        "status": "unavailable",
+        "source": "suwon_charging",
+        "asOf": null,
+        "unavailable": "invalid_input",
+        "rows": []
+      }
+    ],
+    "outcome": "error",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-48",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "location_only",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "unavailable",
+        "source": "kma_forecast",
+        "asOf": null,
+        "unavailable": "missing_key",
+        "rows": []
+      },
+      {
+        "name": "air_quality",
+        "status": "unavailable",
+        "source": "air_korea",
+        "asOf": null,
+        "unavailable": "missing_key",
+        "rows": []
+      },
+      {
+        "name": "charging",
+        "status": "unavailable",
+        "source": "suwon_charging",
+        "asOf": null,
+        "unavailable": "unsupported_region",
+        "rows": []
+      }
+    ],
+    "outcome": "partial",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-49",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "empty_with_unavailable",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": []
+      },
+      {
+        "name": "weather",
+        "status": "unavailable",
+        "source": "kma_forecast",
+        "asOf": null,
+        "unavailable": "no_match",
+        "rows": []
+      },
+      {
+        "name": "air_quality",
+        "status": "unavailable",
+        "source": "air_korea",
+        "asOf": null,
+        "unavailable": "no_match",
+        "rows": []
+      },
+      {
+        "name": "charging",
+        "status": "unavailable",
+        "source": "suwon_charging",
+        "asOf": null,
+        "unavailable": "unsupported_region",
+        "rows": []
+      }
+    ],
+    "outcome": "empty",
+    "adopted": false
+  },
+  {
+    "version": 1,
+    "id": "synthetic-50",
+    "evidence": "synthetic",
+    "bundle": "place_brief",
+    "scenario": "recovery_complete",
+    "requested": [
+      "location",
+      "weather",
+      "air_quality",
+      "charging"
+    ],
+    "components": [
+      {
+        "name": "location",
+        "status": "available",
+        "source": "embedded_location",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "weather",
+        "status": "available",
+        "source": "kma_forecast",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "air_quality",
+        "status": "available",
+        "source": "air_korea",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      },
+      {
+        "name": "charging",
+        "status": "available",
+        "source": "suwon_charging",
+        "asOf": "2026-10-01T09:00:00Z",
+        "unavailable": null,
+        "rows": [
+          {
+            "sample": 1
+          }
+        ]
+      }
+    ],
+    "outcome": "success",
+    "adopted": false
+  }
+]
