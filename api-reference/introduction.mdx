@@ -3,14 +3,14 @@ title: "API Reference"
 description: "Bridger Gateway가 제공하는 REST · SSE · JSON-RPC 인터페이스 한눈에 보기."
 ---
 
-Bridger Gateway는 다음 4종류의 인터페이스를 한 도메인에서 노출합니다.
+Bridger는 MCP와 REST 인터페이스를 서로 다른 호스트에서 제공합니다. 각 경로에 맞는 호스트를 사용하세요.
 
 <CardGroup cols={2}>
   <Card title="Health" href="/api-reference/health">
     `GET /health` — 라이브니스 체크.
   </Card>
-  <Card title="Registry" href="/api-reference/registry-servers">
-    `GET /registry/{servers,tools}` — 로드된 프리셋·도구 카탈로그.
+  <Card title="Registry (Deprecated)" href="/api-reference/registry-servers">
+    `GET /registry/{servers,tools}` — 빈 컬렉션을 반환하는 레거시 호환성 경로.
   </Card>
   <Card title="MCP JSON-RPC" href="/api-reference/mcp-jsonrpc">
     `POST /mcp` — `tools/list`, `tools/call`.
@@ -22,9 +22,11 @@ Bridger Gateway는 다음 4종류의 인터페이스를 한 도메인에서 노�
 
 ## Base URL
 
-| 환경 | Base URL |
-| --- | --- |
-| 호스팅 (권장) | `https://mcp.bridger.kr` |
+| 호스트 | 경로 | 용도 |
+| --- | --- | --- |
+| `https://mcp.bridger.kr` | `/mcp`, `/health` | MCP JSON-RPC, SSE, 헬스체크 |
+| `https://api.bridger.kr` | `/api/v1/government-apis` | 공공데이터 API 카탈로그 (REST) |
+| `https://api.bridger.kr` | `/registry/servers`, `/registry/tools` | Deprecated; 항상 빈 컬렉션 |
 
 ## 인증 한 줄 요약
 

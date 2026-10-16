@@ -146,8 +146,8 @@ Claude나 ChatGPT 없이도 Bridger Gateway는 REST와 표준 MCP SDK로 직접 
 | `GET`  | `/api/v1/tools/:toolId`       | 도구 단건 조회 |
 | `POST` | `/api/v1/register`            | BYOAPI 등록 (`{spec_url\|spec_raw, name, auth, visibility}`) |
 | `GET`  | `/api/v1/register/:id/status` | BYOAPI 등록 작업 상태 |
-| `GET`  | `/registry/servers`           | 프리셋 서버(MCP 그룹) 카탈로그 |
-| `GET`  | `/registry/tools`             | 평탄화된 도구 목록 |
+| `GET`  | `/registry/servers`           | Deprecated; 항상 `{"servers":[]}` 반환 |
+| `GET`  | `/registry/tools`             | Deprecated; 항상 `{"tools":[],"total":0}` 반환 |
 | `GET`  | `/mcp`                        | MCP SSE 이벤트 스트림 |
 | `POST` | `/mcp`                        | JSON-RPC (`tools/list`, `tools/call`) — 도구 실행 |
 

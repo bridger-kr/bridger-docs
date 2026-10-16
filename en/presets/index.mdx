@@ -103,7 +103,7 @@ Specs that merge region- or provider-split public APIs into a single tool. Pass 
 ## Quick start
 
 ```bash
-curl -X POST https://mcp.bridger.kr/mcp \
+curl -X POST https://mcp.bridger.kr/mcp?activation=all \
   -H "x-api-key: $BRIDGER_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'

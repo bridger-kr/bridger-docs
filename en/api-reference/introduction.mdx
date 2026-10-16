@@ -3,14 +3,14 @@ title: "API Reference"
 description: "An at-a-glance view of the REST, SSE, and JSON-RPC interfaces the Bridger Gateway provides."
 ---
 
-The Bridger Gateway exposes the following four kinds of interfaces under a single domain.
+Bridger exposes MCP and REST interfaces on separate hosts. Use the host listed below for each route.
 
 <CardGroup cols={2}>
   <Card title="Health" href="/en/api-reference/health">
     `GET /health` — liveness check.
   </Card>
-  <Card title="Registry" href="/en/api-reference/registry-servers">
-    `GET /registry/{servers,tools}` — catalog of loaded presets and tools.
+  <Card title="Registry (Deprecated)" href="/en/api-reference/registry-servers">
+    `GET /registry/{servers,tools}` — legacy compatibility routes that return empty collections.
   </Card>
   <Card title="MCP JSON-RPC" href="/en/api-reference/mcp-jsonrpc">
     `POST /mcp` — `tools/list`, `tools/call`.
@@ -22,9 +22,11 @@ The Bridger Gateway exposes the following four kinds of interfaces under a singl
 
 ## Base URL
 
-| Environment | Base URL |
-| --- | --- |
-| Hosted (recommended) | `https://mcp.bridger.kr` |
+| Host | Routes | Purpose |
+| --- | --- | --- |
+| `https://mcp.bridger.kr` | `/mcp`, `/health` | MCP JSON-RPC, SSE, health |
+| `https://api.bridger.kr` | `/api/v1/government-apis` | Public-data API catalog (REST) |
+| `https://api.bridger.kr` | `/registry/servers`, `/registry/tools` | Deprecated; always empty |
 
 ## Authentication in one line
 

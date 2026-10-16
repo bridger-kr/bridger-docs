@@ -62,8 +62,6 @@ const LOCALES = {
     listHeading: "## 프리셋 목록",
     tableHeader: "| 이름 | 제공기관 | 도구 수 | data.go.kr |",
     usageHeading: "## 사용 예시",
-    serverQueryLabel: "bash 카테고리 서버 조회",
-    serverQueryComment: "# 이 카테고리의 프리셋 서버와 도구를 확인합니다. (공개 카탈로그 — 인증 불필요)",
     toolsListLabel: "bash 전체 도구 목록 (MCP)",
     indexTitle: "카탈로그 인덱스",
     indexDesc: (cats, total, ops) => `Bridger가 제공하는 ${cats}개 카테고리 · ${total}종 프리셋 · ${ops}종 도구의 전체 인덱스.`,
@@ -91,8 +89,6 @@ const LOCALES = {
     listHeading: "## Preset list",
     tableHeader: "| Name | Provider | Tools | data.go.kr |",
     usageHeading: "## Usage examples",
-    serverQueryLabel: "bash Query category servers",
-    serverQueryComment: "# List the preset servers and tools in this category. (public catalog — no auth required)",
     toolsListLabel: "bash Full tool list (MCP)",
     indexTitle: "Catalog index",
     indexDesc: (cats, total, ops) => `Full index of ${cats} categories · ${total} presets · ${ops} tools provided by Bridger.`,
@@ -313,14 +309,8 @@ ${rows}
 ${L.usageHeading}
 
 <CodeGroup>
-  \`\`\`${L.serverQueryLabel}
-  ${L.serverQueryComment}
-  curl https://api.bridger.kr/registry/servers \\
-    | jq '.servers[] | select(.id | startswith("${category}/"))'
-  \`\`\`
-
   \`\`\`${L.toolsListLabel}
-  curl -X POST https://mcp.bridger.kr/mcp \\
+  curl -X POST https://mcp.bridger.kr/mcp?activation=all \\
     -H "x-api-key: $BRIDGER_API_KEY" \\
     -H "Content-Type: application/json" \\
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'
@@ -352,7 +342,7 @@ function renderIndexMdx(summary, L, families = []) {
   const cards = summary
     .map((s) => {
       const meta = CATEGORY_META[s.category];
-      return `  <Card title="${L.catTitle(meta)}" icon="${meta.icon}" href="${L.linkPrefix}/${s.category}">
+      return `  <Card title="${L.catTitle(meta)}" href="${L.linkPrefix}/${s.category}">
     ${L.metaDesc(meta)}\\
     ${L.cardCount(s.total, s.totalOps)}
   </Card>`;
@@ -387,7 +377,7 @@ ${familiesSection}
 ${L.quickHeading}
 
 \`\`\`bash
-curl -X POST https://mcp.bridger.kr/mcp \\
+curl -X POST https://mcp.bridger.kr/mcp?activation=all \\
   -H "x-api-key: $BRIDGER_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
