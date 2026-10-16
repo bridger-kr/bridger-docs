@@ -24,6 +24,9 @@ jobs:
       - name: install
         run: npm ci
 
+      - name: Dependency security regression
+        run: npm run test:dependency-security
+
       - name: mint broken-links
         run: npm run lint
 
