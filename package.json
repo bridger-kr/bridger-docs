@@ -9,11 +9,13 @@
     "preview": "mintlify dev --port 3334",
     "lint": "mintlify broken-links",
     "check:content": "node scripts/check-content.mjs",
-    "verify:examples": "node scripts/verify-examples.mjs",
+    "verify:examples": "node scripts/verify-examples.mjs && npm run verify:live-tools",
     "check": "npm run lint && npm run check:content && npm run verify:examples",
     "presets": "node scripts/build-presets.mjs",
     "openapi": "node scripts/build-api-reference.mjs",
-    "facts": "node scripts/build-facts.mjs"
+    "facts": "node scripts/build-facts.mjs",
+    "verify:live-tools": "node scripts/verify-live-tools.mjs",
+    "test:examples": "node --test scripts/verify-live-tools.test.mjs"
   },
   "engines": {
     "node": ">=20.9.0"

@@ -5,6 +5,8 @@ description: "AI 클라이언트 없이 Bridger Gateway를 REST · MCP SDK · BY
 
 Claude나 ChatGPT 없이도 Bridger Gateway는 REST와 표준 MCP SDK로 직접 호출할 수 있습니다.
 
+`tools/list`의 이름과 스키마를 그대로 사용하세요. `DATA_GO_KR_SERVICE_KEY`에는 Bridger 키와 별개인 공공데이터 제공기관 키를 설정하고, 예시 날짜·시간은 최근 발표 시각(KST)으로 바꾸세요.
+
 <Steps>
   <Step title="API 키 발급">
     [포털](https://portal.bridger.kr)의 **브릿저 API 키** 페이지에서 API 키를 발급받습니다.
@@ -45,7 +47,7 @@ Claude나 ChatGPT 없이도 Bridger Gateway는 REST와 표준 MCP SDK로 직접 
     import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
     const transport = new StreamableHTTPClientTransport(
-      new URL("https://mcp.bridger.kr/mcp"),
+      new URL("https://mcp.bridger.kr/mcp?activation=all"),
       {
         requestInit: {
           headers: {
@@ -62,15 +64,19 @@ Claude나 ChatGPT 없이도 Bridger Gateway는 REST와 표준 MCP SDK로 직접 
 
     await client.connect(transport);
 
-    // 도구 목록 조회 — 기본 프로필(최대 40개)이 반환됩니다.
-    // 전체 카탈로그는 엔드포인트 URL에 ?activation=all을 붙이세요.
+    // activation=all로 전체 카탈로그의 이름과 inputSchema를 확인합니다.
     const tools = await client.listTools();
     console.log(tools);
 
     // 도구 실행
     const result = await client.callTool({
-      name: "kma_get_village_forecast",
+      name: "getvillageforecast",
       arguments: {
+        ServiceKey: process.env.DATA_GO_KR_SERVICE_KEY,
+        pageNo: 1,
+        numOfRows: 10,
+        base_date: "20261016",
+        base_time: "0500",
         nx: 60,
         ny: 127,
       },
@@ -90,12 +96,13 @@ Claude나 ChatGPT 없이도 Bridger Gateway는 REST와 표준 MCP SDK로 직접 
     from mcp import ClientSession
     from mcp.client.streamable_http import streamablehttp_client
     import asyncio
+    import os
 
     async def main():
         headers = {"Authorization": "Bearer YOUR_API_KEY"}
 
         async with streamablehttp_client(
-            "https://mcp.bridger.kr/mcp",
+            "https://mcp.bridger.kr/mcp?activation=all",
             headers=headers,
         ) as (read, write, _get_session_id):
             async with ClientSession(read, write) as session:
@@ -105,8 +112,16 @@ Claude나 ChatGPT 없이도 Bridger Gateway는 REST와 표준 MCP SDK로 직접 
                 print(tools)
 
                 result = await session.call_tool(
-                    "kma_get_village_forecast",
-                    arguments={"nx": 60, "ny": 127},
+                    "getvillageforecast",
+                    arguments={
+                        "ServiceKey": os.environ["DATA_GO_KR_SERVICE_KEY"],
+                        "pageNo": 1,
+                        "numOfRows": 10,
+                        "base_date": "20261016",
+                        "base_time": "0500",
+                        "nx": 60,
+                        "ny": 127,
+                    },
                 )
                 print(result)
 
