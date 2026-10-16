@@ -39,14 +39,14 @@ export function checkExamples(source, tools) {
   source = source.replace(/^[ \t]*'((?:[^'\\]|\\.)*)',?[ \t]*$/gm, (_, line) => line.replace(/\\'/g, "'"));
   const errors = [];
   const report = (offset, message) => errors.push(`${source.slice(0, offset).split('\n').length}: ${message}`);
+  const fictional = new Set(['listpets', 'getpetbyid', 'pingtool']);
   // Provider-prefixed names anywhere, plus callable identifiers in code/prose.
   // Fictional BYOAPI examples (listpets/pingtool) are intentionally separate.
   const references = /\b(?:kma|molit|nts|keco)_[a-z0-9_]+\b|["'`](get[a-z0-9]{5,}|validatebusinessregistration|search_tools)["'`]/g;
   for (const match of source.matchAll(references)) {
     const name = match[1] ?? match[0];
-    if (!tools.has(name)) report(match.index, `${name} is absent from live tools/list`);
+    if (!fictional.has(name) && !tools.has(name)) report(match.index, `${name} is absent from live tools/list`);
   }
-  const fictional = new Set(['listpets', 'getpetbyid', 'pingtool']);
   // Explicit tool fields and tools/list descriptors also cover operation names
   // outside the providers/get* examples above. Client names lack a schema or
   // arguments in their own object and are not MCP tool references.

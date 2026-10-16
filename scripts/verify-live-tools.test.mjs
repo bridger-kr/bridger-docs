@@ -23,6 +23,7 @@ test('checks JSON, JS and Python call arguments against live required/properties
   }
   assert.deepEqual(checkExamples('name: "getvillageforecast", arguments: {base_date: "20261016", nx: 60}', tools), []);
   assert.deepEqual(checkExamples('name: "listpets", arguments: {}', tools), []);
+  assert.deepEqual(checkExamples('name: "getpetbyid", arguments: {}', tools), []);
   assert.match(checkExamples(`'  "name": "getvillageforecast",',\n'  "arguments": {"city": "Seoul"}',`, tools).join(), /missing required argument/);
 });
 test('fetches activation=all and follows pagination for JSON and SSE', async () => {
