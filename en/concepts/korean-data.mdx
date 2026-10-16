@@ -1,6 +1,6 @@
 ---
 title: "Working with Korean public data"
-description: "What non-Korean users need to know before calling Bridger tools — Korean-language values, region inputs, service keys, and merged family tools."
+description: "What non-Korean users need to know before calling Bridger tools — Korean-language values, region inputs, service keys, and planned regional tools."
 ---
 
 Bridger tools are usable from any language, but the underlying providers are Korean
@@ -27,31 +27,25 @@ the parameter names tell you which one it wants:
 | Coordinates | WGS84 `lat`/`lng` + `radius` (m) | `37.4979`, `127.0276` |
 
 <Note>
-  Coordinates are the most reliable path for non-Korean callers: hospital,
-  pharmacy, and campsite lookups all accept `xPos`/`yPos`/`radius` (or
-  `mapX`/`mapY`/`radius`) and work nationwide. A few providers — notably the ER
-  live-bed feed — only take Korean region names; merged family tools expose those
-  as optional `sidoName`/`sigunguName` inputs instead.
+  Coordinate parameter names, coordinate systems and coverage vary by provider.
+  Check the selected tool's input schema. Supply Korean region names or weather-grid
+  `nx`/`ny` values yourself when required. Automatic latitude/longitude to weather-grid
+  conversion is not available.
 </Note>
 
-## Prefer merged family tools
+## Select provider and region tools
 
-Several regions publish the same kind of API under different providers and
-different response shapes. **Family tools** merge them: you pass a `location`
-hint and the family routes to the right provider, normalizes the fields, and
-returns one item type.
+Find provider and region presets in the [catalog](/en/presets/index), then use
+`search_tools` and `tools/list` to check callable names and input schemas.
+Check each provider's response fields and regional codes separately.
 
-| 이름 | 하는 일 |
-| --- | --- |
-| **Transport** | `bus_arrival`, `bus_location` — Seoul · Gyeonggi · Jeonju + national TAGO fallback in one call. |
-| **Safety** | `emergency_shelter` — regional shelter lists + the national civil-defense registry. |
-| **Culture & lodging** | `culture_events`, `local_heritage`, `public_library`, `lodging` — festivals, heritage, libraries, and stays across regions. |
-| **Health** | `medical_care` — hospitals, pharmacies, and ER live beds around a point. |
+### Planned: merged family tools
 
-<Tip>
-  The full, always-current list is the "Region-unified tools (families)" table
-  on the [catalog index](/en/presets/index).
-</Tip>
+`bus_arrival`, `bus_location`, `emergency_shelter`, `culture_events`,
+`local_heritage`, `public_library`, `lodging` and `medical_care` are not deployed
+on the production MCP endpoint. Related catalog metadata does not mean these tools
+are currently callable. Do not rely on automatic provider selection via a `location`
+hint or normalized family responses.
 
 ## API keys
 
