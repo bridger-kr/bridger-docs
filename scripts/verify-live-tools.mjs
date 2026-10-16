@@ -46,13 +46,25 @@ export function checkExamples(source, tools) {
     const name = match[1] ?? match[0];
     if (!tools.has(name)) report(match.index, `${name} is absent from live tools/list`);
   }
+  const fictional = new Set(['listpets', 'getpetbyid', 'pingtool']);
+  // Explicit tool fields and tools/list descriptors also cover operation names
+  // outside the providers/get* examples above. Client names lack a schema or
+  // arguments in their own object and are not MCP tool references.
+  const fields = /["']?(name|tool|toolName)["']?\s*:\s*["']([a-z][a-z0-9_-]*)["']/g;
+  for (const match of source.matchAll(fields)) {
+    const [, field, name] = match;
+    const rest = source.slice(match.index + match[0].length);
+    const ownObject = rest.slice(0, rest.indexOf('}') < 0 ? 0 : rest.indexOf('}'));
+    if (field === 'name' && !/\b(?:inputSchema|arguments)\b/.test(ownObject)) continue;
+    if (!fictional.has(name) && !tools.has(name)) report(match.index, `${name} is absent from live tools/list`);
+  }
   // Flat JSON/JS/Python argument objects used by the weather SDK examples.
   const calls = /["']?name["']?\s*:\s*["']([a-z0-9_]+)["']\s*,\s*["']?arguments["']?\s*:\s*\{([^{}]*)\}|call_tool\(\s*["']([a-z0-9_]+)["']\s*,\s*arguments\s*=\s*\{([^{}]*)\}/g;
   for (const match of source.matchAll(calls)) {
     const name = match[1] ?? match[3];
     const schema = tools.get(name)?.inputSchema;
     if (!schema) {
-      if (!['listpets', 'pingtool'].includes(name)) report(match.index, `${name} is absent from live tools/list`);
+      if (!fictional.has(name)) report(match.index, `${name} is absent from live tools/list`);
       continue;
     }
     const keys = new Set([...(match[2] ?? match[4]).matchAll(/(?:["']([^"']+)["']|\b([A-Za-z_][\w]*))\s*:/g)].map(key => key[1] ?? key[2]));

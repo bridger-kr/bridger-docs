@@ -7,6 +7,9 @@ const tools = new Map([[tool.name, tool]]);
 test('rejects undeployed prefixed names in prose and bare unknown names in payloads', () => {
   assert.match(checkExamples('`kma_get_village_forecast`', tools).join(), /absent/);
   assert.match(checkExamples('name: "getunknownforecast"', tools).join(), /absent/);
+  assert.match(checkExamples('{name: "unknownoperation", inputSchema: {}}', tools).join(), /absent/);
+  assert.match(checkExamples('{toolName: "unknownoperation"}', tools).join(), /absent/);
+  assert.deepEqual(checkExamples('new Client({name: "my-app", version: "1.0"})', tools), []);
 });
 test('checks JSON, JS and Python call arguments against live required/properties', () => {
   for (const source of [
