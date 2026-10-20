@@ -4,7 +4,7 @@
   "name": "Bridger",
   "description": "Bridger 공식 문서 — 한국 공공데이터 API와 BYOAPI를 AI 도구로 잇는 다리. 인증, 파싱, 에러 처리, 감사 로그, 시크릿 관리.",
   "colors": {
-    "primary": "#ea580c",
+    "primary": "#c2410c",
     "light": "#fb923c",
     "dark": "#ea580c"
   },
