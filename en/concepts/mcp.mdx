@@ -4,8 +4,8 @@ description: "A look at Anthropic's MCP standard and how Bridger fits into it."
 ---
 
 The **Model Context Protocol (MCP)** is an open protocol released by Anthropic for AI models to access
-external tools, data, and systems in a standardized way. It's based on JSON-RPC 2.0 and uses STDIO or
-HTTP + SSE transports.
+external tools, data, and systems in a standardized way. It's based on JSON-RPC 2.0, with STDIO and
+Streamable HTTP (which replaces the HTTP + SSE transport) as the standard transports.
 
 ## Core concepts
 
@@ -23,21 +23,28 @@ The MCP methods the Bridger Gateway currently handles are as follows.
 | Method | Purpose | Bridger |
 | --- | --- | --- |
 | `initialize` | Handshake — exchange protocol version and capabilities | Supported |
-| `notifications/initialized` | Initialization-complete notification | Supported |
+| `notifications/initialized` | Initialization-complete notification | Received (no response) |
+| `ping` | Check server responsiveness | Supported |
 | `tools/list` | Retrieve metadata of exposed tools | Supported |
 | `tools/call` | Run a tool — takes `name` + `arguments` and returns the result | Supported |
-| `resources/list`, `resources/read` | Query static/dynamic resources | Not supported (tools-focused) |
-| `prompts/list`, `prompts/get` | Predefined prompt templates | Not supported (tools-focused) |
+| `resources/list`, `resources/read` | Query registered resources | Supported (no resources are registered yet, so this returns an empty list) |
+| `resources/templates/list` | Query resource URI templates | Supported (returns an empty list) |
+| `resources/subscribe`, `resources/unsubscribe` | Subscribe to resources | Received — accepted as no-ops |
+| `prompts/list` | Predefined prompt templates | Supported (no prompts yet, so this returns an empty list) |
+| `prompts/get` | Retrieve a single prompt template | Not supported (`Method not found`) |
+| Any other method | — | No response (notification) or `Method not found` |
 
 <Note>
-  Bridger is a **tools-focused** gateway. `resources/*` and `prompts/*` are standard MCP methods
-  but are not handled by the Gateway today; any other method responds with `Method not found`.
+  Bridger is a **tools-focused** gateway. The Gateway handles `resources/*` and `prompts/list`, but
+  has no resources or prompts to expose yet, so they return empty lists; `prompts/get` and any other
+  unlisted method respond with `Method not found`.
 </Note>
 
 ## Bridger and MCP
 
 Bridger is an **MCP Server hosting platform**. Without writing, deploying, or operating your own
-MCP server, any OpenAPI spec is instantly converted into MCP tools.
+MCP server, you can submit an OpenAPI spec and have it validated, analyzed, and registered as MCP
+tools (registration runs as an asynchronous job, and invalid specs can be rejected at submission).
 
 ```text
 OpenAPI spec (preset YAML or BYOAPI registration)
@@ -59,7 +66,8 @@ OpenAPI spec (preset YAML or BYOAPI registration)
 - A single domain (`mcp.bridger.kr`) multiplexes **hundreds of tools** by name (`kma_get_ultra_shortcast`,
   `molit_get_apt_trade`...). Official preset servers are distinguished by `{category}/{name}` IDs, while BYOAPI
   tools use the `@{owner}/{slug}` namespace.
-- Use all registered tools with **a single API Key** — no need to spin up a separate Server.
+- You can call MCP tools with an API Key — no need to spin up a separate Server. Tools that need an
+  additional service credential (a service key) must have that key registered before they can run.
 - Clients work as-is with any MCP-compatible client (Claude, Cursor, the ChatGPT connector, your own SDK).
 
 ## Next steps

@@ -4,8 +4,8 @@ description: "Anthropic의 MCP 표준과 Bridger가 어떻게 맞물리는지 �
 ---
 
 **Model Context Protocol (MCP)** 은 Anthropic이 공개한, AI 모델이 외부 도구·데이터·시스템에
-표준화된 방식으로 접근하기 위한 오픈 프로토콜입니다. JSON-RPC 2.0 기반이며 STDIO 또는 HTTP +
-SSE 트랜스포트를 사용합니다.
+표준화된 방식으로 접근하기 위한 오픈 프로토콜입니다. JSON-RPC 2.0 기반이며 표준 트랜스포트는
+STDIO와 Streamable HTTP(HTTP + SSE 트랜스포트를 대체)입니다.
 
 ## 핵심 개념
 
@@ -23,21 +23,28 @@ Bridger Gateway가 현재 처리하는 MCP 메서드는 다음과 같습니다.
 | 메서드 | 용도 | Bridger |
 | --- | --- | --- |
 | `initialize` | 핸드셰이크 — 프로토콜 버전, capabilities 교환 | 지원 |
-| `notifications/initialized` | 초기화 완료 알림 | 지원 |
+| `notifications/initialized` | 초기화 완료 알림 | 수신 (응답 없음) |
+| `ping` | 서버 응답 확인 | 지원 |
 | `tools/list` | 노출하는 도구 메타데이터 조회 | 지원 |
 | `tools/call` | 도구 실행 — `name` + `arguments`를 받아 결과 반환 | 지원 |
-| `resources/list`, `resources/read` | 정적/동적 리소스 조회 | 미지원 (도구 중심) |
-| `prompts/list`, `prompts/get` | 사전 정의 프롬프트 템플릿 | 미지원 (도구 중심) |
+| `resources/list`, `resources/read` | 등록된 리소스 조회 | 지원 (현재 등록 리소스는 없어 빈 목록 반환) |
+| `resources/templates/list` | 리소스 URI 템플릿 조회 | 지원 (빈 목록 반환) |
+| `resources/subscribe`, `resources/unsubscribe` | 리소스 구독 | 수신 — no-op으로 수용 |
+| `prompts/list` | 사전 정의 프롬프트 템플릿 | 지원 (현재 프롬프트는 없어 빈 목록 반환) |
+| `prompts/get` | 프롬프트 템플릿 개별 조회 | 미지원 (`Method not found`) |
+| 그 외 메서드 | — | 응답 없음 (notification) 또는 `Method not found` |
 
 <Note>
-  Bridger는 **도구(tools) 중심** 게이트웨이입니다. `resources/*`·`prompts/*`는 MCP 표준
-  메서드이지만 현재 Gateway에서는 처리하지 않으며, 그 외 메서드는 `Method not found`로 응답합니다.
+  Bridger는 **도구(tools) 중심** 게이트웨이입니다. `resources/*`와 `prompts/list`는 처리하지만
+  아직 노출하는 리소스·프롬프트가 없어 빈 목록을 반환하며, `prompts/get`을 비롯한 그 외 메서드는
+  `Method not found`로 응답합니다.
 </Note>
 
 ## Bridger와 MCP
 
 Bridger는 **MCP Server 호스팅 플랫폼**입니다. 자체 MCP 서버를 작성·배포·운영하지 않아도,
-OpenAPI 스펙만 있으면 즉시 MCP 도구로 변환됩니다.
+OpenAPI 스펙을 제출하면 검증·분석 후 MCP 도구로 등록됩니다(등록은 비동기 작업으로 처리되며,
+스펙이 유효하지 않으면 제출 시점에 거부될 수 있습니다).
 
 ```text
 OpenAPI 스펙 (preset YAML 또는 BYOAPI 등록)
@@ -59,7 +66,8 @@ OpenAPI 스펙 (preset YAML 또는 BYOAPI 등록)
 - 한 도메인(`mcp.bridger.kr`)에 **수백 개 도구**가 이름으로 다중화됩니다 (`kma_get_ultra_shortcast`,
   `molit_get_apt_trade`...). 공식 프리셋 서버는 `{category}/{name}` 형식 ID로, BYOAPI 도구는
   `@{owner}/{slug}` 네임스페이스로 구분됩니다.
-- Server를 별도로 띄울 필요 없이 **API Key 한 개**로 모든 등록 도구 사용.
+- Server를 별도로 띄울 필요 없이 API Key로 MCP 도구를 호출할 수 있습니다. 단, 서비스 키 등
+  추가 자격증명이 필요한 도구는 해당 키를 등록해야 실행됩니다.
 - 클라이언트는 어떤 MCP 호환 클라이언트(Claude, Cursor, ChatGPT 커넥터, 자체 SDK)든 그대로 동작.
 
 ## 다음 단계
