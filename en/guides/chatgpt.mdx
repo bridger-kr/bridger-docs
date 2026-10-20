@@ -38,8 +38,9 @@ Authentication is a Bridger account OAuth login.
     https://mcp.bridger.kr/mcp
     ```
 
-    The transport is **Streamable HTTP**. Use exactly `/mcp` — not `/mcp/openai` or
-    any other path.
+    The transport is **Streamable HTTP**. Regular connectors must use exactly
+    `/mcp`. `/mcp/openai` is a slim profile reserved for the ChatGPT
+    app-directory review — don't use it for manual setup.
   </Step>
 
   <Step title="Scan tools + OAuth login">
@@ -93,7 +94,8 @@ finds them with natural-language search and they can be called right away.
     create apps; on Enterprise/Edu an admin must grant access via RBAC.
   </Accordion>
   <Accordion title="Scan Tools fails">
-    Verify `https://mcp.bridger.kr/mcp` exactly — no `/openai` or other suffix.
+    Verify `https://mcp.bridger.kr/mcp` exactly. `/mcp/openai` is the
+    app-directory review profile — regular connector setup uses `/mcp`.
     Also check that browser popups/redirects aren't blocked.
   </Accordion>
   <Accordion title="It keeps asking me to log in again">

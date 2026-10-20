@@ -88,7 +88,7 @@ Gemini pick and run Bridger tools via `tools/call`.
 </Warning>
 
 ```bash
-pip install mcp google-genai
+pip install "mcp>=2" google-genai
 ```
 
 ```python gemini_mcp_sample.py
@@ -98,15 +98,20 @@ import os
 from google import genai
 from google.genai import types
 from mcp import ClientSession
-from mcp.client.streamable_http import streamable_http_client
+from mcp.client.streamable_http import (
+    create_mcp_http_client,
+    streamable_http_client,
+)
 
 async def main() -> None:
     # The Gemini endpoint caps the tool list at 100. The generic endpoint is
     # https://mcp.bridger.kr/mcp.
     # Issue a Bridger API key (dk_live_…) in the dashboard and send it as x-api-key.
-    headers = {"x-api-key": os.environ["BRIDGER_API_KEY"]}
+    client = create_mcp_http_client(
+        headers={"x-api-key": os.environ["BRIDGER_API_KEY"]}
+    )
     async with streamable_http_client(
-        "https://mcp.bridger.kr/mcp/gemini", headers=headers
+        "https://mcp.bridger.kr/mcp/gemini", http_client=client
     ) as (read_stream, write_stream):
         async with ClientSession(read_stream, write_stream) as session:
             await session.initialize()
@@ -121,8 +126,10 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-On `mcp` 2.x the helper is named `streamable_http_client` (1.x named it
-`streamablehttp_client`).
+The Python samples here and in the [API SDK guide](/guides/api) are unified on
+the `mcp` Python SDK **2.x**. The 1.x `streamablehttp_client` was removed in
+2.x, which no longer takes headers as a keyword — build a client with
+`create_mcp_http_client(headers=…)` and pass it via `http_client`.
 
 <AccordionGroup>
   <Accordion title="Connectivity check — real run output">

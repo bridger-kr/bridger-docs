@@ -83,21 +83,26 @@ Even without Claude or ChatGPT, the Bridger Gateway can be called directly via R
     You can implement the same flow in Python.
 
     ```bash Install
-    pip install mcp
+    pip install "mcp>=2"
     ```
 
     ```python client.py
     from mcp import ClientSession
-    from mcp.client.streamable_http import streamablehttp_client
+    from mcp.client.streamable_http import (
+        create_mcp_http_client,
+        streamable_http_client,
+    )
     import asyncio
 
     async def main():
-        headers = {"Authorization": "Bearer YOUR_API_KEY"}
+        client = create_mcp_http_client(
+            headers={"Authorization": "Bearer YOUR_API_KEY"}
+        )
 
-        async with streamablehttp_client(
+        async with streamable_http_client(
             "https://mcp.bridger.kr/mcp",
-            headers=headers,
-        ) as (read, write, _get_session_id):
+            http_client=client,
+        ) as (read, write):
             async with ClientSession(read, write) as session:
                 await session.initialize()
 
@@ -112,6 +117,11 @@ Even without Claude or ChatGPT, the Bridger Gateway can be called directly via R
 
     asyncio.run(main())
     ```
+
+    This sample targets the `mcp` Python SDK **2.x**. The 1.x
+    `streamablehttp_client` was removed in 2.x, which no longer takes headers as
+    a keyword — build a client with `create_mcp_http_client(headers=…)` and pass
+    it via `http_client`.
   </Step>
 
   <Step title="BYOAPI — register your own API">
