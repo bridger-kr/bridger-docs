@@ -41,7 +41,7 @@ linked to that organization's tenant.
 MCP clients can obtain an access token (prefix `mcat_`) through the OAuth 2.0 Authorization
 Code + PKCE(S256) flow and pass it the same way in the `Authorization: Bearer mcat_...` header.
 
-- Authorization server (issuer): {{oauthIssuer}} — RFC 8414 metadata at {{oauthDiscoveryUrl}}
+- Authorization server (issuer): `{{oauthIssuer}}` — RFC 8414 metadata at {{oauthDiscoveryUrl}}
 - Dynamic Client Registration (DCR): POST {{oauthRegistrationUrl}} — registers instantly, no approval step
 - Scopes: {{oauthScopes}}
 - Protected-resource metadata (RFC 9728): {{oauthPrmUrl}}
