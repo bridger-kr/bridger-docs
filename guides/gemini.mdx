@@ -106,7 +106,7 @@ from mcp.client.streamable_http import (
 async def main() -> None:
     # Gemini 전용 엔드포인트는 도구 목록을 100개로 맞춥니다. 범용 엔드포인트는
     # https://mcp.bridger.kr/mcp 입니다.
-    # 브릿저 API 키(dk_live_…)를 대시보드에서 발급받아 x-api-key로 보냅니다.
+    # Bridger API 키(dk_live_…)를 대시보드에서 발급받아 x-api-key로 보냅니다.
     client = create_mcp_http_client(
         headers={"x-api-key": os.environ["BRIDGER_API_KEY"]}
     )
@@ -118,7 +118,7 @@ async def main() -> None:
             client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
             response = client.models.generate_content(
                 model="gemini-2.5-flash",
-                contents="서울 중구 날씨를 브릿저 도구로 알려줘",
+                contents="서울 중구 날씨를 Bridger 도구로 알려줘",
                 config=types.GenerateContentConfig(tools=[session]),
             )
             print(response.text)
