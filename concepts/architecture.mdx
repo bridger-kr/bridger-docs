@@ -12,7 +12,7 @@ Bridger는 OpenAPI 기반 데이터 소스를 MCP 도구로 변환하고, 하나
 | --- | --- |
 | **Gateway** | MCP JSON-RPC, SSE, Registry API를 노출하는 실행 계층입니다. |
 | **Tool Registry** | 프리셋과 BYOAPI 등록 도구의 스키마, 권한, 라우팅 정보를 관리합니다. |
-| **Public Data Adapter** | 공공데이터 인증키 주입, 좌표 변환, XML/JSON 정규화, 에러 매핑을 처리합니다. |
+| **Public Data Adapter** | 공공데이터 인증키 주입, XML/JSON 정규화, 에러 매핑을 처리합니다. |
 | **포털 (관리 콘솔)** | 브릿저 API 키, 공공데이터 서비스키, 실행 로그를 관리합니다. |
 
 ## 런타임 데이터 흐름
@@ -33,7 +33,6 @@ Bridger는 OpenAPI 기반 데이터 소스를 MCP 도구로 변환하고, 하나
    │     └─ tools/call → ID 라우팅 → Upstream Proxy │
    │  5. 공공데이터 어댑터                           │
    │     ├─ ServiceKey 자동 주입                    │
-   │     ├─ 위경도 → 격자좌표 변환                   │
    │     └─ XML/JSON 정규화                         │
    │  6. PII 필터링                                  │
    │  7. 감사 로그 기록                              │
@@ -43,6 +42,8 @@ Bridger는 OpenAPI 기반 데이터 소스를 MCP 도구로 변환하고, 하나
         ▼
    외부 API (공공데이터포털 · 3rd-party SaaS · 직접 등록한 API)
 ```
+
+`tools/call` 경로에는 위경도 → 기상 격자 자동 변환이 없습니다. 도구 입력 스키마에 맞는 좌표나 지역 코드를 호출 전에 준비해야 합니다.
 
 ## 프리셋 구조
 

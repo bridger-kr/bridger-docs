@@ -12,7 +12,7 @@ auditing in a single Gateway. Users call the Gateway endpoint without operating 
 | --- | --- |
 | **Gateway** | The execution layer that exposes MCP JSON-RPC, SSE, and the Registry API. |
 | **Tool Registry** | Manages schemas, permissions, and routing for preset and BYOAPI-registered tools. |
-| **Public Data Adapter** | Handles public-data service-key injection, coordinate conversion, XML/JSON normalization, and error mapping. |
+| **Public Data Adapter** | Handles public-data service-key injection, XML/JSON normalization, and error mapping. |
 | **Portal (admin console)** | Manages Bridger API keys, public-data service keys, and execution logs. |
 
 ## Runtime data flow
@@ -33,7 +33,6 @@ auditing in a single Gateway. Users call the Gateway endpoint without operating 
    │     └─ tools/call → ID routing → Upstream Proxy│
    │  5. Public Data Adapter                        │
    │     ├─ ServiceKey auto-injection               │
-   │     ├─ lat/lon → grid conversion               │
    │     └─ XML/JSON normalization                  │
    │  6. PII filtering                              │
    │  7. Audit logging                              │
@@ -43,6 +42,8 @@ auditing in a single Gateway. Users call the Gateway endpoint without operating 
         ▼
    External APIs (data.go.kr · 3rd-party SaaS · self-registered APIs)
 ```
+
+The `tools/call` path does not automatically convert latitude/longitude to weather grids. Prepare coordinates or regional codes that match the tool input schema before calling it.
 
 ## Preset structure
 

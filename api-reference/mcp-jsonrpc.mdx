@@ -154,10 +154,14 @@ POST https://mcp.bridger.kr/mcp?activation=all
 
 `isPublicData=true`인 프리셋의 도구 호출 시 다음이 자동 적용됩니다.
 
-1. ServiceKey 주입 (`PUBLIC_DATA_SERVICE_KEY`)
-2. `lat/lon` → `nx/ny` 격자좌표 변환 (기상청 DFS)
-3. XML/JSON payload 정규화
-4. 공공데이터 에러코드 → 사람이 읽는 메시지 매핑
+1. 프리셋의 인증 정책에 따른 서비스키 주입 ([API 키 가이드](/guides/api-keys))
+2. XML/JSON payload 정규화
+3. 공공데이터 에러코드 → 사람이 읽는 메시지 매핑
+
+<Note>
+  `tools/call`은 위경도를 기상 격자로 자동 변환하지 않습니다.
+  기상 도구가 `nx`/`ny`를 요구하면 호출 전에 해당 격자좌표를 직접 준비하세요.
+</Note>
 
 | 코드 | 메시지 |
 | --- | --- |

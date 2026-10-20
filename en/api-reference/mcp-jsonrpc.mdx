@@ -159,10 +159,14 @@ Runs a single tool.
 
 When calling a tool from a preset with `isPublicData=true`, the following are applied automatically.
 
-1. ServiceKey injection (`PUBLIC_DATA_SERVICE_KEY`)
-2. `lat/lon` → `nx/ny` grid coordinate conversion (KMA DFS)
-3. XML/JSON payload normalization
-4. Public-data error code → human-readable message mapping
+1. Service-key injection according to the preset authentication policy ([API key guide](/en/guides/api-keys))
+2. XML/JSON payload normalization
+3. Public-data error code → human-readable message mapping
+
+<Note>
+  `tools/call` does not automatically convert latitude/longitude into a weather grid.
+  If a weather tool requires `nx`/`ny`, prepare those grid coordinates before calling it.
+</Note>
 
 | Code | Message |
 | --- | --- |

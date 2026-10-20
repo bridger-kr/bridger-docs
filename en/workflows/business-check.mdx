@@ -1,6 +1,6 @@
 ---
 title: 'Business basics check'
-description: 'Inputs, permissions and failure boundaries for business status and limited regional normalization'
+description: 'Inputs, permissions and failure boundaries for business status and independently verified regional codes'
 ---
 
 <Warning>This is a workflow design with offline examples, not evidence of live provider responses, customer adoption or legal approval. It is not credit, fraud or street-address verification.</Warning>
@@ -8,7 +8,7 @@ description: 'Inputs, permissions and failure boundaries for business status and
 ## Intended users
 
 Product teams and automation partners handling repeated counterparty onboarding can query NTS business status using a registration number they lawfully hold.
-They may optionally normalize a Korean region name or coordinates into administrative codes and a weather grid.
+They may optionally record administrative codes and a weather grid independently verified by the user.
 A business status, including closure status, is not a trust score or a transaction approval. A responsible operator makes that decision.
 
 ## Inputs and acceptable adoption
@@ -16,13 +16,16 @@ A business status, including closure status, is not a trust score or a transacti
 | Item | Contract |
 | --- | --- |
 | Required | Business registration number, submitted only on the execution path after purpose and authorization review |
-| Optional | Region name or coordinates. Unrequested location normalization is not a required output |
+| Optional | Independently verified regional codes with source and reference time. Unrequested location information is not a required output |
 | Acceptable output | Provider status with source and reference time, requested regional codes and missing-data reasons; the operator explicitly confirms work use |
 | Unsupported | Credit, fraud, beneficial-owner or identity verification; street/building/postal address validation; automatic transaction approval |
 | Privacy | No numbers, addresses, keys or raw queries in optional analytics or public examples. Operational log retention/deletion needs separate review |
 
-`resolve_location` is a regional gazetteer and coordinate-computation meta-tool.
-Unsupported street addresses and ambiguous names must be marked `unsupported_address` or `ambiguous` and clarified, not presented as nationwide address validation.
+<Note>
+  **Planned:** `resolve_location` is not deployed on the production MCP endpoint and cannot currently be called.
+  Automatic region-name/coordinate normalization is excluded from the execution steps.
+  If regional codes cannot be independently verified, record an unavailable reason in the proposed outcome contract.
+</Note>
 
 ## Reuse the existing tools
 
@@ -41,12 +44,12 @@ Repository metadata review date: 2026-10-10. No live provider request was made f
 | Source | Boundary |
 | --- | --- |
 | [NTS business registration](/en/presets/civil) | [Public Data Portal listing](https://www.data.go.kr/data/15081808/openapi.do). Status lookup and information matching are distinct |
-| `resolve_location` | [API reference implementation](https://github.com/bridger-kr/bridger-api/blob/86017b0666c9e8578ec4a8c4260b007dea92219f/internal/mcpedge/resolve_location.go). Show embedded-data version and processing time |
+| Regional codes (optional) | Independently verified user input. Record source and reference time; do not label it as automatic normalization |
 | `source` / `asOf` | Preserve provider reference time. An unknown reference time is `missing_asof`, never an invented current timestamp |
 | Permission | Provider terms, key application/approval and redistribution rights remain unreviewed until an owner checks them. Bridger API authorization is separate from provider approval |
 | Cost | Check provider quota, personal/managed-key availability and Bridger pricing/support before execution. No free or unlimited guarantee |
 
-A location-computation timestamp is not the business-status reference time.
+The regional-code input reference time is not the business-status reference time.
 Even a valid status must satisfy a freshness policy agreed for its intended use.
 Do not claim production readiness until documentation, rights, keys and separately approved live smoke evidence are checked.
 
@@ -62,7 +65,7 @@ Every requested component includes a source, `asOf` and `unavailable` reason.
 | `empty` | No usable rows and at least one valid empty response; preserve any other error reasons | Check input/scope; do not confuse this with an all-error response |
 | `error` | All requested components are unavailable | Distinguish keys, input, provider errors and timeout before retry/support |
 
-Status returned with unsupported address normalization is `partial`.
+Status returned without requested, verifiable regional-code input is `partial`.
 A status-only request is judged only on its requested status output.
 Rows with reference-time or freshness failures are not usable.
 A closed-business status may still be a successful lookup; interpret status codes according to the provider, not as a business approval.
