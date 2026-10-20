@@ -42,6 +42,7 @@ MCP clients can obtain an access token (prefix `mcat_`) through the OAuth 2.0 Au
 Code + PKCE(S256) flow and pass it the same way in the `Authorization: Bearer mcat_...` header.
 
 - Authorization server (issuer): `{{oauthIssuer}}` — RFC 8414 metadata at {{oauthDiscoveryUrl}}
+- Client ID Metadata Documents (CIMD): supported (`client_id_metadata_document_supported: true`) — an HTTPS metadata document URL can be used as the `client_id`, and is the recommended first choice
 - Dynamic Client Registration (DCR): POST {{oauthRegistrationUrl}} — registers instantly, no approval step
 - Scopes: {{oauthScopes}}
 - Protected-resource metadata (RFC 9728): {{oauthPrmUrl}}

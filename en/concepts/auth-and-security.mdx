@@ -15,9 +15,18 @@ security boundary is its most important responsibility. The following four layer
 
 ## 1. Authentication
 
+### OAuth 2.0 (default)
+
+The most common path. When you add Bridger as a connector in an AI app such as Claude or ChatGPT,
+a browser login and consent (OAuth) screen opens and you are connected without issuing any key —
+this is the flow the [quickstart](/en/getting-started/quickstart) walks through.
+
+It supports two flows — Authorization Code and Client Credentials — and the detailed spec is covered in
+[API Reference → Authentication](/en/api-reference/authentication).
+
 ### API Key
 
-The simplest method, used by most users.
+The alternative for developers calling Bridger directly via REST · MCP SDK.
 
 ```bash
 curl -X POST https://mcp.bridger.kr/mcp \
@@ -29,12 +38,6 @@ curl -X POST https://mcp.bridger.kr/mcp \
 - Header: `x-api-key` or `Authorization: Bearer <key>`
 - Issue/revoke keys on the **Bridger API keys** page at [portal.bridger.kr](https://portal.bridger.kr)
 - Keys can be revoked instantly whenever needed.
-
-### OAuth 2.0
-
-Used when you need organization-level permission management. It supports two flows — Authorization Code
-and Client Credentials — and the detailed spec is covered in
-[API Reference → Authentication](/en/api-reference/authentication).
 
 ## 2. Secret management
 
@@ -93,13 +96,13 @@ Every `tools/call` is recorded with the following fields.
 
 - Sensitive fields in input parameters are stored after masking, and secrets are never recorded.
 - Secret operations (`secret.store`, `secret.read`, `secret.rotate`, `secret.revoke`) record only an opaque reference (`opaqueRef`) separately instead of the value.
-- View them on the portal's **Logs** screen, or search and download via `GET /api/v1/audit/logs`.
+- View them on the portal's **Logs** screen at [portal.bridger.kr](https://portal.bridger.kr). Audit log
+  access requires a portal login session and cannot be called with an API key.
 
 ## 5. Network boundary
 
-- All traffic is TLS 1.3 (wildcard certificate `*.bridger.kr`, cert-manager + Let's Encrypt).
-- The Gateway defaults to a Kubernetes NetworkPolicy `default-deny`, reachable only from explicitly allowed ingress sources.
-- Pods use `runAsNonRoot` + `readOnlyRootFilesystem` + a least-privilege SecurityContext.
+- All traffic is encrypted with TLS 1.3.
+- The Gateway runs a deny-by-default policy and is reachable only from explicitly allowed sources.
 
 ## Next steps
 
