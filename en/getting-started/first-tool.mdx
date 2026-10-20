@@ -108,14 +108,41 @@ curl -X POST https://mcp.bridger.kr/mcp \
 
 ## 3. Receive real-time events over SSE
 
-For long-running tools or streaming responses, subscribe to the SSE endpoint (`/mcp`).
+Tool results come back in the `tools/call` POST response by default. To receive the same result on
+the SSE stream as well, open the stream first and read the `clientId` from the `ready` event.
 
 ```bash
 curl -N https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $BRIDGER_API_KEY"
+  -H "x-api-key: $BRIDGER_API_KEY" \
+  -H "Accept: text/event-stream"
 ```
 
-A `gateway/toolResult` event is delivered to your client for each tool execution.
+```text
+event: ready
+data: {"ok":true,"clientId":"sse_3f2a1c9b-..."}
+```
+
+Pass that `clientId` as `_clientId` in the `tools/call` `params`, and the `gateway/toolResult` event
+for that call is sent **only to that client**. Without `_clientId` no SSE event is sent and you get
+the result from the POST response alone.
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "_clientId": "sse_3f2a1c9b-...",
+    "name": "kma_get_ultra_shortcast",
+    "arguments": {
+      "searchKeyword": "Seoul",
+      "numOfRows": 10
+    }
+  }
+}
+```
+
+See [GET /mcp](/en/api-reference/mcp-sse) for the full event list and reconnection behavior.
 
 ## Next steps
 

@@ -108,14 +108,41 @@ curl -X POST https://mcp.bridger.kr/mcp \
 
 ## 3. SSE로 실시간 이벤트 받기
 
-장시간 실행 도구나 스트리밍 응답은 SSE 엔드포인트(`/mcp`)로 받습니다.
+도구 실행 결과는 기본적으로 `tools/call`의 POST 응답 본문으로 반환됩니다. 같은 결과를 SSE
+스트림으로도 받으려면 먼저 스트림을 열고 `ready` 이벤트에서 `clientId`를 확인합니다.
 
 ```bash
 curl -N https://mcp.bridger.kr/mcp \
-  -H "x-api-key: $BRIDGER_API_KEY"
+  -H "x-api-key: $BRIDGER_API_KEY" \
+  -H "Accept: text/event-stream"
 ```
 
-`gateway/toolResult` 이벤트가 도구 실행마다 브로드캐스트됩니다.
+```text
+event: ready
+data: {"ok":true,"clientId":"sse_3f2a1c9b-..."}
+```
+
+이 `clientId`를 `tools/call`의 `params`에 `_clientId`로 넣으면 해당 호출의
+`gateway/toolResult` 이벤트가 **그 클라이언트에만** 전송됩니다. `_clientId`를 생략하면 SSE
+이벤트는 전송되지 않고 POST 응답으로만 결과를 받습니다.
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "_clientId": "sse_3f2a1c9b-...",
+    "name": "kma_get_ultra_shortcast",
+    "arguments": {
+      "searchKeyword": "서울",
+      "numOfRows": 10
+    }
+  }
+}
+```
+
+전체 이벤트 목록과 재연결 동작은 [GET /mcp](/api-reference/mcp-sse)를 참고하세요.
 
 ## 다음 단계
 
