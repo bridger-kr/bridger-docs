@@ -88,7 +88,7 @@ Google GenAI SDK(`google-genai`)의 실험적 MCP 지원으로, MCP `ClientSessi
 </Warning>
 
 ```bash
-pip install mcp google-genai
+pip install "mcp>=2" google-genai
 ```
 
 ```python gemini_mcp_sample.py
@@ -98,15 +98,20 @@ import os
 from google import genai
 from google.genai import types
 from mcp import ClientSession
-from mcp.client.streamable_http import streamable_http_client
+from mcp.client.streamable_http import (
+    create_mcp_http_client,
+    streamable_http_client,
+)
 
 async def main() -> None:
     # Gemini 전용 엔드포인트는 도구 목록을 100개로 맞춥니다. 범용 엔드포인트는
     # https://mcp.bridger.kr/mcp 입니다.
     # 브릿저 API 키(dk_live_…)를 대시보드에서 발급받아 x-api-key로 보냅니다.
-    headers = {"x-api-key": os.environ["BRIDGER_API_KEY"]}
+    client = create_mcp_http_client(
+        headers={"x-api-key": os.environ["BRIDGER_API_KEY"]}
+    )
     async with streamable_http_client(
-        "https://mcp.bridger.kr/mcp/gemini", headers=headers
+        "https://mcp.bridger.kr/mcp/gemini", http_client=client
     ) as (read_stream, write_stream):
         async with ClientSession(read_stream, write_stream) as session:
             await session.initialize()
@@ -121,8 +126,11 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-`mcp` 2.x 기준 함수명은 `streamable_http_client`입니다(1.x의
-`streamablehttp_client`과 이름이 다릅니다).
+이 샘플과 [API SDK 가이드](/guides/api)의 Python 예시는 `mcp` Python SDK
+**2.x** 기준으로 통일되어 있습니다. 1.x의 `streamablehttp_client`는 2.x에서
+제거되었고, 2.x에서는 헤더를 키워드로 받지 않으므로
+`create_mcp_http_client(headers=…)`로 만든 클라이언트를 `http_client`로
+넘깁니다.
 
 <AccordionGroup>
   <Accordion title="연결 확인 — 실제 실행 결과">
