@@ -109,28 +109,44 @@ Bridger에는 두 가지 등록 경로가 있고, 식별자 체계가 다릅니�
 }
 ```
 
-## 데이터 모델 (요약)
+## 등록 API 필드
 
-```sql
-CREATE TABLE tool_registrations (
-  id            UUID PRIMARY KEY,
-  owner_id      UUID NOT NULL REFERENCES users(id),
-  tool_id       VARCHAR(128) NOT NULL UNIQUE,   -- 프리셋: @datari/{category}-{name}, BYOAPI: @{owner}/{slug}
-  display_name  VARCHAR(256),
-  description   TEXT,
-  category      VARCHAR(64),
+등록은 두 단계입니다. `POST {{byoapiRegisterUrl}}`가 작업을 만들고,
+`GET {{byoapiStatusUrl}}`로 진행 상태를 폴링합니다.
 
-  source_type   VARCHAR(16),     -- preset | byoapi | manual
-  source_spec   TEXT,            -- 원본 OpenAPI (압축)
-  spec_hash     VARCHAR(64),     -- SHA-256
+### 요청 본문
 
-  upstream_base_url VARCHAR(512),
-  upstream_paths    JSONB,       -- [{method, path, operationId, inputSchema, ...}]
-  auth_config       JSONB        -- {type, header, tokenEndpoint, ...}
-);
-```
+| 필드 | 타입 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| `spec_url` | string | `spec_url`·`spec_raw` 중 하나 | OpenAPI 스펙(JSON/YAML)을 내려받을 공개 HTTPS URL. |
+| `spec_raw` | string | `spec_url`·`spec_raw` 중 하나 | 스펙 본문을 인라인 텍스트로 직접 전달합니다. |
+| `name` | string | 필수 | 등록 이름. |
+| `auth` | object | 선택 | 비밀값이 아닌 인증 선택. `type`은 `none`·`apikey`·`bearer`·`oauth2`·`basic` 중 하나이고, `credentials`에 `header`(apikey)·`tokenEndpoint`(oauth2)를 담습니다. 생략하면 스펙의 `securitySchemes`를 그대로 사용합니다. |
+| `visibility` | string | 선택 | `private`(기본) 또는 `public`. |
 
-세부 등록 화면과 필드 설명은 포털의 **API 등록** 화면에서 확인할 수 있습니다.
+`auth`에는 시크릿을 담지 않습니다. 실제 키·토큰은 등록 후 별도 시크릿 API로 저장하며,
+자세한 내용은 [인증·보안](/concepts/auth-and-security)에서 다룹니다.
+
+### 응답
+
+`201 Created` — 등록 작업이 큐에 들어가면 즉시 반환됩니다.
+
+| 필드 | 설명 |
+| --- | --- |
+| `job_id` | 등록 작업 ID. 상태 조회 경로에 사용합니다. |
+| `status` | `queued`. |
+| `score` | 스펙 적합성 점수. |
+
+`GET {{byoapiStatusUrl}}` — 작업 상태와 결과를 확인합니다.
+
+| 필드 | 설명 |
+| --- | --- |
+| `job_id` | 등록 작업 ID. |
+| `status` | `queued` · 진행 중 단계 · `registered` · `failed` · `cancelled`. |
+| `step` | 현재 파이프라인 단계. |
+| `tool_reg_id` | 등록된 Tool ID(`@{owner}/{slug}`, 예: `@user123/my-petstore`). 완료 후 채워집니다. |
+| `error` | 실패 사유(없으면 빈 문자열). |
+| `updated_at` | 마지막 갱신 시각. |
 
 <Note>
   내 API를 공용 프리셋으로 모두에게 제공하고 싶다면 [hello@bridger.kr](mailto:hello@bridger.kr)
