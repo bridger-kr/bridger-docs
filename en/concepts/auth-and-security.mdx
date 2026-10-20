@@ -6,7 +6,7 @@ description: "How API keys, secret management, the PII filter, and audit logs ar
 Because the Bridger Gateway exposes public data and self-registered APIs under a single domain, the
 security boundary is its most important responsibility. The following four layers apply to every request.
 
-| 이름 | 하는 일 |
+| Layer | Role |
 | --- | --- |
 | **Authentication** | Identify the caller via API Key / OAuth 2.0. |
 | **Secret management** | Isolate public-data ServiceKeys and BYOAPI tokens in Vault. |

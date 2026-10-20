@@ -6,8 +6,9 @@ description: "The Bridger API key and the data.go.kr service key — two keys wi
 Bridger uses two kinds of keys with different purposes. You don't always need both —
 it depends on the data you want and the client you call from.
 
-| 이름 | 하는 일 |
+| Key | Purpose |
 | --- | --- |
+| **Bridger API key** | Used when external AI clients or your own server call the Bridger Gateway (`dk_live_…`). Not needed for browser test calls in the portal. |
 | **data.go.kr service key** | A key issued by the provider (data.go.kr). Required only for that provider's APIs — APIs callable with the default key don't need one. |
 
 ## Issue a Bridger API key

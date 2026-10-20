@@ -139,8 +139,37 @@ for (const file of tracked) {
   });
 }
 
+// --- 4. en/ locale gate (EDD-430) ------------------------------------------
+//
+//   Table HEADER rows in en/*.mdx must not contain Korean. The 28611b3
+//   card→table migration left `| 이름 | 하는 일 |` headers in six English
+//   pages; Korean data cells inside en tables (e.g. `서울특별시` examples)
+//   stay legal. A header row is a table row immediately followed by the
+//   `| --- |` separator line.
+
+const HANGUL = /[\uAC00-\uD7AF]/;
+const TABLE_ROW = /^\s*\|.*\|\s*$/;
+const TABLE_SEPARATOR = /^\s*\|(?:\s*:?-+:?\s*\|)+\s*$/;
+
+for (const file of tracked) {
+  if (!file.startsWith("en/") || !file.endsWith(".mdx")) continue;
+  if (VENDOR_RE.test(file) || file === SELF) continue;
+  const lines = readFileSync(file, "utf8").split("\n");
+  lines.forEach((line, i) => {
+    if (
+      TABLE_ROW.test(line) &&
+      HANGUL.test(line) &&
+      TABLE_SEPARATOR.test(lines[i + 1] ?? "")
+    ) {
+      console.error(`locale: ${file}:${i + 1} table header row contains Korean`);
+      failures++;
+    }
+  });
+}
+
 if (failures > 0) {
   console.error(`\ncheck-content: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log("check-content: ko/en pairs OK, no forbidden strings, no slop");
+console.log("check-content: ko/en pairs OK, no forbidden strings, no slop, en/ table headers Korean-free");
+
