@@ -23,14 +23,14 @@ export BRIDGER_API_KEY="dk_live_..."
 
 <CodeGroup>
   ```bash cURL
-  curl -X POST https://mcp.bridger.kr/mcp \
+  curl -X POST https://mcp.bridger.kr/mcp?activation=all \
     -H "x-api-key: $BRIDGER_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
   ```
 
   ```javascript Node.js
-  const res = await fetch("https://mcp.bridger.kr/mcp", {
+  const res = await fetch("https://mcp.bridger.kr/mcp?activation=all", {
     method: "POST",
     headers: {
       "x-api-key": process.env.BRIDGER_API_KEY,
@@ -48,7 +48,7 @@ export BRIDGER_API_KEY="dk_live_..."
   ```python Python
   import os, requests
   r = requests.post(
-      "https://mcp.bridger.kr/mcp",
+      "https://mcp.bridger.kr/mcp?activation=all",
       headers={
           "x-api-key": os.environ["BRIDGER_API_KEY"],
           "Content-Type": "application/json",
@@ -68,15 +68,20 @@ The response includes tools with the following structure.
   "result": {
     "tools": [
       {
-        "name": "kma_get_ultra_shortcast",
+        "name": "getultrashortcast",
         "description": "KMA ultra-short-term forecast — data.go.kr OpenAPI",
         "inputSchema": {
           "type": "object",
           "properties": {
-            "searchKeyword": { "type": "string", "description": "Search keyword" },
-            "pageNo": { "type": "integer", "description": "Page number" },
-            "numOfRows": { "type": "integer", "description": "Results per page" }
-          }
+            "ServiceKey": { "type": "string" },
+            "base_date": { "type": "string" },
+            "base_time": { "type": "string" },
+            "nx": { "type": "integer" },
+            "ny": { "type": "integer" },
+            "pageNo": { "type": "integer" },
+            "numOfRows": { "type": "integer" }
+          },
+          "required": ["ServiceKey", "pageNo", "numOfRows", "base_date", "base_time", "nx", "ny"]
         }
       }
     ]
@@ -89,7 +94,7 @@ The response includes tools with the following structure.
 Pick one tool and run it with `tools/call`. The example is an ultra-short-term forecast for Seoul.
 
 ```bash
-curl -X POST https://mcp.bridger.kr/mcp \
+curl -X POST https://mcp.bridger.kr/mcp?activation=all \
   -H "x-api-key: $BRIDGER_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -97,21 +102,28 @@ curl -X POST https://mcp.bridger.kr/mcp \
     "id": 2,
     "method": "tools/call",
     "params": {
-      "name": "kma_get_ultra_shortcast",
+      "name": "getultrashortcast",
       "arguments": {
-        "searchKeyword": "Seoul",
-        "numOfRows": 10
+        "ServiceKey": "YOUR_DATA_GO_KR_SERVICE_KEY",
+        "pageNo": 1,
+        "numOfRows": 10,
+        "base_date": "20261016",
+        "base_time": "0630",
+        "nx": 61,
+        "ny": 126
       }
     }
   }'
 ```
+
+Use the exact name and inputSchema returned by `tools/list`. Dates/times are KST; replace the example with a recent forecast issue time. `ServiceKey` is your public-data provider key, separate from `BRIDGER_API_KEY`. If your configured provider credential is injected by the gateway, follow that credential setup instead of embedding a key.
 
 ## 3. Receive real-time events over SSE
 
 For long-running tools or streaming responses, subscribe to the SSE endpoint (`/mcp`).
 
 ```bash
-curl -N https://mcp.bridger.kr/mcp \
+curl -N https://mcp.bridger.kr/mcp?activation=all \
   -H "x-api-key: $BRIDGER_API_KEY"
 ```
 

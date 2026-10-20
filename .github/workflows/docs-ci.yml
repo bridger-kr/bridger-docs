@@ -30,6 +30,9 @@ jobs:
       - name: ko/en pairs + forbidden strings
         run: npm run check:content
 
+      - name: Live MCP example contract (no private submodule required)
+        run: npm run test:examples && npm run verify:live-tools
+
       # vendor/spec is a private submodule (bridger-spec): reachable only when
       # SPEC_READ_TOKEN is in the secret store — fork/dependabot PRs carry the
       # restricted store, so example verification is skipped there, same as
@@ -54,7 +57,7 @@ jobs:
       - name: example API ids exist
         run: |
           if [ -d vendor/spec/presets ]; then
-            npm run verify:examples
+            node scripts/verify-examples.mjs
           else
             echo "vendor/spec not checked out — skipping example verification"
           fi

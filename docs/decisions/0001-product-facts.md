@@ -16,7 +16,7 @@ Users saw contradictory product facts across bridger.kr, docs.bridger.kr, and th
 | Login | Google + GitHub | Google / Kakao | Google + GitHub (only providers in `internal/datariauth/providers.go`) |
 | BYOAPI | working `POST /api/v1/register` guide | "추후 제공 예정" | Live for authenticated tenants (`internal/controlplane/byoapi_routes.go`) |
 | Catalog size | "8 core categories" (ko: 8 개 핵심 카테고리) | "over 230", "14 categories · 218 presets · 285 tools" | `GET /api/v1/government-apis?limit=1` → `total: 446`; 16 live categories; 218 preset YAMLs / 285 operationIds in the spec repo |
-| Tool names | `weather.short_term_forecast`, `kma_forecast` | `search_tools` under the pre-rename tool-ID prefix | `<toolPrefix>_<operationId snake_case>` from mcp-gen, e.g. `kma_get_village_forecast`; meta tool `search_tools` |
+| Tool names | `weather.short_term_forecast`, `kma_forecast` | `search_tools` under the pre-rename tool-ID prefix | Deployed `tools/list` names, e.g. `getvillageforecast`; meta tool `search_tools` |
 
 ## Decision
 

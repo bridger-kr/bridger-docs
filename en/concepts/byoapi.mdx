@@ -20,8 +20,8 @@ Gateway **without building or deploying a separate container** — as long as yo
 
 ```text
 A single Bridger Gateway (mcp.bridger.kr)
-  ├─ Official preset   tool_id: @datari/weather-ultra-shortcast   → tool: kma_get_ultra_shortcast
-  ├─ Official preset   tool_id: @datari/realestate-apt-trade      → tool: molit_get_apt_trade
+  ├─ Official preset   tool_id: @datari/weather-ultra-shortcast   → tool: getultrashortcast
+  ├─ Official preset   tool_id: @datari/realestate-apt-trade      → tool: getapttrade
   ├─ BYOAPI            tool_id: @user123/my-petstore              → tool: listpets, getpetbyid
   ├─ BYOAPI            tool_id: @company/internal-crm             → tool: ...
   └─ ... full preset catalog
@@ -34,7 +34,7 @@ Bridger has two registration paths with different identifier schemes.
 **1. Official presets** — loaded directly by the Gateway from OpenAPI YAML in `vendor/spec`.
 
 - The **Tool ID** (registry registration ID) follows the `@datari/{category}-{name}` format based on the preset file path. e.g. `@datari/weather-ultra-shortcast`. In the in-memory server catalog (`/registry/servers`), the same group is exposed as `servers[].id` = `{category}/{name}` (e.g. `weather/ultra-shortcast`).
-- The **tool name** (`tools[].name`) follows `{provider prefix}_{snake_case operationId}` (e.g. `getUltraShortcast` → `kma_get_ultra_shortcast`), matching `^[a-z0-9_-]+$` within 64 chars. You use this name as-is in `tools/call`.
+- The **tool name** (`tools[].name`) comes from the deployed `tools/list` response (currently, for example, `getultrashortcast`). Do not derive a prefix or assume an alias exists.
 
 **2. BYOAPI tools** — tools a user registers via `/api/v1/register`.
 
@@ -45,7 +45,7 @@ Bridger has two registration paths with different identifier schemes.
 | Type | Identifier format | Example |
 | --- | --- | --- |
 | Official preset (Tool ID) | `@datari/{category}-{name}` | `@datari/weather-ultra-shortcast` |
-| Official preset (tool name) | `{toolPrefix}_{snake_case operationId}` | `kma_get_ultra_shortcast` |
+| Official preset (tool name) | `tools/list → tools[].name` | `getultrashortcast` |
 | BYOAPI (tool_id) | `@{owner}/{slug}` | `@user123/my-petstore` |
 
 ## Registration pipeline
@@ -84,15 +84,20 @@ Bridger has two registration paths with different identifier schemes.
 {
   "tools": [
     {
-      "name": "kma_get_village_forecast",
+      "name": "getvillageforecast",
       "description": "KMA short-term forecast — location-based weather info",
       "inputSchema": {
         "type": "object",
         "properties": {
+          "ServiceKey": { "type": "string" },
+          "pageNo": { "type": "integer" },
+          "numOfRows": { "type": "integer" },
+          "base_date": { "type": "string" },
+          "base_time": { "type": "string" },
           "nx": { "type": "integer", "description": "Forecast point X coordinate" },
           "ny": { "type": "integer", "description": "Forecast point Y coordinate" }
         },
-        "required": ["nx", "ny"]
+        "required": ["ServiceKey", "pageNo", "numOfRows", "base_date", "base_time", "nx", "ny"]
       },
       "annotations": {
         "readOnlyHint": true,

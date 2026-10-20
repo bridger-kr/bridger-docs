@@ -5,6 +5,8 @@ description: "Developer guide for calling the Bridger Gateway via REST, MCP SDK,
 
 Even without Claude or ChatGPT, the Bridger Gateway can be called directly via REST and the standard MCP SDK.
 
+Use `tools/list` names and schemas exactly. Set `DATA_GO_KR_SERVICE_KEY` to your public-data provider key (separate from the Bridger key), and replace the sample date/time with a recent forecast issue time in KST.
+
 <Steps>
   <Step title="Issue an API key">
     Issue an API key on the **Bridger API keys** page in the [portal](https://portal.bridger.kr).
@@ -45,7 +47,7 @@ Even without Claude or ChatGPT, the Bridger Gateway can be called directly via R
     import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
     const transport = new StreamableHTTPClientTransport(
-      new URL("https://mcp.bridger.kr/mcp"),
+      new URL("https://mcp.bridger.kr/mcp?activation=all"),
       {
         requestInit: {
           headers: {
@@ -62,15 +64,19 @@ Even without Claude or ChatGPT, the Bridger Gateway can be called directly via R
 
     await client.connect(transport);
 
-    // List tools — returns the default profile (up to 40 tools).
-    // Append ?activation=all to the endpoint URL for the full catalog.
+    // activation=all returns the full catalog of names and input schemas.
     const tools = await client.listTools();
     console.log(tools);
 
     // Run a tool
     const result = await client.callTool({
-      name: "kma_get_village_forecast",
+      name: "getvillageforecast",
       arguments: {
+        ServiceKey: process.env.DATA_GO_KR_SERVICE_KEY,
+        pageNo: 1,
+        numOfRows: 10,
+        base_date: "20261016",
+        base_time: "0500",
         nx: 60,
         ny: 127,
       },
@@ -90,12 +96,13 @@ Even without Claude or ChatGPT, the Bridger Gateway can be called directly via R
     from mcp import ClientSession
     from mcp.client.streamable_http import streamablehttp_client
     import asyncio
+    import os
 
     async def main():
         headers = {"Authorization": "Bearer YOUR_API_KEY"}
 
         async with streamablehttp_client(
-            "https://mcp.bridger.kr/mcp",
+            "https://mcp.bridger.kr/mcp?activation=all",
             headers=headers,
         ) as (read, write, _get_session_id):
             async with ClientSession(read, write) as session:
@@ -105,8 +112,16 @@ Even without Claude or ChatGPT, the Bridger Gateway can be called directly via R
                 print(tools)
 
                 result = await session.call_tool(
-                    "kma_get_village_forecast",
-                    arguments={"nx": 60, "ny": 127},
+                    "getvillageforecast",
+                    arguments={
+                        "ServiceKey": os.environ["DATA_GO_KR_SERVICE_KEY"],
+                        "pageNo": 1,
+                        "numOfRows": 10,
+                        "base_date": "20261016",
+                        "base_time": "0500",
+                        "nx": 60,
+                        "ny": 127,
+                    },
                 )
                 print(result)
 
