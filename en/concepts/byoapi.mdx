@@ -109,28 +109,44 @@ Bridger has two registration paths with different identifier schemes.
 }
 ```
 
-## Data model (summary)
+## Registration API fields
 
-```sql
-CREATE TABLE tool_registrations (
-  id            UUID PRIMARY KEY,
-  owner_id      UUID NOT NULL REFERENCES users(id),
-  tool_id       VARCHAR(128) NOT NULL UNIQUE,   -- preset: @datari/{category}-{name}, BYOAPI: @{owner}/{slug}
-  display_name  VARCHAR(256),
-  description   TEXT,
-  category      VARCHAR(64),
+Registration is two steps: `POST {{byoapiRegisterUrl}}` creates a job, then you poll
+`GET {{byoapiStatusUrl}}` for its progress.
 
-  source_type   VARCHAR(16),     -- preset | byoapi | manual
-  source_spec   TEXT,            -- original OpenAPI (compressed)
-  spec_hash     VARCHAR(64),     -- SHA-256
+### Request body
 
-  upstream_base_url VARCHAR(512),
-  upstream_paths    JSONB,       -- [{method, path, operationId, inputSchema, ...}]
-  auth_config       JSONB        -- {type, header, tokenEndpoint, ...}
-);
-```
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `spec_url` | string | one of `spec_url`/`spec_raw` | Public HTTPS URL to fetch the OpenAPI spec (JSON/YAML) from. |
+| `spec_raw` | string | one of `spec_url`/`spec_raw` | The spec body passed inline as text. |
+| `name` | string | yes | Registration name. |
+| `auth` | object | no | Non-secret auth selection. `type` is one of `none`/`apikey`/`bearer`/`oauth2`/`basic`; `credentials` carries `header` (apikey) or `tokenEndpoint` (oauth2). When omitted, the spec's `securitySchemes` are used as-is. |
+| `visibility` | string | no | `private` (default) or `public`. |
 
-You can find the detailed registration screen and field descriptions on the portal's **Register API** page.
+`auth` never carries secrets. The actual key or token is stored afterwards through the
+separate secrets API; see [Auth & security](/en/concepts/auth-and-security).
+
+### Response
+
+`201 Created` — returned as soon as the registration job is queued.
+
+| Field | Description |
+| --- | --- |
+| `job_id` | Registration job ID. Use it in the status path. |
+| `status` | `queued`. |
+| `score` | Spec fitness score. |
+
+`GET {{byoapiStatusUrl}` — job status and result.
+
+| Field | Description |
+| --- | --- |
+| `job_id` | Registration job ID. |
+| `status` | `queued` · an in-progress step · `registered` · `failed` · `cancelled`. |
+| `step` | Current pipeline step. |
+| `tool_reg_id` | Registered Tool ID (`@{owner}/{slug}`, e.g. `@user123/my-petstore`). Filled in once registration completes. |
+| `error` | Failure reason (empty string when there is none). |
+| `updated_at` | Last update time. |
 
 <Note>
   If you'd like your API offered to everyone as a public preset, contact us at
