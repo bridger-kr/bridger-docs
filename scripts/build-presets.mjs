@@ -110,7 +110,20 @@ const LOCALES = {
 };
 
 /** @typedef {string | Record<string, string>} LocalizedString */
-/** @typedef {{ title: string, description: string, provider?: LocalizedString, displayName?: LocalizedString, isPublicData: boolean, opCount: number, dataGoKrId?: string, file: string }} PresetInfo */
+/** @typedef {{ id?: string, summary?: string }} OperationInfo */
+/** @typedef {{ title: string, description: string, provider?: LocalizedString, displayName?: LocalizedString, isPublicData: boolean, opCount: number, operations: OperationInfo[], catalogId: string, dataGoKrId?: string, file: string }} PresetInfo */
+
+/**
+ * Presets whose YAML home directory under vendor/spec/presets/ does not match
+ * the docs category they belong in, keyed by catalog.id. Each entry moves the
+ * preset into the category it is listed under in the generated pages, so the
+ * generated docs stay correct until the spec directory layout catches up.
+ */
+const PRESET_CATEGORY_OVERRIDES = new Map([
+  // 대기질 측정소 조회(한국환경공단) is environment data but lives in
+  // vendor/spec/presets/weather/; the docs list it under the environment category.
+  ["air-quality-station", "environment"],
+]);
 
 function isRecord(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -194,14 +207,25 @@ function readCategory(categoryDir) {
       Object.keys(xpd).length > 0 ||
       registry.provider === PUBLIC_DATA_REGISTRY ||
       Boolean(dataGoKrId);
+    const operations = /** @type {OperationInfo[]} */ ([]);
     const opCount = doc.paths
       ? Object.values(doc.paths).reduce((acc, methods) => {
           if (!methods || typeof methods !== "object") return acc;
-          return acc + Object.keys(methods).filter((k) =>
-            ["get", "post", "put", "delete", "patch", "head", "options"].includes(
-              String(k).toLowerCase(),
-            ),
-          ).length;
+          for (const method of Object.keys(methods)) {
+            if (!["get", "post", "put", "delete", "patch", "head", "options"].includes(
+              String(method).toLowerCase(),
+            )) continue;
+            const operation = isRecord(methods[method]) ? methods[method] : undefined;
+            operations.push({
+              summary:
+                typeof operation?.summary === "string"
+                  ? operation.summary.split("\n")[0].trim()
+                  : undefined,
+              id: typeof operation?.operationId === "string" ? operation.operationId : undefined,
+            });
+            acc += 1;
+          }
+          return acc;
         }, 0)
       : 0;
 
@@ -218,6 +242,11 @@ function readCategory(categoryDir) {
       dataGoKrId,
       isPublicData,
       opCount,
+      operations,
+      catalogId: firstString(
+        typeof catalog.id === "string" ? catalog.id : undefined,
+        fname.replace(/\.ya?ml$/, ""),
+      ),
       file: fname,
     });
   }
@@ -272,6 +301,58 @@ function escapeMdxCell(s) {
 }
 
 /**
+ * Operation summary used to distinguish duplicate table rows within a
+ * category: operation summaries joined by "·", or operationIds when the
+ * summaries are not distinctive, or the catalog id as a last resort.
+ * @param {PresetInfo} preset
+ * @param {boolean} useSummaries
+ */
+function operationSummaryText(preset, useSummaries) {
+  const parts = useSummaries
+    ? preset.operations
+        .map((op) => op.summary || op.id)
+        .map((text) => text?.trim())
+        .filter(Boolean)
+    : preset.operations.map((op) => op.id).filter(Boolean);
+  return [...new Set(parts)].join(" · ") || preset.catalogId;
+}
+
+/**
+ * Disambiguates rows that share a display name inside one category: the KO
+ * tables may show several presets with the same data.go.kr title (cold/heat
+ * impact forecasts, `-real` alias presets, ...). The locally curated
+ * displayName keeps priority; duplicated rows get an operation summary
+ * appended in parentheses.
+ * @param {PresetInfo[]} presets
+ * @param {string} locale
+ */
+function tableNames(presets, locale) {
+  /** @type {{ preset: PresetInfo, name: string }[]} */
+  const rows = presets.map((preset) => ({
+    preset,
+    name: localizedString(preset.displayName, locale) || preset.title,
+  }));
+  /** @type {Map<string, { preset: PresetInfo, name: string }[]>} */
+  const groups = new Map();
+  for (const row of rows) {
+    const group = groups.get(row.name) ?? [];
+    group.push(row);
+    groups.set(row.name, group);
+  }
+  for (const group of groups.values()) {
+    if (group.length < 2) continue;
+    let suffixes = group.map(({ preset }) => operationSummaryText(preset, true));
+    if (new Set(suffixes).size !== group.length) {
+      suffixes = group.map(({ preset }) => operationSummaryText(preset, false));
+    }
+    for (let i = 0; i < group.length; i += 1) {
+      group[i].name = `${group[i].name} (${suffixes[i]})`;
+    }
+  }
+  return rows;
+}
+
+/**
  * @param {string} category
  * @param {PresetInfo[]} presets
  * @param {typeof LOCALES.ko} L
@@ -281,15 +362,15 @@ function renderCategoryMdx(category, presets, L) {
   const total = presets.length;
   const totalOps = presets.reduce((acc, p) => acc + p.opCount, 0);
 
-  const rows = presets
-    .map((p) => {
-      const name = escapeMdxCell(localizedString(p.displayName, L.locale) || p.title);
-      const provider = escapeMdxCell(localizedString(p.provider, L.locale) || "—");
-      const ops = p.opCount;
-      const link = p.dataGoKrId
-        ? `[${escapeMdxCell(p.dataGoKrId)}](https://www.data.go.kr/data/${p.dataGoKrId}/openapi.do)`
+  const rows = tableNames(presets, L.locale)
+    .map(({ preset, name }) => {
+      const displayName = escapeMdxCell(name);
+      const provider = escapeMdxCell(localizedString(preset.provider, L.locale) || "—");
+      const ops = preset.opCount;
+      const link = preset.dataGoKrId
+        ? `[${escapeMdxCell(preset.dataGoKrId)}](https://www.data.go.kr/data/${preset.dataGoKrId}/openapi.do)`
         : "—";
-      return `| ${name} | ${provider} | ${ops} | ${link} |`;
+      return `| ${displayName} | ${provider} | ${ops} | ${link} |`;
     })
     .join("\n");
 
@@ -352,7 +433,7 @@ function renderIndexMdx(summary, L, families = []) {
   const cards = summary
     .map((s) => {
       const meta = CATEGORY_META[s.category];
-      return `  <Card title="${L.catTitle(meta)}" icon="${meta.icon}" href="${L.linkPrefix}/${s.category}">
+      return `  <Card title="${L.catTitle(meta)}" href="${L.linkPrefix}/${s.category}">
     ${L.metaDesc(meta)}\\
     ${L.cardCount(s.total, s.totalOps)}
   </Card>`;
@@ -411,10 +492,34 @@ function main() {
 
   // Read each category once, reuse across locales.
   const byCategory = new Map();
+  for (const category of categories) {
+    byCategory.set(category, readCategory(join(PRESETS_DIR, category)));
+  }
+
+  // Apply preset category overrides after every category is read, so that
+  // movement between sibling directories works regardless of order.
+  /** @type {{ from: string, to: string, preset: PresetInfo }[]} */
+  const moves = [];
+  for (const [category, presets] of byCategory) {
+    const kept = presets.filter((preset) => {
+      const target = PRESET_CATEGORY_OVERRIDES.get(preset.catalogId);
+      if (!target || target === category || !CATEGORY_META[target]) return true;
+      moves.push({ from: category, to: target, preset });
+      return false;
+    });
+    byCategory.set(category, kept);
+  }
+  for (const { from, to, preset } of moves) {
+    const targetPresets = byCategory.get(to);
+    (targetPresets ?? byCategory.get(from))?.push(preset);
+  }
+  for (const presets of byCategory.values()) {
+    presets.sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : 0));
+  }
+
   const summary = [];
   for (const category of categories) {
-    const presets = readCategory(join(PRESETS_DIR, category));
-    byCategory.set(category, presets);
+    const presets = byCategory.get(category);
     const totalOps = presets.reduce((acc, p) => acc + p.opCount, 0);
     summary.push({ category, total: presets.length, totalOps });
   }
