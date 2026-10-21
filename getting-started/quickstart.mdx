@@ -1,35 +1,35 @@
 ---
 title: "빠른 시작"
-description: "로그인하고 Claude · ChatGPT에 브릿저를 연결해 첫 질문까지 — 개발 도구 없이 3단계."
+description: "로그인하고 Claude · ChatGPT에 Bridger를 연결해 첫 질문까지 — 개발 도구 없이 3단계."
 ---
 
-브릿저(Bridger)는 Claude · ChatGPT 같은 AI 앱에서 한국 공공데이터를 바로 물어볼 수 있게 해주는
+Bridger는 Claude · ChatGPT 같은 AI 앱에서 한국 공공데이터를 바로 물어볼 수 있게 해주는
 커넥터입니다. 설치할 프로그램도, 미리 발급할 API 키도 없습니다.
 
 ## 3단계면 끝납니다
 
 <Steps>
-  <Step title="브릿저 로그인">
+  <Step title="Bridger 로그인">
     [portal.bridger.kr](https://portal.bridger.kr)을 열고 **Google** 또는 **GitHub** 계정으로
     로그인합니다. 별도 회원가입 절차 없이 소셜 계정으로 바로 시작됩니다.
   </Step>
-  <Step title="AI 앱에 브릿저 연결">
-    사용하는 AI 앱의 설정 화면에서 브릿저를 커넥터로 추가합니다. 서버 주소는 두 앱 모두
+  <Step title="AI 앱에 Bridger 연결">
+    사용하는 AI 앱의 설정 화면에서 Bridger를 커넥터로 추가합니다. 서버 주소는 두 앱 모두
     `https://mcp.bridger.kr/mcp` 하나입니다.
 
     - **Claude (웹 · 데스크톱):** 설정(Settings) → 커넥터(Connectors) →
-      **사용자 지정 커넥터 추가(Add custom connector)** → 이름 `브릿저`, 서버 주소 붙여넣기 →
+      **사용자 지정 커넥터 추가(Add custom connector)** → 이름 `Bridger`, 서버 주소 붙여넣기 →
       **연결(Connect)**. 화면에 맞춘 단계별 안내는 [Claude 연결 가이드](/guides/claude)에 있습니다.
     - **ChatGPT:** 설정(Settings) → 앱(Apps) → **개발자 모드(Developer mode)** 켜기 →
-      만들기(Create) → 이름 `브릿저`, MCP 서버 주소 붙여넣기 → **도구 스캔(Scan tools)**.
+      만들기(Create) → 이름 `Bridger`, MCP 서버 주소 붙여넣기 → **도구 스캔(Scan tools)**.
       계정 플랜에 따라 개발자 모드가 보이지 않을 수 있습니다. 자세한 내용은
       [ChatGPT 연결 가이드](/guides/chatgpt)에 있습니다.
 
-    연결(Connect)을 누르면 브라우저에서 브릿저 로그인과 권한 동의(OAuth) 화면이 열립니다.
+    연결(Connect)을 누르면 브라우저에서 Bridger 로그인과 권한 동의(OAuth) 화면이 열립니다.
     1단계와 같은 Google · GitHub 계정으로 로그인하고 **승인(Allow)** 을 누르면 완료입니다.
   </Step>
   <Step title="첫 질문">
-    새 대화에서 브릿저 커넥터를 켠 뒤 그대로 물어보세요. 아래 질문은 브릿저 카탈로그의
+    새 대화에서 Bridger 커넥터를 켠 뒤 그대로 물어보세요. 아래 질문은 Bridger 카탈로그의
     공공데이터를 사용합니다.
 
     {/* example-api: environment/air-quality-realtime */}
@@ -74,7 +74,7 @@ REST · MCP SDK로 직접 호출하는 경로는 따로 있습니다.
     Claude 커스텀 커넥터로 자연어로 Bridger 도구 호출.
   </Card>
   <Card title="API 키 발급" href="/guides/api-keys">
-    외부 클라이언트·서버에서 쓰는 브릿저 API 키(`dk_live_…`) 발급.
+    외부 클라이언트·서버에서 쓰는 Bridger API 키(`dk_live_…`) 발급.
   </Card>
   <Card title="REST / MCP SDK" href="/guides/api">
     curl · Node.js · Python으로 `tools/list` · `tools/call` 호출.
