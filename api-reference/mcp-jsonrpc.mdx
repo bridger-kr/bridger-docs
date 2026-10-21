@@ -62,12 +62,33 @@ POST https://mcp.bridger.kr/mcp?activation=all
   "result": {
     "tools": [
       {
-        "name": "pingtool",
-        "description": "Ping endpoint",
-        "inputSchema": { "type": "object", "properties": {} },
+        "name": "search_tools",
+        "title": "Search Bridger tools",
+        "description": "Find the best Bridger tool for a natural-language task. This semantic search tool lets agents choose an MCP tool without rereading provider documents; it respects tenant visibility and session activation policy.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Natural-language task, API name, field, provider, or domain to search for. Korean and English are both supported."
+            },
+            "limit": { "type": "integer", "default": 5, "minimum": 1, "maximum": 20 },
+            "category": {
+              "type": "string",
+              "description": "Optional category filter, such as weather, transportation, culture, welfare, economy, or civil."
+            },
+            "authScheme": {
+              "type": "string",
+              "description": "Optional auth scheme filter. Only tools whose upstream auth type matches are returned.",
+              "enum": ["apikey", "bearer", "oauth2", "basic", "none"]
+            }
+          },
+          "required": ["query"]
+        },
         "annotations": {
           "readOnlyHint": true,
           "destructiveHint": false,
+          "idempotentHint": true,
           "openWorldHint": false
         }
       }
@@ -78,7 +99,7 @@ POST https://mcp.bridger.kr/mcp?activation=all
 
 ## tools/call
 
-도구 한 개를 실행합니다.
+도구 한 개를 실행합니다. 예시는 기상청 초단기예보(`kma_get_ultra_shortcast`)입니다.
 
 ### Request
 
@@ -88,8 +109,14 @@ POST https://mcp.bridger.kr/mcp?activation=all
   "id": 2,
   "method": "tools/call",
   "params": {
-    "name": "pingtool",
-    "arguments": { "q": "hello" }
+    "name": "kma_get_ultra_shortcast",
+    "arguments": {
+      "base_date": "20210628",
+      "base_time": "0630",
+      "nx": 55,
+      "ny": 127,
+      "numOfRows": 10
+    }
   }
 }
 ```
@@ -101,28 +128,84 @@ POST https://mcp.bridger.kr/mcp?activation=all
   "jsonrpc": "2.0",
   "id": 2,
   "result": {
-    "tool": "pingtool",
+    "tool": "kma_get_ultra_shortcast",
     "upstream": {
       "method": "GET",
-      "url": "http://127.0.0.1:9921/ping?q=hello",
+      "url": "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst?pageNo=1&numOfRows=10&dataType=JSON&base_date=20210628&base_time=0630&nx=55&ny=127&ServiceKey=REDACTED",
       "status": 200
     },
-    "data": { "ok": true, "q": "hello" },
-    "cacheStatus": "MISS",
-    "auditId": "aud_..."
+    "data": {
+      "ok": true,
+      "resultCode": "00",
+      "resultMessage": "정상",
+      "resultCategory": "success",
+      "resultAction": "결과를 그대로 사용합니다.",
+      "retryable": false,
+      "items": [
+        {
+          "baseDate": "20210628",
+          "baseTime": "0630",
+          "category": "T1H",
+          "fcstDate": "20210628",
+          "fcstTime": "0700",
+          "fcstValue": "24.0",
+          "nx": 55,
+          "ny": 127
+        },
+        {
+          "baseDate": "20210628",
+          "baseTime": "0630",
+          "category": "SKY",
+          "fcstDate": "20210628",
+          "fcstTime": "0700",
+          "fcstValue": "1",
+          "nx": 55,
+          "ny": 127
+        }
+      ],
+      "totalCount": 10,
+      "pageNo": 1,
+      "numOfRows": 10
+    },
+    "cacheStatus": "CACHE_STATUS_MISS",
+    "auditId": "aud_...",
+    "latencyMs": 128,
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"ok\":true,\"resultCode\":\"00\",\"resultMessage\":\"정상\",\"resultCategory\":\"success\",\"items\":[…structuredContent 전체를 직렬화한 문자열]…}"
+      }
+    ],
+    "structuredContent": {
+      "ok": true,
+      "resultCode": "00",
+      "resultCategory": "success",
+      "items": [ { "category": "T1H", "fcstValue": "24.0", "…": "data와 같은 정규화 페이로드" } ],
+      "totalCount": 10,
+      "numOfRows": 10
+    },
+    "isError": false
   }
 }
 ```
+
+도구 실행이 실패하면 JSON-RPC 에러 대신 `isError: true` 결과가 돌아오고,
+`structuredContent.error`에 종류(`kind`)·원인·한/영 안내 메시지가 담깁니다.
 
 | 필드 | 설명 |
 | --- | --- |
 | `result.tool` | 호출된 도구 이름 |
 | `result.upstream.method` | upstream HTTP 메서드 |
-| `result.upstream.url` | upstream 최종 URL (ServiceKey 등 미들웨어 주입 후) |
+| `result.upstream.url` | upstream 최종 URL (ServiceKey 등 미들웨어 주입 후; 민감 파라미터는 `REDACTED`) |
 | `result.upstream.status` | upstream HTTP 상태 코드 |
 | `result.data` | upstream 응답 본문 (XML→JSON 정규화 후) |
-| `result.cacheStatus` | 캐시 적중 여부 (`HIT`/`MISS` 등) |
+| `result.data.raw` | 공공데이터 프리셋은 provider 원본 응답을 `data.raw`에 보존 |
+| `result.cacheStatus` | 캐시 적중 여부 (`CACHE_STATUS_HIT`/`CACHE_STATUS_MISS`/`CACHE_STATUS_BYPASS`) |
 | `result.auditId` | 이 호출의 감사 로그 식별자 |
+| `result.latencyMs` | 도구 실행 지연 시간 (ms) |
+| `result.content` | MCP 표준 텍스트 블록 — `structuredContent`를 JSON 문자열로 직렬화한 1개 항목 (80KB 상한, 초과 시 잘림) |
+| `result.structuredContent` | `data`와 같은 정규화 페이로드 (80KB 상한, 초과 시 잘림) |
+| `result.isError` | `false` = 성공, `true` = 도구 실행 오류 |
 
 ## cURL 전체 예시
 
@@ -143,8 +226,14 @@ POST https://mcp.bridger.kr/mcp?activation=all
       "id": 2,
       "method": "tools/call",
       "params": {
-        "name": "pingtool",
-        "arguments": { "q": "hello" }
+        "name": "kma_get_ultra_shortcast",
+        "arguments": {
+          "base_date": "20210628",
+          "base_time": "0630",
+          "nx": 55,
+          "ny": 127,
+          "numOfRows": 10
+        }
       }
     }'
   ```

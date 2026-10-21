@@ -39,12 +39,21 @@ See [Authentication](/en/api-reference/authentication) for the full auth flow, O
 
 ## Common error format
 
-```json
-{
-  "error": "Unauthorized",
-  "message": "Valid API key is required."
-}
+Authentication failures are not returned as JSON. Calling a protected endpoint
+with an invalid key answers `401 Unauthorized` with a `text/plain` body and a
+`WWW-Authenticate` challenge.
+
+```http
+HTTP/1.1 401 Unauthorized
+Content-Type: text/plain; charset=utf-8
+WWW-Authenticate: Bearer error="invalid_token", resource_metadata="https://mcp.bridger.kr/.well-known/oauth-protected-resource/mcp"
+
+invalid_token
 ```
+
+A token lacking the required scope is rejected with `403 Forbidden` and
+`Bearer error="insufficient_scope", resource_metadata="...", scope="..."`. See
+[Authentication](/en/api-reference/authentication) for the full format.
 
 The JSON-RPC endpoint (`/mcp`) returns a [JSON-RPC 2.0 error object](https://www.jsonrpc.org/specification#error_object).
 

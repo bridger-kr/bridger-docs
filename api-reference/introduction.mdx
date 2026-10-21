@@ -39,12 +39,20 @@ Authorization: Bearer dk_live_...
 
 ## 공통 오류 형식
 
-```json
-{
-  "error": "Unauthorized",
-  "message": "Valid API key is required."
-}
+인증 실패는 JSON으로 반환되지 않습니다. 잘못된 키로 보호 엔드포인트를 호출하면
+`401 Unauthorized`에 `text/plain` 본문과 `WWW-Authenticate` 챌린지가 함께 옵니다.
+
+```http
+HTTP/1.1 401 Unauthorized
+Content-Type: text/plain; charset=utf-8
+WWW-Authenticate: Bearer error="invalid_token", resource_metadata="https://mcp.bridger.kr/.well-known/oauth-protected-resource/mcp"
+
+invalid_token
 ```
+
+스코프가 모자라면 `403 Forbidden`과 `Bearer error="insufficient_scope",
+resource_metadata="...", scope="..."`로
+거절됩니다. 전체 형식은 [Authentication](/api-reference/authentication)을 참고하세요.
 
 JSON-RPC 엔드포인트(`/mcp`)는 [JSON-RPC 2.0 에러 객체](https://www.jsonrpc.org/specification#error_object)를 반환합니다.
 
