@@ -126,6 +126,11 @@ const toolIdRe = /@datari\/([a-z0-9][a-z0-9-]*)/g;
 const nameRe =
   /(?<![\w])["']?(?:name|tool|toolName)["']?\s*:\s*"([a-z][a-z0-9_]*)"/g;
 
+// System tools served by the registry itself are not preset operations.
+// search_tools is bridger-api's semantic tool finder
+// (internal/toolsearch SystemToolName) and carries no provider prefix.
+const systemToolNames = new Set(["search_tools"]);
+
 for (const file of mdxFiles) {
   const lines = readFileSync(join(REPO_ROOT, file), "utf8").split("\n");
   lines.forEach((line, i) => {
@@ -142,6 +147,7 @@ for (const file of mdxFiles) {
     for (const m of line.matchAll(nameRe)) {
       const token = m[1];
       if (!token.includes("_")) continue; // single-word names out of scope
+      if (systemToolNames.has(token)) continue; // registry system tools
       const opPart = token.slice(token.indexOf("_") + 1);
       if (!operations.has(opPart)) {
         report(

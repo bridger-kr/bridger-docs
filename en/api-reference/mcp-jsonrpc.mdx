@@ -67,12 +67,33 @@ your tool list.
   "result": {
     "tools": [
       {
-        "name": "pingtool",
-        "description": "Ping endpoint",
-        "inputSchema": { "type": "object", "properties": {} },
+        "name": "search_tools",
+        "title": "Search Bridger tools",
+        "description": "Find the best Bridger tool for a natural-language task. This semantic search tool lets agents choose an MCP tool without rereading provider documents; it respects tenant visibility and session activation policy.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Natural-language task, API name, field, provider, or domain to search for. Korean and English are both supported."
+            },
+            "limit": { "type": "integer", "default": 5, "minimum": 1, "maximum": 20 },
+            "category": {
+              "type": "string",
+              "description": "Optional category filter, such as weather, transportation, culture, welfare, economy, or civil."
+            },
+            "authScheme": {
+              "type": "string",
+              "description": "Optional auth scheme filter. Only tools whose upstream auth type matches are returned.",
+              "enum": ["apikey", "bearer", "oauth2", "basic", "none"]
+            }
+          },
+          "required": ["query"]
+        },
         "annotations": {
           "readOnlyHint": true,
           "destructiveHint": false,
+          "idempotentHint": true,
           "openWorldHint": false
         }
       }
@@ -83,7 +104,8 @@ your tool list.
 
 ## tools/call
 
-Runs a single tool.
+Runs a single tool. The example calls the KMA ultra-short-term forecast
+(`kma_get_ultra_shortcast`).
 
 ### Request
 
@@ -93,8 +115,14 @@ Runs a single tool.
   "id": 2,
   "method": "tools/call",
   "params": {
-    "name": "pingtool",
-    "arguments": { "q": "hello" }
+    "name": "kma_get_ultra_shortcast",
+    "arguments": {
+      "base_date": "20210628",
+      "base_time": "0630",
+      "nx": 55,
+      "ny": 127,
+      "numOfRows": 10
+    }
   }
 }
 ```
@@ -106,28 +134,85 @@ Runs a single tool.
   "jsonrpc": "2.0",
   "id": 2,
   "result": {
-    "tool": "pingtool",
+    "tool": "kma_get_ultra_shortcast",
     "upstream": {
       "method": "GET",
-      "url": "http://127.0.0.1:9921/ping?q=hello",
+      "url": "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst?pageNo=1&numOfRows=10&dataType=JSON&base_date=20210628&base_time=0630&nx=55&ny=127&ServiceKey=REDACTED",
       "status": 200
     },
-    "data": { "ok": true, "q": "hello" },
-    "cacheStatus": "MISS",
-    "auditId": "aud_..."
+    "data": {
+      "ok": true,
+      "resultCode": "00",
+      "resultMessage": "Success",
+      "resultCategory": "success",
+      "resultAction": "Use the returned data as-is.",
+      "retryable": false,
+      "items": [
+        {
+          "baseDate": "20210628",
+          "baseTime": "0630",
+          "category": "T1H",
+          "fcstDate": "20210628",
+          "fcstTime": "0700",
+          "fcstValue": "24.0",
+          "nx": 55,
+          "ny": 127
+        },
+        {
+          "baseDate": "20210628",
+          "baseTime": "0630",
+          "category": "SKY",
+          "fcstDate": "20210628",
+          "fcstTime": "0700",
+          "fcstValue": "1",
+          "nx": 55,
+          "ny": 127
+        }
+      ],
+      "totalCount": 10,
+      "pageNo": 1,
+      "numOfRows": 10
+    },
+    "cacheStatus": "CACHE_STATUS_MISS",
+    "auditId": "aud_...",
+    "latencyMs": 128,
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"ok\":true,\"resultCode\":\"00\",\"resultMessage\":\"Success\",\"resultCategory\":\"success\",\"items\":[…serialized full structuredContent]…}"
+      }
+    ],
+    "structuredContent": {
+      "ok": true,
+      "resultCode": "00",
+      "resultCategory": "success",
+      "items": [ { "category": "T1H", "fcstValue": "24.0", "…": "same normalized payload as data" } ],
+      "totalCount": 10,
+      "numOfRows": 10
+    },
+    "isError": false
   }
 }
 ```
+
+A failed tool run returns an `isError: true` result instead of a JSON-RPC
+error; `structuredContent.error` carries the kind (`kind`), cause, and
+bilingual guidance message.
 
 | Field | Description |
 | --- | --- |
 | `result.tool` | Called tool name |
 | `result.upstream.method` | Upstream HTTP method |
-| `result.upstream.url` | Final upstream URL (after middleware injection such as ServiceKey) |
+| `result.upstream.url` | Final upstream URL (after middleware injection such as ServiceKey; sensitive query params read `REDACTED`) |
 | `result.upstream.status` | Upstream HTTP status code |
 | `result.data` | Upstream response body (after XML→JSON normalization) |
-| `result.cacheStatus` | Whether the cache was hit (`HIT`/`MISS`, etc.) |
+| `result.data.raw` | Public-data presets preserve the provider's original response in `data.raw` |
+| `result.cacheStatus` | Whether the cache was hit (`CACHE_STATUS_HIT`/`CACHE_STATUS_MISS`/`CACHE_STATUS_BYPASS`) |
 | `result.auditId` | Audit-log identifier for this call |
+| `result.latencyMs` | Tool execution latency (ms) |
+| `result.content` | MCP-standard text block — a single item with `structuredContent` serialized as a JSON string (80KB cap, truncated beyond it) |
+| `result.structuredContent` | Same normalized payload as `data` (80KB cap, truncated beyond it) |
+| `result.isError` | `false` = success, `true` = tool execution error |
 
 ## Full cURL examples
 
@@ -148,8 +233,14 @@ Runs a single tool.
       "id": 2,
       "method": "tools/call",
       "params": {
-        "name": "pingtool",
-        "arguments": { "q": "hello" }
+        "name": "kma_get_ultra_shortcast",
+        "arguments": {
+          "base_date": "20210628",
+          "base_time": "0630",
+          "nx": 55,
+          "ny": 127,
+          "numOfRows": 10
+        }
       }
     }'
   ```

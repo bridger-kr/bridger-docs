@@ -17,14 +17,28 @@ See the [API key guide](/en/guides/api-keys) for the full flow.
 
 ## Authentication failure response
 
-If the key is missing or invalid, **401 Unauthorized** is returned.
+If the key is missing or invalid, **401 Unauthorized** is returned. The body is
+not JSON but a `text/plain` error code, and an RFC 6750-style
+`WWW-Authenticate` challenge header is sent along so OAuth clients can find the
+authorization server and scopes.
 
-```json
-{
-  "error": "Unauthorized",
-  "message": "Valid API key is required."
-}
+```http
+HTTP/1.1 401 Unauthorized
+Content-Type: text/plain; charset=utf-8
+WWW-Authenticate: Bearer error="invalid_token", resource_metadata="https://mcp.bridger.kr/.well-known/oauth-protected-resource/mcp"
 ```
+
+```text
+invalid_token
+```
+
+`resource_metadata` points to the RFC 9728 protected-resource metadata and
+echoes the requested MCP endpoint path (`/mcp`). Read the authorization server
+(issuer) and supported scopes from it, then start the
+[OAuth 2.0](#oauth-20) authorization-code + PKCE flow. A valid token that lacks
+the required scope is rejected with the same challenge form as
+**403 Forbidden** (`Bearer error="insufficient_scope",
+resource_metadata="...", scope="..."`).
 
 ## Tenant identification
 
