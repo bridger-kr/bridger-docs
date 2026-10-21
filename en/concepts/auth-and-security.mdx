@@ -36,7 +36,7 @@ curl -X POST https://mcp.bridger.kr/mcp \
 ```
 
 - Header: `x-api-key` or `Authorization: Bearer <key>`
-- Issue/revoke keys on the **Bridger API keys** page at [portal.bridger.kr](https://portal.bridger.kr)
+- Issue/revoke keys on the **Auth keys** page at [portal.bridger.kr](https://portal.bridger.kr)
 - Keys can be revoked instantly whenever needed.
 
 ## 2. Secret management
@@ -96,8 +96,8 @@ Every `tools/call` is recorded with the following fields.
 
 - Sensitive fields in input parameters are stored after masking, and secrets are never recorded.
 - Secret operations (`secret.store`, `secret.read`, `secret.rotate`, `secret.revoke`) record only an opaque reference (`opaqueRef`) separately instead of the value.
-- View them on the portal's **Logs** screen at [portal.bridger.kr](https://portal.bridger.kr). Audit log
-  access requires a portal login session and cannot be called with an API key.
+- View them on the **Execution logs** screen at [portal.bridger.kr](https://portal.bridger.kr). Audit log
+  access requires a Dashboard login session and cannot be called with an API key.
 
 ## 5. Network boundary
 

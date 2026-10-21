@@ -8,18 +8,18 @@ it depends on the data you want and the client you call from.
 
 | Key | Purpose |
 | --- | --- |
-| **Bridger API key** | Used when external AI clients or your own server call the Bridger Gateway (`dk_live_…`). Not needed for browser test calls in the portal. |
-| **data.go.kr service key** | A key issued by the provider (data.go.kr). Required only for that provider's APIs — APIs callable with the default key don't need one. |
+| **Bridger API key** | Used when external AI clients or your own server call the Bridger Gateway (`dk_live_…`). Not needed for test calls in the Dashboard. |
+| **data.go.kr service key** | A key issued by the provider (data.go.kr). Required only for that provider's APIs — APIs callable with the free trial key don't need one. |
 
 ## Issue a Bridger API key
 
 <Steps>
-  <Step title="Sign in to the portal">
+  <Step title="Sign in to the Dashboard">
     Sign in at [portal.bridger.kr](https://portal.bridger.kr) with {{loginProviders}}.
   </Step>
 
   <Step title="Create an API key">
-    Issue a new key on the **Bridger API keys** page in the left menu. It works immediately.
+    Issue a new key on the **Auth keys** page in the left menu. It works immediately.
   </Step>
 
   <Step title="Store the key securely">
@@ -35,8 +35,8 @@ it depends on the data you want and the client you call from.
 
 Some of the public-data APIs Bridger calls require a
 [Public Data Portal (data.go.kr)](https://www.data.go.kr) service key. To check whether an
-API needs one, open its detail page in the portal's **Government APIs** menu — some APIs
-work with the default key, others require your own service key. A single service key can
+API needs one, open its detail page in the Dashboard's **Public data** menu — some APIs
+work with the free trial key, others require your own service key. A single service key can
 often be reused across multiple APIs from the same provider.
 
 <Steps>
@@ -62,8 +62,8 @@ often be reused across multiple APIs from the same provider.
   </Step>
 
   <Step title="Register the key in Bridger">
-    Paste the key into **Register service key** on the API's detail page under the portal's
-    **Government APIs** menu, or add it in the **Public-data service keys** section of
+    Paste the key into **Register service key** on the API's detail page under the Dashboard's
+    **Public data** menu, or add it in the **Public data service keys** section of
     **Account settings**. It takes effect right away.
   </Step>
 </Steps>
