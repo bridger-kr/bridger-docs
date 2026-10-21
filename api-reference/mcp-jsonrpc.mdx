@@ -25,6 +25,7 @@ x-api-key: dk_live_...
 ## tools/list
 
 도구 메타데이터를 반환합니다. 기본 호출은 **기본 프로필** — `search_tools` + 사용량 상위 도구 + 대시보드에서 직접 켠 도구로 구성된 최대 40개의 목록 — 을 반환합니다. 전체 카탈로그(공공데이터 {{catalogTotal}}종 포함 모든 도구)가 필요하면 엔드포인트 URL에 `?activation=all`을 붙이세요.
+여기서 {{catalogTotal}}은 공개 카탈로그에 등록된 공공데이터 API 수이며, 실제 노출되는 도구 수는 activation 설정에 따라 달라집니다.
 
 ```text 전체 카탈로그 (개발자용)
 POST https://mcp.bridger.kr/mcp?activation=all
