@@ -251,7 +251,7 @@
     "prompt": "Bridger 문서 검색…"
   },
   "variables": {
-    "catalogTotal": "446",
+    "catalogTotal": "217",
     "apiBaseUrl": "https://api.bridger.kr",
     "docsUrl": "https://docs.bridger.kr",
     "landingUrl": "https://bridger.kr",
