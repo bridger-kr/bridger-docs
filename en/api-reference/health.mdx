@@ -4,7 +4,7 @@ description: "Bridger Gateway liveness health-check endpoint."
 ---
 
 The lightest endpoint for checking whether the service has started up correctly.
-It requires no authentication and can be used directly for load balancers and Kubernetes liveness probes.
+It requires no authentication and can be used directly for load balancer health checks.
 
 ## Request
 
@@ -19,37 +19,28 @@ GET /health
 
 ```json
 {
-  "status": "healthy",
-  "service": "mcp-gateway",
-  "timestamp": "2026-02-09T05:00:00.000Z"
+  "status": "ok"
 }
 ```
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `status` | `"healthy"` | Started up normally |
-| `service` | string | Service identifier (`mcp-gateway`) |
-| `timestamp` | ISO 8601 | Response generation time |
+| `status` | `"ok"` | Started up normally |
 
 ## Related endpoints
 
 | Endpoint | Auth | Description |
 | --- | --- | --- |
-| `GET /health` | none | Liveness — always returns `status: healthy` |
-| `GET /health/ready` | none | Readiness — checks dependencies like DB and Redis. `200 healthy` when OK, `503 degraded` on failure |
-| `GET /health/detailed` | API Key | Detailed report including per-dependency status and latency (latencyMs) |
+| `GET /health` | none | Liveness — returns `status: ok` |
+| `GET /health/ready` | none | Readiness — checks control plane and metadata snapshot. `200 ok` when healthy |
 
-`/health/ready` response example (dependency check):
+`/health/ready` response example:
 
 ```json
 {
-  "status": "healthy",
-  "service": "mcp-gateway",
-  "timestamp": "2026-02-09T05:00:00.000Z",
-  "checks": {
-    "database": { "status": "healthy", "latencyMs": 3 },
-    "redis": { "status": "healthy", "latencyMs": 1 }
-  }
+  "status": "ok",
+  "control-plane": "ok",
+  "metadata-snapshot": "fresh"
 }
 ```
 
@@ -57,21 +48,4 @@ GET /health
 
 ```bash
 curl https://mcp.bridger.kr/health
-```
-
-## Kubernetes probe example
-
-```yaml
-livenessProbe:
-  httpGet:
-    path: /health
-    port: 8080
-  initialDelaySeconds: 5
-  periodSeconds: 10
-readinessProbe:
-  httpGet:
-    path: /health/ready
-    port: 8080
-  initialDelaySeconds: 5
-  periodSeconds: 5
 ```
