@@ -167,6 +167,19 @@ for (const file of tracked) {
   });
 }
 
+
+// --- 5. Unpublished internal working docs (EDD-412) -------------------------
+// docs/gtm and docs/decisions are repo-local working notes. Mintlify still
+// serves files that are not in docs.json, so they must stay in .mintignore.
+const mintignore = readFileSync(".mintignore", "utf8");
+const DOCS_UNPUBLISHED = /(^|\n)\/?docs\/\*\*\s*($|\n)/;
+if (!DOCS_UNPUBLISHED.test(mintignore)) {
+  console.error(
+    "mintignore: docs/** must stay in .mintignore so GTM/ADR working notes are not served on docs.bridger.kr (EDD-412)",
+  );
+  failures++;
+}
+
 if (failures > 0) {
   console.error(`\ncheck-content: ${failures} failure(s)`);
   process.exit(1);
