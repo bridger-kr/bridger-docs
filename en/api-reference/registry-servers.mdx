@@ -1,69 +1,26 @@
 ---
-title: "GET /registry/servers"
-description: "Query the catalog of preset servers (MCP groups) loaded into the Bridger Gateway."
+title: "GET /registry/servers (Deprecated)"
+description: "Deprecated compatibility endpoint; always returns an empty collection."
 ---
 
-Returns information about every preset server the Gateway loaded at startup. Each server has one or more MCP tools.
+<Warning>
+  This legacy endpoint intentionally returns an empty, non-tenant-scoped collection. It does not expose loaded presets or tenant tools. The empty response is expected, not a sign that no presets are available.
+</Warning>
+
+To discover tools, send `tools/list` to `POST https://mcp.bridger.kr/mcp?activation=all` with your Bridger API key. Without `activation=all`, the default tool profile is returned.
+
+[Tool discovery and request examples](/en/api-reference/mcp-jsonrpc#toolslist)
 
 ## Request
 
 ```http
-GET /registry/servers
+GET https://api.bridger.kr/registry/servers
 ```
 
-- Authentication: not required — the preset catalog is public information and can be queried before sign-in.
-- Content-Type: not applicable
+Authentication: not required. This route is on `api.bridger.kr`; `mcp.bridger.kr/registry/servers` returns 404.
 
 ## Response 200
 
 ```json
-{
-  "servers": [
-    {
-      "id": "weather/ultra-shortcast",
-      "name": "KMA Ultra-Short-Term Forecast",
-      "filePath": "/abs/path/presets/weather/ultra-shortcast.yaml",
-      "baseUrl": "https://apis.data.go.kr/...",
-      "isPublicData": true,
-      "tools": [
-        {
-          "name": "kma_get_ultra_shortcast",
-          "description": "...",
-          "inputSchema": { "type": "object", "properties": {} },
-          "method": "GET",
-          "path": "/getUltraSrtFcst"
-        }
-      ]
-    }
-  ]
-}
+{"servers": []}
 ```
-
-## Response fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `servers[]` | array | List of preset servers |
-| `servers[].id` | string | Unique ID in category/name format |
-| `servers[].name` | string | Human-readable name |
-| `servers[].filePath` | string | Absolute path of the source preset YAML |
-| `servers[].baseUrl` | string | Upstream API base URL |
-| `servers[].isPublicData` | boolean | Whether the public-data middleware is enabled |
-| `servers[].tools[]` | array | MCP tools this server exposes |
-
-## cURL
-
-```bash
-curl https://api.bridger.kr/registry/servers
-```
-
-## Related endpoints
-
-<CardGroup cols={2}>
-  <Card title="GET /registry/tools" href="/en/api-reference/registry-tools">
-    A flattened tool list without server grouping.
-  </Card>
-  <Card title="POST /mcp tools/list" href="/en/api-reference/mcp-jsonrpc">
-    The MCP-standard tool-list call.
-  </Card>
-</CardGroup>

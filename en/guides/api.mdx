@@ -156,8 +156,8 @@ Even without Claude or ChatGPT, the Bridger Gateway can be called directly via R
 | `GET`  | `/api/v1/tools/:toolId`       | Get a single tool |
 | `POST` | `/api/v1/register`            | BYOAPI registration (`{spec_url\|spec_raw, name, auth, visibility}`) |
 | `GET`  | `/api/v1/register/:id/status` | BYOAPI registration job status |
-| `GET`  | `/registry/servers`           | Preset server (MCP group) catalog |
-| `GET`  | `/registry/tools`             | Flattened tool list |
+| `GET`  | `/registry/servers`           | Deprecated; always returns `{"servers":[]}` |
+| `GET`  | `/registry/tools`             | Deprecated; always returns `{"tools":[],"total":0}` |
 | `GET`  | `/mcp`                    | MCP SSE event stream |
 | `POST` | `/mcp`                        | JSON-RPC (`tools/list`, `tools/call`) — tool execution |
 

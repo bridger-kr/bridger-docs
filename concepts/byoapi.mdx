@@ -33,7 +33,7 @@ Bridger에는 두 가지 등록 경로가 있고, 식별자 체계가 다릅니�
 
 **1. 공식 프리셋** — `vendor/spec`의 OpenAPI YAML에서 Gateway가 직접 로드합니다.
 
-- **Tool ID**(레지스트리 등록 ID)는 프리셋 파일 경로 기반의 `@datari/{category}-{name}` 형식입니다. 예: `@datari/weather-ultra-shortcast`. 인메모리 서버 카탈로그(`/registry/servers`)에서는 동일 그룹이 `servers[].id` = `{category}/{name}`(예: `weather/ultra-shortcast`)로 노출됩니다.
+- **Tool ID**(레지스트리 등록 ID)는 프리셋 파일 경로 기반의 `@datari/{category}-{name}` 형식입니다. 예: `@datari/weather-ultra-shortcast`. 도구 이름은 Bridger API 키로 `POST https://mcp.bridger.kr/mcp?activation=all`에 `tools/list`를 호출해 확인합니다.
 - **도구 이름**(`tools[].name`)은 `{제공기관 접두사}_{snake_case operationId}` 형식입니다(예: `getUltraShortcast` → `kma_get_ultra_shortcast`). `^[a-z0-9_-]+$`, 64자 이내이며 `tools/call`에는 이 이름을 그대로 사용합니다.
 
 **2. BYOAPI 도구** — 사용자가 `/api/v1/register`로 등록한 도구입니다.

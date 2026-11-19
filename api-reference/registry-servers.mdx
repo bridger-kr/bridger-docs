@@ -1,69 +1,26 @@
 ---
-title: "GET /registry/servers"
-description: "Bridger Gateway에 로드된 프리셋 서버(MCP 그룹) 카탈로그 조회."
+title: "GET /registry/servers (Deprecated)"
+description: "Deprecated 호환성 엔드포인트. 항상 빈 컬렉션을 반환합니다."
 ---
 
-Gateway가 시작 시 로드한 모든 프리셋 서버 정보를 반환합니다. 각 서버는 1개 이상의 MCP 도구를 가집니다.
+<Warning>
+  이 레거시 엔드포인트는 테넌트 범위가 아닌 빈 컬렉션을 의도적으로 반환합니다. 로드된 프리셋이나 테넌트의 도구를 노출하지 않습니다. 빈 응답은 정상 동작이며, 사용 가능한 프리셋이 없다는 뜻이 아닙니다.
+</Warning>
+
+도구를 조회하려면 Bridger API 키로 `POST https://mcp.bridger.kr/mcp?activation=all`에 `tools/list`를 보내세요. `activation=all`을 생략하면 기본 도구 프로필을 반환합니다.
+
+[도구 조회 및 요청 예시](/api-reference/mcp-jsonrpc#toolslist)
 
 ## Request
 
 ```http
-GET /registry/servers
+GET https://api.bridger.kr/registry/servers
 ```
 
-- 인증: 불필요 — 프리셋 카탈로그는 공개 정보이며 로그인 전에도 조회할 수 있습니다.
-- Content-Type: 해당 없음
+인증은 필요하지 않습니다. 이 경로는 `api.bridger.kr`에서 제공하며, `mcp.bridger.kr/registry/servers`는 404를 반환합니다.
 
 ## Response 200
 
 ```json
-{
-  "servers": [
-    {
-      "id": "weather/ultra-shortcast",
-      "name": "기상청 초단기예보",
-      "filePath": "/abs/path/presets/weather/ultra-shortcast.yaml",
-      "baseUrl": "https://apis.data.go.kr/...",
-      "isPublicData": true,
-      "tools": [
-        {
-          "name": "kma_get_ultra_shortcast",
-          "description": "...",
-          "inputSchema": { "type": "object", "properties": {} },
-          "method": "GET",
-          "path": "/getUltraSrtFcst"
-        }
-      ]
-    }
-  ]
-}
+{"servers": []}
 ```
-
-## 응답 필드
-
-| 필드 | 타입 | 설명 |
-| --- | --- | --- |
-| `servers[]` | array | 프리셋 서버 목록 |
-| `servers[].id` | string | 카테고리/이름 형식의 고유 ID |
-| `servers[].name` | string | 사람이 읽는 이름 |
-| `servers[].filePath` | string | 원본 프리셋 YAML 절대 경로 |
-| `servers[].baseUrl` | string | upstream API base URL |
-| `servers[].isPublicData` | boolean | 공공데이터 미들웨어 활성화 여부 |
-| `servers[].tools[]` | array | 이 서버가 노출하는 MCP 도구 |
-
-## cURL
-
-```bash
-curl https://api.bridger.kr/registry/servers
-```
-
-## 관련 엔드포인트
-
-<CardGroup cols={2}>
-  <Card title="GET /registry/tools" href="/api-reference/registry-tools">
-    서버 그룹 없이 평탄화된 도구 목록.
-  </Card>
-  <Card title="POST /mcp tools/list" href="/api-reference/mcp-jsonrpc">
-    MCP 표준 도구 목록 호출.
-  </Card>
-</CardGroup>

@@ -21,14 +21,8 @@ This category has **4 presets** registered, exposing **4 MCP tools** in total. T
 ## Usage examples
 
 <CodeGroup>
-  ```bash Query category servers
-  # List the preset servers and tools in this category. (public catalog — no auth required)
-  curl https://api.bridger.kr/registry/servers \
-    | jq '.servers[] | select(.id | startswith("science/"))'
-  ```
-
   ```bash Full tool list (MCP)
-  curl -X POST https://mcp.bridger.kr/mcp \
+  curl -X POST https://mcp.bridger.kr/mcp?activation=all \
     -H "x-api-key: $BRIDGER_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools[].name'

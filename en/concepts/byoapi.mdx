@@ -33,7 +33,7 @@ Bridger has two registration paths with different identifier schemes.
 
 **1. Official presets** — loaded directly by the Gateway from OpenAPI YAML in `vendor/spec`.
 
-- The **Tool ID** (registry registration ID) follows the `@datari/{category}-{name}` format based on the preset file path. e.g. `@datari/weather-ultra-shortcast`. In the in-memory server catalog (`/registry/servers`), the same group is exposed as `servers[].id` = `{category}/{name}` (e.g. `weather/ultra-shortcast`).
+- The **Tool ID** (registry registration ID) follows the `@datari/{category}-{name}` format based on the preset file path. e.g. `@datari/weather-ultra-shortcast`. Discover tool names with `tools/list` at `POST https://mcp.bridger.kr/mcp?activation=all` using your Bridger API key.
 - The **tool name** (`tools[].name`) follows `{provider prefix}_{snake_case operationId}` (e.g. `getUltraShortcast` → `kma_get_ultra_shortcast`), matching `^[a-z0-9_-]+$` within 64 chars. You use this name as-is in `tools/call`.
 
 **2. BYOAPI tools** — tools a user registers via `/api/v1/register`.
